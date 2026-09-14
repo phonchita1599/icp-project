@@ -1392,7 +1392,7 @@ export default function GroupManagementPage({
 
   // Save monthly evaluation & feedback
   const handleSaveMonthlyEvaluation = (e) => {
-    e.preventDefault()
+    e?.preventDefault?.()
     if (!activeGroup || !selectedMember) return
 
     const months = [...getMonthsList(selectedMember)]
@@ -1408,6 +1408,7 @@ export default function GroupManagementPage({
       hours: evaluationData.hours,
       criteria: evaluationData.criteria,
       passedCriteria: evaluationData.passedCriteria,
+      criteriaDetails: evaluationData.criteriaDetails,
       note: evaluationData.mentorNote,
       plan: evaluationData.advicePlan,
       userSelfScore: evaluationData.userSelfScore,
@@ -3885,11 +3886,129 @@ export default function GroupManagementPage({
               )}
             </div>
 
-            {/* Modal Footer */}
-            <div className="mgmt-modal-footer">
-              <button type="button" className="btn-modal-cancel" onClick={() => setShowMemberDetailModal(false)}>
-                ปิดหน้าต่าง
-              </button>
+            {/* Modal Footer (ส่วนท้าย: บันทึกผลการประเมิน & เปิดป๊อปอัป) */}
+            <div className="mgmt-modal-footer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
+              <div className="modal-footer-status-summary" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12.5px', color: '#475569' }}>
+                {modalSubTab === 'monthly' ? (
+                  <>
+                    <span style={{ fontWeight: 700, color: '#1e3a8a', background: '#eff6ff', padding: '4px 10px', borderRadius: '7px', border: '1px solid #bfdbfe', display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                        <line x1="16" y1="2" x2="16" y2="6" />
+                        <line x1="8" y1="2" x2="8" y2="6" />
+                        <line x1="3" y1="10" x2="21" y2="10" />
+                      </svg>
+                      <span>รอบเดือน: {getMonthsList(selectedMember)[activeMonthIdx]?.monthName} ({activeMonthIdx + 1}/12)</span>
+                    </span>
+                    <span style={{ fontWeight: 800, color: '#047857', background: '#ecfdf5', padding: '4px 10px', borderRadius: '7px', border: '1px solid #a7f3d0' }}>
+                      ความพร้อม: {evaluationData.score}% ({evaluationData.status})
+                    </span>
+                    <span style={{ fontSize: '12px', color: '#64748b', fontWeight: 600 }}>
+                      ผ่าน {(evaluationData.passedCriteria || []).length}/{(evaluationData.criteria || []).length} เกณฑ์
+                    </span>
+                  </>
+                ) : (
+                  <span style={{ fontWeight: 700, color: '#1e3a8a', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.2">
+                      <circle cx="12" cy="12" r="10" />
+                      <circle cx="12" cy="12" r="6" />
+                      <circle cx="12" cy="12" r="2" />
+                    </svg>
+                    <span>อาชีพเป้าหมาย: <strong>{selectedMember.careerGoal || 'ยังไม่ระบุ'}</strong> ({memberSkills.length} ทักษะ)</span>
+                  </span>
+                )}
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <button type="button" className="btn-modal-cancel" onClick={() => setShowMemberDetailModal(false)}>
+                  ปิดหน้าต่าง
+                </button>
+
+                {modalSubTab === 'monthly' ? (
+                  <>
+                    <button
+                      type="button"
+                      className="btn-modal-open-popup-eval"
+                      onClick={() => handleOpenEditMonthModal(activeMonthIdx)}
+                      style={{
+                        background: '#ffffff',
+                        color: '#1d4ed8',
+                        border: '1.5px solid #bfdbfe',
+                        borderRadius: '8px',
+                        padding: '8px 16px',
+                        fontWeight: 700,
+                        fontSize: '13px',
+                        cursor: 'pointer',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        transition: 'all 0.15s ease',
+                      }}
+                      title="เปิดหน้าต่างป๊อปอัปเพื่อประเมินและแก้ไขรอบเดือนนี้"
+                    >
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                        <line x1="9" y1="3" x2="9" y2="21" />
+                      </svg>
+                      <span>เปิดป๊อปอัปประเมิน</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      className="btn-modal-save-eval"
+                      onClick={handleSaveMonthlyEvaluation}
+                      style={{
+                        background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
+                        color: '#ffffff',
+                        border: 'none',
+                        borderRadius: '8px',
+                        padding: '9px 22px',
+                        fontWeight: 800,
+                        fontSize: '13.5px',
+                        cursor: 'pointer',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        boxShadow: '0 3px 10px rgba(37, 99, 235, 0.28)',
+                        transition: 'all 0.2s ease',
+                      }}
+                      title="บันทึกผลการประเมินและข้อเสนอแนะรอบเดือนปัจจุบัน"
+                    >
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4">
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                      <span>✓ บันทึกผลการประเมิน ({getMonthsList(selectedMember)[activeMonthIdx]?.shortMonth})</span>
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    type="button"
+                    className="btn-save-member-skills"
+                    onClick={handleSaveMemberSkills}
+                    style={{
+                      background: 'linear-gradient(135deg, #059669 0%, #10b981 100%)',
+                      color: '#ffffff',
+                      border: 'none',
+                      borderRadius: '8px',
+                      padding: '9px 22px',
+                      fontWeight: 800,
+                      fontSize: '13.5px',
+                      cursor: 'pointer',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      boxShadow: '0 3px 10px rgba(16, 185, 129, 0.28)',
+                    }}
+                  >
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                      <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                      <polyline points="17 21 17 13 7 13 7 21" />
+                      <polyline points="7 3 7 8 15 8" />
+                    </svg>
+                    <span>บันทึกชุดทักษะเฉพาะบุคคล</span>
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
