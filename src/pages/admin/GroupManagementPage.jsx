@@ -3721,13 +3721,52 @@ export default function GroupManagementPage({
 
       {/* Add New Skill Popup Modal */}
       {showAddSkillModal && (
-        <div className="assessment-modal-overlay" onClick={handleCloseAddSkillModal}>
+        <div
+          className="assessment-modal-overlay"
+          onClick={handleCloseAddSkillModal}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 2500,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '16px',
+            backgroundColor: 'rgba(15, 23, 42, 0.65)',
+            backdropFilter: 'blur(4px)',
+            WebkitBackdropFilter: 'blur(4px)',
+            overflow: 'hidden',
+          }}
+        >
           <div
-            className="assessment-modal-container add-skill-popup-modal"
+            className="assessment-modal-dialog add-skill-popup-modal"
             onClick={(e) => e.stopPropagation()}
+            style={{
+              maxWidth: '560px',
+              width: '95%',
+              maxHeight: '85vh',
+              display: 'flex',
+              flexDirection: 'column',
+              overflow: 'hidden',
+              borderRadius: '16px',
+              margin: 'auto',
+              boxShadow: '0 25px 60px -15px rgba(15, 23, 42, 0.35)',
+              background: '#ffffff',
+            }}
           >
             {/* Modal Header */}
-            <div className="assessment-modal-header" style={{ background: 'linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%)' }}>
+            <div
+              className="assessment-modal-header"
+              style={{
+                background: 'linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%)',
+                padding: '12px 18px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexShrink: 0,
+                borderBottom: '1.5px solid rgba(255, 255, 255, 0.15)',
+              }}
+            >
               <div className="assessment-modal-title-group">
                 <div className="assessment-modal-icon-badge" style={{ background: 'rgba(255, 255, 255, 0.2)' }}>
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2.5">
@@ -3736,10 +3775,10 @@ export default function GroupManagementPage({
                   </svg>
                 </div>
                 <div>
-                  <h3 className="assessment-modal-title" style={{ color: '#ffffff', margin: 0 }}>
+                  <h3 className="assessment-modal-title" style={{ color: '#ffffff', margin: 0, fontSize: '15.5px' }}>
                     เพิ่มทักษะใหม่เฉพาะบุคคล (Add Skill)
                   </h3>
-                  <p className="assessment-modal-sub" style={{ color: '#bfdbfe', margin: '3px 0 0 0', fontSize: '12.5px' }}>
+                  <p className="assessment-modal-sub" style={{ color: '#bfdbfe', margin: '2px 0 0 0', fontSize: '12px' }}>
                     สำหรับนักศึกษา: <strong>{selectedMember?.name}</strong> ({selectedMember?.institution || 'มทส.'})
                   </p>
                 </div>
@@ -3757,11 +3796,23 @@ export default function GroupManagementPage({
             </div>
 
             {/* Modal Body */}
-            <div className="assessment-modal-body" style={{ padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div
+              className="assessment-modal-body"
+              style={{
+                padding: '14px 18px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '10px',
+                overflowY: 'auto',
+                flex: '1 1 auto',
+                minHeight: 0,
+                maxHeight: 'calc(85vh - 110px)',
+              }}
+            >
               {/* Field 1: Skill Name */}
-              <div className="modal-form-card-section" style={{ background: '#ffffff', padding: '14px', border: '1.5px solid #e2e8f0', borderRadius: '12px' }}>
-                <label className="modal-field-label" style={{ fontWeight: 800, color: '#0f172a', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.2">
+              <div className="modal-form-card-section" style={{ background: '#ffffff', padding: '10px 12px', border: '1.5px solid #e2e8f0', borderRadius: '10px' }}>
+                <label className="modal-field-label" style={{ fontWeight: 800, color: '#0f172a', fontSize: '12.5px', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.2">
                     <path d="M12 20h9" />
                     <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
                   </svg>
@@ -3774,14 +3825,14 @@ export default function GroupManagementPage({
                   value={addSkillModalData.name}
                   onChange={(e) => setAddSkillModalData({ ...addSkillModalData, name: e.target.value })}
                   autoFocus
-                  style={{ width: '100%', boxSizing: 'border-box', padding: '10px 12px', fontSize: '14px', borderRadius: '8px', border: '1.5px solid #cbd5e1' }}
+                  style={{ width: '100%', boxSizing: 'border-box', padding: '8px 12px', fontSize: '13.5px', borderRadius: '8px', border: '1.5px solid #cbd5e1' }}
                 />
               </div>
 
               {/* Field 2: Category Dropdown */}
-              <div className="modal-form-card-section" style={{ background: '#ffffff', padding: '14px', border: '1.5px solid #e2e8f0', borderRadius: '12px', position: 'relative' }}>
-                <label className="modal-field-label" style={{ fontWeight: 800, color: '#0f172a', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.2">
+              <div className="modal-form-card-section" style={{ background: '#ffffff', padding: '10px 12px', border: '1.5px solid #e2e8f0', borderRadius: '10px', position: 'relative' }}>
+                <label className="modal-field-label" style={{ fontWeight: 800, color: '#0f172a', fontSize: '12.5px', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.2">
                     <rect x="3" y="3" width="7" height="7" />
                     <rect x="14" y="3" width="7" height="7" />
                     <rect x="14" y="14" width="7" height="7" />
@@ -3795,7 +3846,7 @@ export default function GroupManagementPage({
                     type="button"
                     className="custom-cat-dropdown-trigger"
                     onClick={() => setIsCatDropdownOpen(!isCatDropdownOpen)}
-                    style={{ width: '100%', boxSizing: 'border-box', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', background: '#ffffff', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', fontSize: '13.5px', fontWeight: 600, color: '#0f172a' }}
+                    style={{ width: '100%', boxSizing: 'border-box', padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', background: '#ffffff', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', fontSize: '13px', fontWeight: 600, color: '#0f172a' }}
                   >
                     <span>{categoryOptions.find((c) => c.id === addSkillModalData.categoryId)?.name || 'เลือกหมวดหมู่'}</span>
                     <span style={{ color: '#2563eb', transition: 'transform 0.2s', transform: isCatDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}>
@@ -3826,9 +3877,9 @@ export default function GroupManagementPage({
                           key={opt.id}
                           className={`custom-cat-dropdown-item ${addSkillModalData.categoryId === opt.id ? 'selected' : ''}`}
                           style={{
-                            padding: '10px 14px',
+                            padding: '9px 12px',
                             cursor: 'pointer',
-                            fontSize: '13px',
+                            fontSize: '12.5px',
                             fontWeight: addSkillModalData.categoryId === opt.id ? 700 : 500,
                             background: addSkillModalData.categoryId === opt.id ? '#eff6ff' : '#ffffff',
                             color: addSkillModalData.categoryId === opt.id ? '#1d4ed8' : '#334155',
@@ -3847,8 +3898,8 @@ export default function GroupManagementPage({
                 </div>
 
                 {addSkillModalData.categoryId === 'other' && (
-                  <div style={{ marginTop: '10px' }}>
-                    <label className="modal-field-label" style={{ fontSize: '12px', color: '#475569', marginBottom: '4px', display: 'block' }}>
+                  <div style={{ marginTop: '8px' }}>
+                    <label className="modal-field-label" style={{ fontSize: '11.5px', color: '#475569', marginBottom: '3px', display: 'block' }}>
                       ระบุชื่อหมวดหมู่ที่ต้องการเอง:
                     </label>
                     <input
@@ -3857,48 +3908,49 @@ export default function GroupManagementPage({
                       placeholder="เช่น IoT, คลาวด์, ความปลอดภัยไซเบอร์..."
                       value={addSkillModalData.customCategory}
                       onChange={(e) => setAddSkillModalData({ ...addSkillModalData, customCategory: e.target.value })}
-                      style={{ width: '100%', boxSizing: 'border-box', padding: '8px 12px', fontSize: '13px', borderRadius: '6px', border: '1.5px solid #93c5fd' }}
+                      style={{ width: '100%', boxSizing: 'border-box', padding: '7px 10px', fontSize: '13px', borderRadius: '6px', border: '1.5px solid #93c5fd' }}
                     />
                   </div>
                 )}
               </div>
 
               {/* Field 3: Training Hours with Quick Chips */}
-              <div className="modal-form-card-section" style={{ background: '#ffffff', padding: '14px', border: '1.5px solid #e2e8f0', borderRadius: '12px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                  <label className="modal-field-label" style={{ fontWeight: 800, color: '#0f172a', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '6px', margin: 0 }}>
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.2">
+              <div className="modal-form-card-section" style={{ background: '#ffffff', padding: '10px 12px', border: '1.5px solid #e2e8f0', borderRadius: '10px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                  <label className="modal-field-label" style={{ fontWeight: 800, color: '#0f172a', fontSize: '12.5px', display: 'flex', alignItems: 'center', gap: '6px', margin: 0 }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.2">
                       <circle cx="12" cy="12" r="10" />
                       <polyline points="12 6 12 12 16 14" />
                     </svg>
                     <span>เวลาที่ใช้ฝึกฝน / ปฏิบัติ:</span>
                   </label>
-                  <span style={{ fontSize: '13px', color: '#2563eb', fontWeight: '800' }}>
+                  <span style={{ fontSize: '12.5px', color: '#2563eb', fontWeight: '800' }}>
                     {addSkillModalData.hours || '0'} ชั่วโมง
                   </span>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
                   <input
                     type="number"
                     min="0"
                     className="modal-text-input"
-                    style={{ width: '90px', padding: '8px 10px', fontSize: '14px', fontWeight: '700', borderRadius: '6px', border: '1.5px solid #cbd5e1' }}
+                    style={{ width: '80px', padding: '6px 10px', fontSize: '13.5px', fontWeight: '700', borderRadius: '6px', border: '1.5px solid #cbd5e1' }}
                     value={addSkillModalData.hours}
                     onChange={(e) => setAddSkillModalData({ ...addSkillModalData, hours: e.target.value })}
                     placeholder="15"
                   />
-                  <span style={{ fontSize: '13px', color: '#64748b', fontWeight: 600 }}>ชั่วโมง</span>
+                  <span style={{ fontSize: '12.5px', color: '#64748b', fontWeight: 600 }}>ชั่วโมง</span>
                 </div>
 
-                <div className="modal-quick-hours-chips" style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                  <span className="quick-chip-label" style={{ fontSize: '11.5px', color: '#64748b', fontWeight: 700 }}>เลือกด่วน:</span>
+                <div className="modal-quick-hours-chips" style={{ display: 'flex', alignItems: 'center', gap: '5px', flexWrap: 'wrap' }}>
+                  <span className="quick-chip-label" style={{ fontSize: '11px', color: '#64748b', fontWeight: 700 }}>เลือกด่วน:</span>
                   {['2', '3', '5', '6', '9', '12', '15', '20', '25', '30'].map((h) => (
                     <button
                       key={h}
                       type="button"
                       className={`btn-quick-hour-chip ${String(addSkillModalData.hours) === String(h) ? 'active' : ''}`}
                       onClick={() => setAddSkillModalData({ ...addSkillModalData, hours: h })}
+                      style={{ padding: '3px 8px', fontSize: '11.5px' }}
                     >
                       +{h} ชม.
                     </button>
@@ -3907,22 +3959,22 @@ export default function GroupManagementPage({
               </div>
 
               {/* Field 4: Initial Level (Rating 1-5 Stars) & Status */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                <div className="modal-form-card-section" style={{ background: '#ffffff', padding: '14px', border: '1.5px solid #e2e8f0', borderRadius: '12px' }}>
-                  <label className="modal-field-label" style={{ fontWeight: 800, color: '#0f172a', fontSize: '12.5px', display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '8px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                <div className="modal-form-card-section" style={{ background: '#ffffff', padding: '10px 12px', border: '1.5px solid #e2e8f0', borderRadius: '10px' }}>
+                  <label className="modal-field-label" style={{ fontWeight: 800, color: '#0f172a', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '6px' }}>
                     <span>ระดับความเชี่ยวชาญ:</span>
                     <span style={{ color: '#2563eb', fontWeight: 800 }}>{addSkillModalData.level} / 5</span>
                   </label>
-                  <div style={{ display: 'flex', gap: '4px' }}>
+                  <div style={{ display: 'flex', gap: '3px' }}>
                     {[1, 2, 3, 4, 5].map((star) => (
                       <button
                         key={star}
                         type="button"
                         className={`star-rate-btn ${star <= addSkillModalData.level ? 'active' : ''}`}
                         onClick={() => setAddSkillModalData({ ...addSkillModalData, level: star })}
-                        style={{ cursor: 'pointer', padding: '4px' }}
+                        style={{ cursor: 'pointer', padding: '3px' }}
                       >
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill={star <= addSkillModalData.level ? "#f59e0b" : "none"} stroke="#f59e0b" strokeWidth="1.8">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill={star <= addSkillModalData.level ? "#f59e0b" : "none"} stroke="#f59e0b" strokeWidth="1.8">
                           <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
                         </svg>
                       </button>
@@ -3930,15 +3982,15 @@ export default function GroupManagementPage({
                   </div>
                 </div>
 
-                <div className="modal-form-card-section" style={{ background: '#ffffff', padding: '14px', border: '1.5px solid #e2e8f0', borderRadius: '12px' }}>
-                  <label className="modal-field-label" style={{ fontWeight: 800, color: '#0f172a', fontSize: '12.5px', display: 'block', marginBottom: '8px' }}>
+                <div className="modal-form-card-section" style={{ background: '#ffffff', padding: '10px 12px', border: '1.5px solid #e2e8f0', borderRadius: '10px' }}>
+                  <label className="modal-field-label" style={{ fontWeight: 800, color: '#0f172a', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
                     สถานะการประเมิน:
                   </label>
                   <select
                     className="skill-status-select"
                     value={addSkillModalData.status}
                     onChange={(e) => setAddSkillModalData({ ...addSkillModalData, status: e.target.value })}
-                    style={{ width: '100%', padding: '8px 10px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '13px', fontWeight: 700, background: '#ffffff' }}
+                    style={{ width: '100%', padding: '6px 8px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '12.5px', fontWeight: 700, background: '#ffffff' }}
                   >
                     <option value="กำลังพัฒนา">กำลังพัฒนา</option>
                     <option value="ผ่านเกณฑ์แล้ว">ผ่านเกณฑ์แล้ว</option>
@@ -3948,8 +4000,8 @@ export default function GroupManagementPage({
               </div>
 
               {/* Field 5: Optional Notes */}
-              <div className="modal-form-card-section" style={{ background: '#ffffff', padding: '14px', border: '1.5px solid #e2e8f0', borderRadius: '12px' }}>
-                <label className="modal-field-label" style={{ fontWeight: 800, color: '#0f172a', fontSize: '12.5px', display: 'block', marginBottom: '6px' }}>
+              <div className="modal-form-card-section" style={{ background: '#ffffff', padding: '10px 12px', border: '1.5px solid #e2e8f0', borderRadius: '10px' }}>
+                <label className="modal-field-label" style={{ fontWeight: 800, color: '#0f172a', fontSize: '12px', display: 'block', marginBottom: '4px' }}>
                   บันทึกข้อเสนอแนะหรือเป้าหมายเพิ่มเติม (ถ้ามี):
                 </label>
                 <textarea
@@ -3957,18 +4009,30 @@ export default function GroupManagementPage({
                   placeholder="เช่น มุ่งเน้นทำโจทย์จริง, รอสอบ Certificate, หรือบันทึกเพื่อติดตามผลรอบถัดไป..."
                   value={addSkillModalData.note}
                   onChange={(e) => setAddSkillModalData({ ...addSkillModalData, note: e.target.value })}
-                  style={{ width: '100%', boxSizing: 'border-box', minHeight: '65px', padding: '8px 12px', fontSize: '13px', borderRadius: '8px', border: '1.5px solid #cbd5e1' }}
+                  style={{ width: '100%', boxSizing: 'border-box', minHeight: '52px', padding: '7px 10px', fontSize: '12.5px', borderRadius: '8px', border: '1.5px solid #cbd5e1' }}
                 ></textarea>
               </div>
             </div>
 
             {/* Modal Footer */}
-            <div className="assessment-modal-footer" style={{ padding: '14px 24px', background: '#f8fafc', borderTop: '1.5px solid #e2e8f0', display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+            <div
+              className="assessment-modal-footer"
+              style={{
+                padding: '10px 18px',
+                background: '#f8fafc',
+                borderTop: '1.5px solid #e2e8f0',
+                display: 'flex',
+                justifyContent: 'flex-end',
+                alignItems: 'center',
+                gap: '10px',
+                flexShrink: 0,
+              }}
+            >
               <button
                 type="button"
                 className="btn-modal-cancel"
                 onClick={handleCloseAddSkillModal}
-                style={{ padding: '9px 18px', borderRadius: '8px', border: '1px solid #cbd5e1', background: '#ffffff', color: '#475569', fontWeight: 700, fontSize: '13px', cursor: 'pointer' }}
+                style={{ padding: '8px 16px', borderRadius: '8px', border: '1px solid #cbd5e1', background: '#ffffff', color: '#475569', fontWeight: 700, fontSize: '13px', cursor: 'pointer' }}
               >
                 ยกเลิก
               </button>
@@ -3979,13 +4043,13 @@ export default function GroupManagementPage({
                 onClick={handleSaveAddSkillFromModal}
                 disabled={!addSkillModalData.name.trim()}
                 style={{
-                  padding: '9px 22px',
+                  padding: '8px 20px',
                   borderRadius: '8px',
                   border: 'none',
                   background: addSkillModalData.name.trim() ? 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)' : '#cbd5e1',
                   color: '#ffffff',
                   fontWeight: 800,
-                  fontSize: '13.5px',
+                  fontSize: '13px',
                   cursor: addSkillModalData.name.trim() ? 'pointer' : 'not-allowed',
                   display: 'flex',
                   alignItems: 'center',

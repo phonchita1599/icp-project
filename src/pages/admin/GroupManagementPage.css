@@ -2650,13 +2650,113 @@
   transform: scale(1.04);
 }
 
-/* Add Skill Popup Modal Custom Styling */
-.add-skill-popup-modal {
-  max-width: 580px !important;
-  width: 95% !important;
-  border-radius: 16px !important;
+/* ========================================================
+   Add Skill Popup Modal & Assessment Dialogs (Prevent Overflow)
+   ======================================================== */
+.assessment-modal-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  background-color: rgba(15, 23, 42, 0.65) !important;
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 2000 !important;
+  padding: 16px !important;
   overflow: hidden !important;
-  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25) !important;
+  box-sizing: border-box !important;
+}
+
+.add-skill-popup-modal,
+.assessment-modal-container,
+.assessment-modal-dialog {
+  background: #ffffff !important;
+  border-radius: 16px !important;
+  box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.35) !important;
+  width: 100% !important;
+  max-width: 560px !important;
+  max-height: 85vh !important; /* CRITICAL: Never exceed 85% of viewport height */
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important; /* Clips header and footer cleanly */
+  position: relative !important;
+  margin: auto !important;
+  box-sizing: border-box !important;
+  animation: modalPopIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalPopIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.add-skill-popup-modal .assessment-modal-header,
+.assessment-modal-dialog .assessment-modal-header {
+  padding: 12px 18px !important;
+  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-shrink: 0 !important; /* NEVER scroll out of view */
+  z-index: 10 !important;
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+.add-skill-popup-modal .assessment-modal-body,
+.assessment-modal-dialog .assessment-modal-body {
+  padding: 14px 18px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  overflow-y: auto !important; /* ALWAYS scroll within body */
+  flex: 1 1 auto !important;
+  min-height: 0 !important; /* CRITICAL for flex child vertical scrolling */
+  box-sizing: border-box !important;
+  max-height: calc(85vh - 110px) !important;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f8fafc;
+}
+
+.add-skill-popup-modal .assessment-modal-body::-webkit-scrollbar,
+.assessment-modal-dialog .assessment-modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+.add-skill-popup-modal .assessment-modal-body::-webkit-scrollbar-thumb,
+.assessment-modal-dialog .assessment-modal-body::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.add-skill-popup-modal .assessment-modal-footer,
+.assessment-modal-dialog .assessment-modal-footer {
+  padding: 10px 18px !important;
+  background: #f8fafc !important;
+  border-top: 1.5px solid #e2e8f0 !important;
+  display: flex !important;
+  justify-content: flex-end !important;
+  align-items: center !important;
+  gap: 10px !important;
+  flex-shrink: 0 !important; /* ALWAYS visible at bottom */
+  z-index: 10 !important;
+  box-sizing: border-box !important;
+}
+
+.add-skill-popup-modal .modal-form-card-section {
+  background: #ffffff !important;
+  padding: 8px 12px !important;
+  border: 1.5px solid #e2e8f0 !important;
+  border-radius: 10px !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 5px !important;
 }
 
 /* Save Member Skills Footer */
