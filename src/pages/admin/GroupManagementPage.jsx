@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import './GroupManagementPage.css'
 
 // Standard Career Presets with Recommended Competencies for SUT DSS (20+ Diverse Pathways)
@@ -341,6 +341,32 @@ export default function GroupManagementPage({
   const [customCatText, setCustomCatText] = useState('')
   const [isCatDropdownOpen, setIsCatDropdownOpen] = useState(false)
   const [newSkillHours, setNewSkillHours] = useState('15')
+
+  // Custom Beautiful Career Combobox State
+  const [isCareerDropdownOpen, setIsCareerDropdownOpen] = useState(false)
+  const [careerSearchTerm, setCareerSearchTerm] = useState('')
+  const careerDropdownRef = useRef(null)
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (careerDropdownRef.current && !careerDropdownRef.current.contains(event.target)) {
+        setIsCareerDropdownOpen(false)
+      }
+    }
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setIsCareerDropdownOpen(false)
+      }
+    }
+    if (isCareerDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+      document.addEventListener('keydown', handleKeyDown)
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [isCareerDropdownOpen])
 
   // Add Individual Skill Popup Modal State
   const [showAddSkillModal, setShowAddSkillModal] = useState(false)
@@ -2991,68 +3017,394 @@ export default function GroupManagementPage({
 
                     <div className="career-select-controls">
                       <div className="career-select-dropdown-wrap">
-                        <label className="career-select-label">เลือกจากชุดอาชีพแนะนำ หรือเลือก "อื่นๆ":</label>
-                        <select
-                          className="career-select-dropdown"
-                          value={
-                            CAREER_PRESETS.find((p) => p.shortTitle === selectedMember.careerGoal || p.title === selectedMember.careerGoal)?.shortTitle ||
-                            (selectedMember.careerGoal && (selectedMember.careerGoal.startsWith('อื่นๆ') || selectedMember.careerGoal.includes('กำหนดเอง')) ? 'other' : selectedMember.careerGoal || '')
-                          }
-                          onChange={(e) => {
-                            if (e.target.value) {
-                              handleSelectCareerPreset(e.target.value, false)
-                            }
-                          }}
-                        >
-                          <option value="">-- 🎯 เลือกอาชีพแนะนำ หรือ อื่นๆ --</option>
-
-                          {/* Custom careers from localStorage */}
-                          {getCustomCareersFromStorage().length > 0 && (
-                            <optgroup label="📌 อาชีพที่บันทึกไว้ในระบบ (Custom Careers)">
-                              {getCustomCareersFromStorage().map((c) => (
-                                <option key={c.id} value={c.title}>
-                                  {c.title}
-                                </option>
-                              ))}
-                            </optgroup>
+                        <label className="career-select-label" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <span>เลือกจากชุดอาชีพแนะนำ หรือเลือก "อื่นๆ":</span>
+                          {selectedMember.careerGoal && (
+                            <span style={{ fontSize: '11px', color: '#2563eb', fontWeight: 700, background: '#eff6ff', padding: '1px 8px', borderRadius: '9999px', border: '1px solid #bfdbfe' }}>
+                              กำลังเลือก: {selectedMember.careerGoal.length > 25 ? selectedMember.careerGoal.slice(0, 25) + '...' : selectedMember.careerGoal}
+                            </span>
                           )}
+                        </label>
 
-                          <optgroup label="💻 สายงานเทคโนโลยี & ซอฟต์แวร์ (Technology & Software)">
-                            {CAREER_PRESETS.filter((p) => p.category.includes('เทคโนโลยี') || p.category.includes('ข้อมูล') || p.category.includes('สนับสนุน')).map((p) => (
-                              <option key={p.id} value={p.shortTitle}>
-                                {p.title} ({p.skills.length} ทักษะหลัก)
-                              </option>
-                            ))}
-                          </optgroup>
+                        {/* Custom Combobox Trigger & Popover */}
+                        <div className="career-custom-combobox-wrap" ref={careerDropdownRef}>
+                          <button
+                            type="button"
+                            className={`career-combobox-trigger ${isCareerDropdownOpen ? 'active' : ''}`}
+                            onClick={() => setIsCareerDropdownOpen(!isCareerDropdownOpen)}
+                          >
+                            <div className="combobox-trigger-content">
+                              <span className="combobox-trigger-icon-badge">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                  <circle cx="12" cy="12" r="10" />
+                                  <circle cx="12" cy="12" r="6" />
+                                  <circle cx="12" cy="12" r="2" />
+                                </svg>
+                              </span>
+                              <div className="combobox-trigger-text">
+                                {selectedMember.careerGoal ? (
+                                  <>
+                                    <span className="combobox-selected-title" title={selectedMember.careerGoal}>
+                                      {selectedMember.careerGoal}
+                                    </span>
+                                    {CAREER_PRESETS.find((p) => p.shortTitle === selectedMember.careerGoal || p.title === selectedMember.careerGoal) && (
+                                      <span className="combobox-selected-sub">
+                                        {CAREER_PRESETS.find((p) => p.shortTitle === selectedMember.careerGoal || p.title === selectedMember.careerGoal).category} • {CAREER_PRESETS.find((p) => p.shortTitle === selectedMember.careerGoal || p.title === selectedMember.careerGoal).skills.length} ทักษะหลัก
+                                      </span>
+                                    )}
+                                  </>
+                                ) : (
+                                  <span className="combobox-placeholder-title">-- 🎯 เลือกอาชีพแนะนำ หรือ อื่นๆ --</span>
+                                )}
+                              </div>
+                            </div>
 
-                          <optgroup label="🎨 สายงานออกแบบ สื่อดิจิทัล & ครีเอทีฟ (Design & Media)">
-                            {CAREER_PRESETS.filter((p) => p.category.includes('ออกแบบ') || p.category.includes('ครีเอทีฟ')).map((p) => (
-                              <option key={p.id} value={p.shortTitle}>
-                                {p.title} ({p.skills.length} ทักษะหลัก)
-                              </option>
-                            ))}
-                          </optgroup>
+                            <div className="combobox-trigger-right">
+                              {selectedMember.careerGoal && (
+                                <span
+                                  className="combobox-clear-btn"
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    setSelectedMember({ ...selectedMember, careerGoal: '' })
+                                  }}
+                                  title="ล้างการเลือกอาชีพ"
+                                >
+                                  ✕
+                                </span>
+                              )}
+                              <span className={`combobox-chevron ${isCareerDropdownOpen ? 'open' : ''}`}>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                  <polyline points="6 9 12 15 18 9" />
+                                </svg>
+                              </span>
+                            </div>
+                          </button>
 
-                          <optgroup label="📈 สายงานธุรกิจ การตลาด & การจัดการ (Business & Management)">
-                            {CAREER_PRESETS.filter((p) => p.category.includes('ธุรกิจ') || p.category.includes('การตลาด')).map((p) => (
-                              <option key={p.id} value={p.shortTitle}>
-                                {p.title} ({p.skills.length} ทักษะหลัก)
-                              </option>
-                            ))}
-                          </optgroup>
+                          {/* Floating Popover Menu */}
+                          {isCareerDropdownOpen && (
+                            <div className="career-combobox-menu">
+                              {/* Search Bar */}
+                              <div className="combobox-search-box">
+                                <span className="combobox-search-icon">
+                                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                                    <circle cx="11" cy="11" r="8" />
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                                  </svg>
+                                </span>
+                                <input
+                                  type="text"
+                                  className="combobox-search-input"
+                                  placeholder="ค้นหาชื่ออาชีพหรือสายงาน..."
+                                  value={careerSearchTerm}
+                                  onChange={(e) => setCareerSearchTerm(e.target.value)}
+                                  autoFocus
+                                  onClick={(e) => e.stopPropagation()}
+                                />
+                                {careerSearchTerm && (
+                                  <button
+                                    type="button"
+                                    className="combobox-search-clear"
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      setCareerSearchTerm('')
+                                    }}
+                                  >
+                                    ✕
+                                  </button>
+                                )}
+                              </div>
 
-                          <optgroup label="🏢 สายงานบริหาร บริการ & สนับสนุน (Administration & Services)">
-                            {CAREER_PRESETS.filter((p) => p.category.includes('บริหาร') || p.category.includes('บริการองค์กร')).map((p) => (
-                              <option key={p.id} value={p.shortTitle}>
-                                {p.title} ({p.skills.length} ทักษะหลัก)
-                              </option>
-                            ))}
-                          </optgroup>
+                              {/* Options List */}
+                              <div className="combobox-options-scroll">
+                                {/* Group 0: Custom Careers */}
+                                {(() => {
+                                  const customList = getCustomCareersFromStorage().filter(
+                                    (c) => !careerSearchTerm.trim() || c.title.toLowerCase().includes(careerSearchTerm.toLowerCase().trim())
+                                  )
+                                  if (customList.length === 0) return null
+                                  return (
+                                    <div className="combobox-group">
+                                      <div className="combobox-group-header">
+                                        <span className="combobox-group-title">
+                                          <span>📌</span>
+                                          <span>อาชีพที่บันทึกไว้ในระบบ (Custom Careers)</span>
+                                        </span>
+                                        <span className="combobox-group-count">{customList.length} อาชีพ</span>
+                                      </div>
+                                      {customList.map((c) => {
+                                        const isSel = selectedMember.careerGoal === c.title
+                                        return (
+                                          <div
+                                            key={c.id}
+                                            className={`combobox-item ${isSel ? 'selected' : ''}`}
+                                            onClick={() => {
+                                              handleSelectCareerPreset(c.title, false)
+                                              setIsCareerDropdownOpen(false)
+                                              setCareerSearchTerm('')
+                                            }}
+                                          >
+                                            <div className="combobox-item-left">
+                                              <span className="combobox-item-title">{c.title}</span>
+                                              <div className="combobox-item-meta">
+                                                <span className="combobox-skill-badge" style={{ background: '#fef3c7', color: '#92400e', borderColor: '#fde68a' }}>
+                                                  กำหนดเอง
+                                                </span>
+                                              </div>
+                                            </div>
+                                            <div className="combobox-item-right">
+                                              {isSel && <span className="combobox-selected-badge">✓ เลือกอยู่</span>}
+                                            </div>
+                                          </div>
+                                        )
+                                      })}
+                                    </div>
+                                  )
+                                })()}
 
-                          <optgroup label="✨ ตัวเลือกกำหนดเอง">
-                            <option value="other">⭐ อื่นๆ (ระบุชื่ออาชีพและกำหนดทักษะเอง)</option>
-                          </optgroup>
-                        </select>
+                                {/* Group 1: Technology & Software */}
+                                {(() => {
+                                  const list = CAREER_PRESETS.filter((p) => p.category.includes('เทคโนโลยี') || p.category.includes('ข้อมูล') || p.category.includes('สนับสนุน')).filter(
+                                    (p) =>
+                                      !careerSearchTerm.trim() ||
+                                      p.title.toLowerCase().includes(careerSearchTerm.toLowerCase().trim()) ||
+                                      p.shortTitle.toLowerCase().includes(careerSearchTerm.toLowerCase().trim()) ||
+                                      p.category.toLowerCase().includes(careerSearchTerm.toLowerCase().trim())
+                                  )
+                                  if (list.length === 0) return null
+                                  return (
+                                    <div className="combobox-group">
+                                      <div className="combobox-group-header">
+                                        <span className="combobox-group-title">
+                                          <span>💻</span>
+                                          <span>สายงานเทคโนโลยี & ซอฟต์แวร์ (Technology & Software)</span>
+                                        </span>
+                                        <span className="combobox-group-count">{list.length} อาชีพ</span>
+                                      </div>
+                                      {list.map((p) => {
+                                        const isSel = selectedMember.careerGoal === p.shortTitle || selectedMember.careerGoal === p.title
+                                        return (
+                                          <div
+                                            key={p.id}
+                                            className={`combobox-item ${isSel ? 'selected' : ''}`}
+                                            onClick={() => {
+                                              handleSelectCareerPreset(p.shortTitle, false)
+                                              setIsCareerDropdownOpen(false)
+                                              setCareerSearchTerm('')
+                                            }}
+                                          >
+                                            <div className="combobox-item-left">
+                                              <span className="combobox-item-title">{p.title}</span>
+                                              <div className="combobox-item-meta">
+                                                <span className="combobox-skill-badge">{p.skills.length} ทักษะหลัก</span>
+                                                <span style={{ fontSize: '11px', color: '#64748b' }}>{p.category}</span>
+                                              </div>
+                                            </div>
+                                            <div className="combobox-item-right">
+                                              {isSel && <span className="combobox-selected-badge">✓ เลือกอยู่</span>}
+                                            </div>
+                                          </div>
+                                        )
+                                      })}
+                                    </div>
+                                  )
+                                })()}
+
+                                {/* Group 2: Design & Media */}
+                                {(() => {
+                                  const list = CAREER_PRESETS.filter((p) => p.category.includes('ออกแบบ') || p.category.includes('ครีเอทีฟ')).filter(
+                                    (p) =>
+                                      !careerSearchTerm.trim() ||
+                                      p.title.toLowerCase().includes(careerSearchTerm.toLowerCase().trim()) ||
+                                      p.shortTitle.toLowerCase().includes(careerSearchTerm.toLowerCase().trim()) ||
+                                      p.category.toLowerCase().includes(careerSearchTerm.toLowerCase().trim())
+                                  )
+                                  if (list.length === 0) return null
+                                  return (
+                                    <div className="combobox-group">
+                                      <div className="combobox-group-header">
+                                        <span className="combobox-group-title">
+                                          <span>🎨</span>
+                                          <span>สายงานออกแบบ สื่อดิจิทัล & ครีเอทีฟ (Design & Media)</span>
+                                        </span>
+                                        <span className="combobox-group-count">{list.length} อาชีพ</span>
+                                      </div>
+                                      {list.map((p) => {
+                                        const isSel = selectedMember.careerGoal === p.shortTitle || selectedMember.careerGoal === p.title
+                                        return (
+                                          <div
+                                            key={p.id}
+                                            className={`combobox-item ${isSel ? 'selected' : ''}`}
+                                            onClick={() => {
+                                              handleSelectCareerPreset(p.shortTitle, false)
+                                              setIsCareerDropdownOpen(false)
+                                              setCareerSearchTerm('')
+                                            }}
+                                          >
+                                            <div className="combobox-item-left">
+                                              <span className="combobox-item-title">{p.title}</span>
+                                              <div className="combobox-item-meta">
+                                                <span className="combobox-skill-badge">{p.skills.length} ทักษะหลัก</span>
+                                                <span style={{ fontSize: '11px', color: '#64748b' }}>{p.category}</span>
+                                              </div>
+                                            </div>
+                                            <div className="combobox-item-right">
+                                              {isSel && <span className="combobox-selected-badge">✓ เลือกอยู่</span>}
+                                            </div>
+                                          </div>
+                                        )
+                                      })}
+                                    </div>
+                                  )
+                                })()}
+
+                                {/* Group 3: Business & Management */}
+                                {(() => {
+                                  const list = CAREER_PRESETS.filter((p) => p.category.includes('ธุรกิจ') || p.category.includes('การตลาด')).filter(
+                                    (p) =>
+                                      !careerSearchTerm.trim() ||
+                                      p.title.toLowerCase().includes(careerSearchTerm.toLowerCase().trim()) ||
+                                      p.shortTitle.toLowerCase().includes(careerSearchTerm.toLowerCase().trim()) ||
+                                      p.category.toLowerCase().includes(careerSearchTerm.toLowerCase().trim())
+                                  )
+                                  if (list.length === 0) return null
+                                  return (
+                                    <div className="combobox-group">
+                                      <div className="combobox-group-header">
+                                        <span className="combobox-group-title">
+                                          <span>📈</span>
+                                          <span>สายงานธุรกิจ การตลาด & การจัดการ (Business & Management)</span>
+                                        </span>
+                                        <span className="combobox-group-count">{list.length} อาชีพ</span>
+                                      </div>
+                                      {list.map((p) => {
+                                        const isSel = selectedMember.careerGoal === p.shortTitle || selectedMember.careerGoal === p.title
+                                        return (
+                                          <div
+                                            key={p.id}
+                                            className={`combobox-item ${isSel ? 'selected' : ''}`}
+                                            onClick={() => {
+                                              handleSelectCareerPreset(p.shortTitle, false)
+                                              setIsCareerDropdownOpen(false)
+                                              setCareerSearchTerm('')
+                                            }}
+                                          >
+                                            <div className="combobox-item-left">
+                                              <span className="combobox-item-title">{p.title}</span>
+                                              <div className="combobox-item-meta">
+                                                <span className="combobox-skill-badge">{p.skills.length} ทักษะหลัก</span>
+                                                <span style={{ fontSize: '11px', color: '#64748b' }}>{p.category}</span>
+                                              </div>
+                                            </div>
+                                            <div className="combobox-item-right">
+                                              {isSel && <span className="combobox-selected-badge">✓ เลือกอยู่</span>}
+                                            </div>
+                                          </div>
+                                        )
+                                      })}
+                                    </div>
+                                  )
+                                })()}
+
+                                {/* Group 4: Administration & Services */}
+                                {(() => {
+                                  const list = CAREER_PRESETS.filter((p) => p.category.includes('บริหาร') || p.category.includes('บริการองค์กร')).filter(
+                                    (p) =>
+                                      !careerSearchTerm.trim() ||
+                                      p.title.toLowerCase().includes(careerSearchTerm.toLowerCase().trim()) ||
+                                      p.shortTitle.toLowerCase().includes(careerSearchTerm.toLowerCase().trim()) ||
+                                      p.category.toLowerCase().includes(careerSearchTerm.toLowerCase().trim())
+                                  )
+                                  if (list.length === 0) return null
+                                  return (
+                                    <div className="combobox-group">
+                                      <div className="combobox-group-header">
+                                        <span className="combobox-group-title">
+                                          <span>🏢</span>
+                                          <span>สายงานบริหาร บริการ & สนับสนุน (Administration & Services)</span>
+                                        </span>
+                                        <span className="combobox-group-count">{list.length} อาชีพ</span>
+                                      </div>
+                                      {list.map((p) => {
+                                        const isSel = selectedMember.careerGoal === p.shortTitle || selectedMember.careerGoal === p.title
+                                        return (
+                                          <div
+                                            key={p.id}
+                                            className={`combobox-item ${isSel ? 'selected' : ''}`}
+                                            onClick={() => {
+                                              handleSelectCareerPreset(p.shortTitle, false)
+                                              setIsCareerDropdownOpen(false)
+                                              setCareerSearchTerm('')
+                                            }}
+                                          >
+                                            <div className="combobox-item-left">
+                                              <span className="combobox-item-title">{p.title}</span>
+                                              <div className="combobox-item-meta">
+                                                <span className="combobox-skill-badge">{p.skills.length} ทักษะหลัก</span>
+                                                <span style={{ fontSize: '11px', color: '#64748b' }}>{p.category}</span>
+                                              </div>
+                                            </div>
+                                            <div className="combobox-item-right">
+                                              {isSel && <span className="combobox-selected-badge">✓ เลือกอยู่</span>}
+                                            </div>
+                                          </div>
+                                        )
+                                      })}
+                                    </div>
+                                  )
+                                })()}
+
+                                {/* Group 5: Other / Custom Option */}
+                                <div className="combobox-group">
+                                  <div className="combobox-group-header">
+                                    <span className="combobox-group-title">
+                                      <span>✨</span>
+                                      <span>ตัวเลือกกำหนดเอง (Custom)</span>
+                                    </span>
+                                  </div>
+                                  <div
+                                    className={`combobox-item ${selectedMember.careerGoal && (selectedMember.careerGoal.startsWith('อื่นๆ') || selectedMember.careerGoal.includes('กำหนดเอง')) ? 'selected' : ''}`}
+                                    onClick={() => {
+                                      handleSelectCareerPreset('other', false)
+                                      setIsCareerDropdownOpen(false)
+                                      setCareerSearchTerm('')
+                                    }}
+                                  >
+                                    <div className="combobox-item-left">
+                                      <span className="combobox-item-title" style={{ color: '#d97706', fontWeight: 700 }}>
+                                        ⭐ อื่นๆ (ระบุชื่ออาชีพและกำหนดทักษะเอง)
+                                      </span>
+                                      <div className="combobox-item-meta">
+                                        <span style={{ fontSize: '11px', color: '#78350f' }}>
+                                          พิมพ์ชื่ออาชีพเป้าหมายได้อย่างอิสระ พร้อมกำหนดทักษะเฉพาะด้าน
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                {/* Empty Search Fallback */}
+                                {careerSearchTerm.trim() && (
+                                  <div className="combobox-empty-search">
+                                    <div style={{ fontSize: '12.5px', color: '#64748b' }}>
+                                      ต้องการใช้ชื่อ "<strong>{careerSearchTerm}</strong>" เป็นอาชีพใหม่?
+                                    </div>
+                                    <button
+                                      type="button"
+                                      className="btn-use-custom-search"
+                                      onClick={() => {
+                                        handleSelectCareerPreset(careerSearchTerm.trim(), false)
+                                        setIsCareerDropdownOpen(false)
+                                        setCareerSearchTerm('')
+                                      }}
+                                    >
+                                      ✨ ใช้ชื่อ "{careerSearchTerm.trim()}" เป็นอาชีพเป้าหมาย
+                                    </button>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )}
+                        </div>
                       </div>
 
                       <div className="career-custom-input-wrap">
