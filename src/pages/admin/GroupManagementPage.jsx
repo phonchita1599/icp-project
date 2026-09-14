@@ -3095,13 +3095,26 @@ export default function GroupManagementPage({
                           ? 'cat-soft'
                           : 'cat-assist'
 
+                      const catIcon = skill.category?.includes('Technical') ? (
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                      ) : skill.category?.includes('Soft') ? (
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>
+                      ) : (
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                      )
+
+                      const statusClass = skill.status === 'ผ่านเกณฑ์แล้ว' ? 'status-pill-passed' : skill.status === 'กำลังพัฒนา' ? 'status-pill-developing' : 'status-pill-improving'
+
                       return (
                         <div key={skill.id} className="skill-card-item">
                           <div className="skill-card-top">
-                            <span className={`skill-cat-badge ${catBadgeClass}`}>{skill.category}</span>
+                            <span className={`skill-cat-badge ${catBadgeClass}`}>
+                              {catIcon}
+                              <span>{skill.category}</span>
+                            </span>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                              <div className="skill-direct-hours-wrap" title="ชั่วโมงฝึกฝน (พิมพ์ตัวเลขแก้ไขได้)">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2.2">
+                              <div className="skill-direct-hours-wrap" title="ชั่วโมงฝึกฝน (คลิกเพื่อพิมพ์แก้ไขจำนวนชั่วโมงได้)">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.2">
                                   <circle cx="12" cy="12" r="10" />
                                   <polyline points="12 6 12 12 16 14" />
                                 </svg>
@@ -3109,7 +3122,7 @@ export default function GroupManagementPage({
                                   type="number"
                                   className="skill-direct-hours-input"
                                   value={skill.hours ? skill.hours.replace(/[^0-9.]/g, '') : ''}
-                                  placeholder="ชม."
+                                  placeholder="25"
                                   onChange={(e) => handleSkillHoursChange(skill.id, e.target.value ? `${e.target.value} ชม.` : '')}
                                 />
                                 <span className="skill-direct-hours-label">ชม.</span>
@@ -3145,7 +3158,7 @@ export default function GroupManagementPage({
                                   className="btn-inline-save"
                                   onClick={() => handleSaveSkillName(skill.id)}
                                 >
-                                  บันทึก
+                                  ✓ บันทึก
                                 </button>
                                 <button
                                   type="button"
@@ -3166,31 +3179,24 @@ export default function GroupManagementPage({
                               >
                                 <span>{skill.name}</span>
                               </h5>
-                              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
-                                <button
-                                  type="button"
-                                  className="btn-card-edit-skill"
-                                  onClick={(e) => {
-                                    e.stopPropagation()
-                                    handleStartEditSkill(skill)
-                                  }}
-                                  title="คลิกเพื่อพิมพ์แก้ไขชื่อทักษะนี้"
-                                >
-                                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
-                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                                  </svg>
-                                  <span>แก้ชื่อ</span>
-                                </button>
-                                <span
-                                  style={{ fontSize: '11px', color: '#2563eb', fontWeight: '600', cursor: 'pointer' }}
-                                  onClick={() => handleOpenSkillEvalModal(skill)}
-                                >
-                                  ประเมิน ↗
-                                </span>
-                              </div>
+                              <button
+                                type="button"
+                                className="btn-card-edit-skill"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  handleStartEditSkill(skill)
+                                }}
+                                title="คลิกเพื่อพิมพ์แก้ไขชื่อทักษะนี้"
+                              >
+                                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                </svg>
+                                <span>แก้ไข</span>
+                              </button>
                             </div>
                           )}
+
                           <div className="skill-rating-box">
                             <div className="rating-label-row">
                               <span className="rating-label">ระดับความเชี่ยวชาญ:</span>
@@ -3205,7 +3211,7 @@ export default function GroupManagementPage({
                                   onClick={() => handleSkillRatingChange(skill.id, star)}
                                   title={`ให้คะแนน ${star} ดาว`}
                                 >
-                                  <svg width="14" height="14" viewBox="0 0 24 24" fill={star <= (skill.level || 0) ? "#f59e0b" : "none"} stroke="#f59e0b" strokeWidth="2">
+                                  <svg width="16" height="16" viewBox="0 0 24 24" fill={star <= (skill.level || 0) ? "#f59e0b" : "none"} stroke="#f59e0b" strokeWidth="1.8">
                                     <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
                                   </svg>
                                 </button>
@@ -3214,21 +3220,22 @@ export default function GroupManagementPage({
                           </div>
 
                           {/* Status & Open Full Eval Button */}
-                          <div className="skill-status-box" style={{ marginTop: '8px' }}>
-                            <select
-                              className="skill-status-select"
-                              value={skill.status || 'กำลังพัฒนา'}
-                              onChange={(e) => handleSkillStatusChange(skill.id, e.target.value)}
-                            >
-                              <option value="ผ่านเกณฑ์แล้ว">ผ่านเกณฑ์แล้ว</option>
-                              <option value="กำลังพัฒนา">กำลังพัฒนา</option>
-                              <option value="ต้องปรับปรุง">ต้องปรับปรุง</option>
-                            </select>
+                          <div className="skill-status-box">
+                            <div className={`skill-status-select-wrap ${statusClass}`}>
+                              <select
+                                className="skill-status-select"
+                                value={skill.status || 'กำลังพัฒนา'}
+                                onChange={(e) => handleSkillStatusChange(skill.id, e.target.value)}
+                              >
+                                <option value="ผ่านเกณฑ์แล้ว">ผ่านเกณฑ์แล้ว</option>
+                                <option value="กำลังพัฒนา">กำลังพัฒนา</option>
+                                <option value="ต้องปรับปรุง">ต้องปรับปรุง</option>
+                              </select>
+                            </div>
 
                             <button
                               type="button"
                               className="btn-open-popup-eval"
-                              style={{ padding: '5px 10px', fontSize: '12px' }}
                               onClick={() => handleOpenSkillEvalModal(skill)}
                               title="เปิดหน้าต่างประเมินทักษะ บันทึกเวลา และแนบหลักฐาน"
                             >
