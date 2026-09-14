@@ -1,0 +1,293 @@
+/* Auth Modal Component Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.2s ease-out;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.modal-card {
+  background: #ffffff;
+  border-radius: 14px;
+  width: 100%;
+  max-width: 480px;
+  padding: 36px 36px 32px;
+  box-shadow: 0 20px 30px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  position: relative;
+  animation: slideUp 0.2s ease-out;
+  box-sizing: border-box;
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #64748b;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.modal-close-btn:hover {
+  background-color: #f1f5f9;
+  color: #0f172a;
+}
+
+.modal-header {
+  margin-bottom: 20px;
+}
+
+.modal-title {
+  font-size: 23px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+
+.modal-subtitle {
+  font-size: 14.5px;
+  color: #475569;
+}
+
+/* Role Selector Tabs */
+.login-role-tabs {
+  display: flex;
+  gap: 8px;
+  background-color: #f1f5f9;
+  padding: 4px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.login-role-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 12px;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.login-role-tab:hover {
+  color: #0f172a;
+}
+
+.login-role-tab.active {
+  background-color: #ffffff;
+  color: #1976d2;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  font-weight: 700;
+}
+
+.login-role-tab.tab-super.active {
+  background: linear-gradient(135deg, #fffbeb, #fef08a);
+  color: #854d0e;
+  border: 1px solid #facc15;
+}
+
+.login-role-tab.tab-admin.active {
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  color: #1e40af;
+  border: 1px solid #93c5fd;
+}
+
+.role-tab-icon {
+  font-size: 15px;
+}
+
+.super-user-hint-banner {
+  background-color: #fefce8;
+  border: 1px solid #fef08a;
+  color: #854d0e;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.super-admin-hint-banner {
+  background-color: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1e40af;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-super-submit {
+  background: linear-gradient(135deg, #d97706, #b45309) !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 6px rgba(217, 119, 6, 0.3) !important;
+}
+
+.btn-super-submit:hover {
+  background: linear-gradient(135deg, #b45309, #92400e) !important;
+}
+
+.btn-admin-submit {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3) !important;
+}
+
+.btn-admin-submit:hover {
+  background: linear-gradient(135deg, #1d4ed8, #1e40af) !important;
+}
+
+.underline-form-row {
+  position: relative;
+  margin-bottom: 24px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #cbd5e1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: border-color 0.2s ease;
+}
+
+.underline-form-row:focus-within {
+  border-bottom-color: #1976d2;
+}
+
+.row-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #475569;
+  flex-shrink: 0;
+}
+
+.row-input-field {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: 16.5px;
+  color: #0f172a;
+  background: transparent;
+  padding: 4px 0;
+}
+
+.row-input-field::placeholder {
+  color: #64748b;
+  font-size: 15px;
+}
+
+.row-action-icon-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #475569;
+  padding: 4px;
+  border-radius: var(--radius-btn, 8px);
+  transition: color 0.15s, background-color 0.15s;
+}
+
+.row-action-icon-btn:hover {
+  color: #1976d2;
+  background-color: #f1f5f9;
+}
+
+.form-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 28px;
+  flex-wrap: wrap;
+}
+
+.btn-primary-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: #1976d2;
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-btn, 8px);
+  padding: 10px 20px;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.2s ease;
+}
+
+.btn-primary-action:hover {
+  background-color: #1565c0;
+}
+
+.btn-link-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  background: transparent;
+  color: #1976d2;
+  border: none;
+  padding: 8px 12px;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: var(--radius-btn, 8px);
+  transition: background-color 0.15s ease;
+}
+
+.btn-link-action:hover {
+  background-color: rgba(25, 118, 210, 0.1);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,188 @@
+﻿/* Authorization Page Styling matching the screenshot */
+.auth-page-container {
+  padding: 24px 32px;
+  max-width: 1300px;
+  margin: 0 auto;
+  font-family: inherit;
+  color: #1e293b;
+}
+
+.auth-page-header {
+  margin-bottom: 24px;
+}
+
+.auth-page-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 6px 0;
+}
+
+.auth-page-subtitle {
+  font-size: 14.5px;
+  color: #475569;
+  margin: 0;
+}
+
+.auth-card {
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  padding: 20px;
+}
+
+.auth-table-responsive {
+  overflow-x: auto;
+}
+
+.auth-matrix-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  text-align: left;
+}
+
+.auth-matrix-table th,
+.auth-matrix-table td {
+  border: 1px solid #e2e8f0;
+  padding: 12px 14px;
+}
+
+.auth-matrix-table thead th {
+  background-color: #f8fafc;
+  color: #334155;
+  font-weight: 600;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.auth-matrix-table thead .th-resource {
+  text-align: left;
+  min-width: 240px;
+  background-color: #f8fafc;
+}
+
+.auth-matrix-table thead .th-role {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.auth-matrix-table thead .th-admin {
+  min-width: 140px;
+}
+
+.th-subtext {
+  display: block;
+  font-size: 12px;
+  font-weight: normal;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+.th-action-group {
+  padding: 8px 12px !important;
+  background-color: #f1f5f9 !important;
+}
+
+.th-action-combo {
+  font-size: 12.5px;
+  color: #475569;
+  font-weight: 600;
+}
+
+.auth-data-row:hover {
+  background-color: #f8fafc;
+}
+
+.td-resource-name {
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.td-actions-cell {
+  text-align: center;
+}
+
+.checkboxes-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.auth-checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13.5px;
+  color: #334155;
+  cursor: pointer;
+  user-select: none;
+}
+
+.auth-checkbox-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #1976d2;
+}
+
+.td-admin-fixed {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.admin-fixed-pill {
+  display: inline-block;
+  color: #16a34a;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.auth-actions-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 16px;
+}
+
+.btn-auth-reset {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #64748b;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-auth-reset:hover {
+  background-color: #f1f5f9;
+  color: #334155;
+}
+
+.btn-auth-save {
+  background-color: #1976d2;
+  border: 1px solid #1976d2;
+  color: #ffffff;
+  padding: 8px 22px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(25, 118, 210, 0.25);
+  transition: all 0.15s ease;
+}
+
+.btn-auth-save:hover {
+  background-color: #1565c0;
+}

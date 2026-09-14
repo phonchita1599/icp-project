@@ -1,0 +1,3197 @@
+import React, { useState } from 'react'
+import './GroupManagementPage.css'
+
+// Standard Career Presets with Recommended Competencies for SUT DSS
+export const CAREER_PRESETS = [
+  {
+    id: 'programmer',
+    title: 'โปรแกรมเมอร์ / นักพัฒนาซอฟต์แวร์ (Frontend / Full-Stack Developer)',
+    shortTitle: 'โปรแกรมเมอร์ (Full-Stack)',
+    category: 'เทคโนโลยีสารสนเทศ & ซอฟต์แวร์',
+    skills: [
+      { id: 1, name: 'การเขียนโปรแกรม JavaScript ES6+ & TypeScript', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 2, name: 'React Web Framework & Component Architecture', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 3, name: 'การออกแบบและจัดการฐานข้อมูล PostgreSQL / SQL', category: 'Technical Skills', level: 3, targetLevel: 4, status: 'กำลังพัฒนา' },
+      { id: 4, name: 'ระบบ Git Version Control & GitHub Team Collaboration', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 5, name: 'มาตรฐานการเข้าถึงสำหรับคนพิการ WCAG 2.1 (Accessibility)', category: 'Assistive & Accessibility', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 6, name: 'การทำงานร่วมกันเป็นทีม & ทักษะการสื่อสารในองค์กร', category: 'Soft Skills', level: 4, targetLevel: 4, status: 'ผ่านเกณฑ์แล้ว' },
+    ],
+  },
+  {
+    id: 'data-analyst',
+    title: 'นักวิเคราะห์ข้อมูลและสารสนเทศ (Data Analyst)',
+    shortTitle: 'นักวิเคราะห์ข้อมูล (Data Analyst)',
+    category: 'ข้อมูล & ปัญญาประดิษฐ์',
+    skills: [
+      { id: 101, name: 'การเขียนคำสั่ง SQL ขั้นสูงเพื่อดึงและรวมข้อมูล', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 102, name: 'Data Visualization & Dashboard (Power BI / Tableau)', category: 'Technical Skills', level: 3, targetLevel: 4, status: 'กำลังพัฒนา' },
+      { id: 103, name: 'Python for Data Analysis (Pandas & NumPy)', category: 'Technical Skills', level: 3, targetLevel: 4, status: 'กำลังพัฒนา' },
+      { id: 104, name: 'Data Storytelling & การสรุปผลเพื่อการตัดสินใจ', category: 'Soft Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 105, name: 'การใช้เครื่องมือช่วยเหลือ DSS สำหรับการประมวลผลข้อมูล', category: 'Assistive & Accessibility', level: 4, targetLevel: 4, status: 'ผ่านเกณฑ์แล้ว' },
+    ],
+  },
+  {
+    id: 'uiux-designer',
+    title: 'นักออกแบบ UI/UX ดิจิทัล (UI/UX Designer)',
+    shortTitle: 'นักออกแบบ UI/UX',
+    category: 'ออกแบบดิจิทัล',
+    skills: [
+      { id: 201, name: 'UI Design & Component Design System ด้วย Figma', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 202, name: 'Inclusive User Research & Usability Testing', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 203, name: 'Wireframing & Interactive Prototyping', category: 'Technical Skills', level: 3, targetLevel: 4, status: 'กำลังพัฒนา' },
+      { id: 204, name: 'Accessibility Color Contrast & Readability', category: 'Assistive & Accessibility', level: 5, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 205, name: 'การนำเสนอ Design Showcase & การรับฟัง Feedback', category: 'Soft Skills', level: 4, targetLevel: 4, status: 'ผ่านเกณฑ์แล้ว' },
+    ],
+  },
+  {
+    id: 'it-support',
+    title: 'เจ้าหน้าที่บริการเทคโนโลยีสารสนเทศ (IT Support & Network Specialist)',
+    shortTitle: 'IT Support & Network',
+    category: 'สนับสนุนและเครือข่าย',
+    skills: [
+      { id: 301, name: 'การแก้ปัญหาคอมพิวเตอร์และระบบปฏิบัติการ (Windows/Linux)', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 302, name: 'การจัดการระบบเครือข่ายพื้นฐาน (LAN, Wi-Fi, VPN, DHCP)', category: 'Technical Skills', level: 3, targetLevel: 4, status: 'กำลังพัฒนา' },
+      { id: 303, name: 'การติดตั้งและตั้งค่าซอฟต์แวร์/อุปกรณ์ช่วยเหลือคนพิการ DSS', category: 'Assistive & Accessibility', level: 5, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 304, name: 'การบริการและการสื่อสารประสานงานกับผู้ใช้งาน', category: 'Soft Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+    ],
+  },
+  {
+    id: 'digital-marketing',
+    title: 'นักการตลาดดิจิทัลและอีคอมเมิร์ซ (Digital Marketing & Content Creator)',
+    shortTitle: 'นักการตลาดดิจิทัล',
+    category: 'การตลาดและสื่อออนไลน์',
+    skills: [
+      { id: 401, name: 'การวางแผนและสร้าง Content สื่อสังคมออนไลน์', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 402, name: 'การยิงโฆษณาและการวิเคราะห์สถิติ (Meta / Google Ads / TikTok)', category: 'Technical Skills', level: 3, targetLevel: 4, status: 'กำลังพัฒนา' },
+      { id: 403, name: 'การจัดการร้านค้าออนไลน์ E-commerce & Customer Service', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 404, name: 'การคิดสร้างสรรค์และการสื่อสารโน้มน้าวใจ', category: 'Soft Skills', level: 4, targetLevel: 4, status: 'ผ่านเกณฑ์แล้ว' },
+    ],
+  },
+]
+
+export default function GroupManagementPage({
+  groupsList = [],
+  onAddGroup,
+  onUpdateGroup,
+  onDeleteGroup,
+  onAddMemberToGroup,
+  onUpdateMemberProgress,
+  onRemoveMemberFromGroup,
+  allAvailableUsers = [],
+}) {
+  // Active selected group
+  const [selectedGroupId, setSelectedGroupId] = useState(groupsList[0]?.id || 1)
+  const activeGroup = groupsList.find((g) => g.id === selectedGroupId) || groupsList[0]
+
+  // Modals
+  const [showCreateGroupModal, setShowCreateGroupModal] = useState(false)
+  const [showEditGroupModal, setShowEditGroupModal] = useState(false)
+  const [editGroupFormData, setEditGroupFormData] = useState({
+    id: null,
+    name: '',
+    description: '',
+    dssName: '',
+    mentorName: '',
+  })
+  const [showAddMemberModal, setShowAddMemberModal] = useState(false)
+  const [showMemberDetailModal, setShowMemberDetailModal] = useState(false)
+  const [selectedMember, setSelectedMember] = useState(null)
+
+  // Subtab inside Evaluation Modal ('monthly' | 'skills')
+  const [modalSubTab, setModalSubTab] = useState('monthly')
+
+  // 7 Standard Evaluation Options (matching user)
+  const evaluationOptions = [
+    '1.ได้รู้จักหรือมีทักษะนี้เพียงเล็กน้อยเท่านั้น',
+    '2.ได้เรียนทักษะนี้บ้างและพอทำได้ ถึงแม้จะน้อยกว่าคนทั่วไป',
+    '3.ได้มีประสบการณ์ในการใช้ทักษะนี้เป็นครั้งคราว และทำได้เทียบเท่ากับคนทั่วไป',
+    '4.ได้ใช้ทักษะนี้ประจำหรือในงานและทำได้ดีกว่าคนทั่วไป',
+    '5.ได้ถ่ายทอดทักษะนี้แก่ผู้อื่น หรือเป็นต้นแบบของทักษะนี้แก่ผู้อื่น',
+    '(Yes) มีใบประกาศ มีใบรับรอง ผ่านการฝึกประสบการณ์ ได้รับใบอนุญาตขับขี่',
+    '(No) ยังไม่มีใบประกาศ ยังไม่มีใบรับรอง ยังไม่ผ่านการฝึกประสบการณ์ ยังไม่ได้รับใบอนุญาตขับขี่',
+  ]
+
+  // Category Options for Adding Skill
+  const categoryOptions = [
+    { id: 'tech', name: 'ทักษะทางเทคนิค (Technical Skills)' },
+    { id: 'soft', name: 'ทักษะทางอารมณ์และสังคม (Soft Skills)' },
+    { id: 'comm', name: 'ทักษะการสื่อสารและภาษา (Language & Comm)' },
+    { id: 'cert', name: 'ใบรับรองวิชาชีพ / มาตรฐาน (Certificates)' },
+    { id: 'assist', name: 'สิ่งอำนวยความสะดวก DSS (Assistive Tech)' },
+    { id: 'other', name: 'อื่นๆ (ระบุหมวดหมู่เอง)' },
+  ]
+
+  const [selectedCatId, setSelectedCatId] = useState('tech')
+  const [customCatText, setCustomCatText] = useState('')
+  const [isCatDropdownOpen, setIsCatDropdownOpen] = useState(false)
+  const [newSkillHours, setNewSkillHours] = useState('15')
+
+  // Super User Evaluation Popup Modal for individual skill
+  const [selectedSkillEvalModal, setSelectedSkillEvalModal] = useState(null)
+  const [isEvalDropdownOpen, setIsEvalDropdownOpen] = useState(false)
+  const [evalModalData, setEvalModalData] = useState({
+    level: '4.ได้ใช้ทักษะนี้ประจำหรือในงานและทำได้ดีกว่าคนทั่วไป',
+    hours: '25',
+    images: [],
+    note: '',
+  })
+
+  // Individual Skills Matrix for the selected member
+  const [memberSkills, setMemberSkills] = useState([])
+  const [newSkillForm, setNewSkillForm] = useState({
+    name: '',
+    category: 'Technical Skills',
+    targetLevel: 5,
+  })
+
+  // Forms state
+  const [groupFormData, setGroupFormData] = useState({
+    name: '',
+    description: '',
+    dssName: 'มหาวิทยาลัยเทคโนโลยีสุรนารี',
+    mentorName: 'อ.ที่ปรึกษา / พี่เลี้ยงศูนย์บริการ DSS',
+  })
+  const [selectedUserToAdd, setSelectedUserToAdd] = useState('')
+  const [userSearchQuery, setUserSearchQuery] = useState('')
+  const [customSkillText, setCustomSkillText] = useState('')
+  const [autoSyncScore, setAutoSyncScore] = useState(true)
+
+  // Active month index for monthly evaluation (0 = Jan ... 7 = Aug ... 11 = Dec)
+  const [activeMonthIdx, setActiveMonthIdx] = useState(7) // Default to สิงหาคม (Index 7)
+
+  // Standard 12-Month Balanced Evaluation Syllabus for SUT DSS
+  const DEFAULT_12_MONTHS_SYLLABUS = [
+    {
+      monthKey: '01',
+      monthName: 'มกราคม 2568',
+      shortMonth: 'ม.ค.',
+      topic: 'ปูพื้นฐานการเขียนโปรแกรม & ตรรกะอัลกอริทึม',
+      shortTopic: 'ปูพื้นฐาน',
+      score: 35,
+      passedSkills: '1 ทักษะ',
+      hours: '12 ชม.',
+      status: 'กำลังพัฒนาได้ดี',
+      criteria: ['ทดสอบตรรกะและอัลกอริทึมพื้นฐาน (Condition, Loop)', 'การติดตั้งและตั้งค่าเครื่องมือพัฒนาซอฟต์แวร์', 'การประเมินความต้องการอุปกรณ์ช่วยเหลือ DSS มทส.'],
+      passedCriteria: [0, 1, 2],
+      note: 'เริ่มปรับพื้นฐานการเขียนโปรแกรม Python และอัลกอริทึม เข้าใจ Flowchart และ Logic การทำงานได้ดี',
+      plan: 'ฝึกทำโจทย์ Condition & Loop เพิ่มเติม',
+      userSelfScore: 40,
+      userSelfStatus: 'เข้าใจพื้นฐานดี',
+      userSelfNote: 'เรียนรู้ Logic และเขียน Python ฟังก์ชันพื้นฐานได้แล้ว มีความเข้าใจคำสั่ง Loop ดีขึ้น',
+      userSelfEvidence: 'https://github.com/sut-student/python-basics-lab1',
+      userSelfPassedCriteria: [0, 1],
+    },
+    {
+      monthKey: '02',
+      monthName: 'กุมภาพันธ์ 2568',
+      shortMonth: 'ก.พ.',
+      topic: 'โครงสร้างข้อมูล & ระบบ Git Version Control',
+      shortTopic: 'Git & Data',
+      score: 48,
+      passedSkills: '2 ทักษะ',
+      hours: '16 ชม.',
+      status: 'กำลังพัฒนาได้ดี',
+      criteria: ['การใช้งาน Git & GitHub (Commit, Branch, Pull Request)', 'การจัดการ Data Structures (Array, List, Map, Set)', 'การทำงานร่วมกันเป็นทีมผ่าน Version Control'],
+      passedCriteria: [0, 1, 2],
+      note: 'ศึกษา Data Structures และ Git Version Control ได้คล่องแคล่ว ส่งงานผ่าน GitHub สม่ำเสมอ',
+      plan: 'เริ่มเรียนรู้โครงสร้างหน้าเว็บ HTML5/CSS3',
+      userSelfScore: 50,
+      userSelfStatus: 'ใช้งาน Git ได้คล่อง',
+      userSelfNote: 'สามารถสร้าง Branch และส่ง Pull Request บน GitHub ได้ถูกต้อง ทำการทดลองโครงสร้าง Array และ Map ผ่านเกณฑ์',
+      userSelfEvidence: 'https://github.com/sut-student/data-structure-assignment',
+      userSelfPassedCriteria: [0, 1, 2],
+    },
+    {
+      monthKey: '03',
+      monthName: 'มีนาคม 2568',
+      shortMonth: 'มี.ค.',
+      topic: 'พื้นฐานการพัฒนาเว็บ & JavaScript ES6+',
+      shortTopic: 'Web & JS',
+      score: 56,
+      passedSkills: '3 ทักษะ',
+      hours: '20 ชม.',
+      status: 'กำลังพัฒนาได้ดี',
+      criteria: ['การเขียน Modern JavaScript (ES6+, Async/Await, Fetch)', 'การจัด Layout Responsive ด้วย CSS Flexbox และ Grid', 'การจัดการ DOM Manipulation และ Event Handling'],
+      passedCriteria: [0, 1, 2],
+      note: 'เรียนรู้ HTML5, CSS3, JavaScript ES6 และ DOM Manipulation สร้าง Interactive Form ได้ถูกต้อง',
+      plan: 'เริ่มศึกษา React และ Component-based Architecture',
+      userSelfScore: 60,
+      userSelfStatus: 'เขียน JavaScript ได้ดี',
+      userSelfNote: 'เข้าใจการใช้ Fetch API และการจัดหน้าจอ Responsive ด้วย Flexbox/Grid ได้อย่างถูกต้อง',
+      userSelfEvidence: 'https://codepen.io/sut-dss-student/pen/responsive-form',
+      userSelfPassedCriteria: [0, 1, 2],
+    },
+    {
+      monthKey: '04',
+      monthName: 'เมษายน 2568',
+      shortMonth: 'เม.ย.',
+      topic: 'Frontend Web Framework (React Components & Hooks)',
+      shortTopic: 'React Web',
+      score: 65,
+      passedSkills: '4 ทักษะ',
+      hours: '18 ชม.',
+      status: 'กำลังพัฒนาได้ดี',
+      criteria: ['การสร้าง Reusable React Components & Props', 'การจัดการ State ด้วย React Hooks (useState, useEffect, useMemo)', 'การเชื่อมต่อ REST API และจัดการสถานะข้อมูลแบบ Asynchronous'],
+      passedCriteria: [0, 1, 2],
+      note: 'สร้าง Component และใช้งาน Hooks บน React ได้ถูกต้อง สามารถเชื่อมต่อ Mock API ได้อย่างราบรื่น',
+      plan: 'ศึกษาการออกแบบฐานข้อมูล PostgreSQL และระบบความปลอดภัย',
+      userSelfScore: 68,
+      userSelfStatus: 'สร้าง React App ได้แล้ว',
+      userSelfNote: 'พัฒนา Single Page Application โดยใช้ React และเชื่อมต่อ API แสดงผลข้อมูลได้ตามโจทย์',
+      userSelfEvidence: 'https://github.com/sut-student/react-icp-miniapp',
+      userSelfPassedCriteria: [0, 1, 2],
+    },
+    {
+      monthKey: '05',
+      monthName: 'พฤษภาคม 2568',
+      shortMonth: 'พ.ค.',
+      topic: 'ฐานข้อมูล & มาตรฐานการเข้าถึงสำหรับคนพิการ (WCAG)',
+      shortTopic: 'DB & WCAG',
+      score: 72,
+      passedSkills: '5 ทักษะ',
+      hours: '24 ชม.',
+      status: 'กำลังพัฒนาได้ดี',
+      criteria: ['การออกแบบและ Query ฐานข้อมูล PostgreSQL (DDL/DML)', 'การพัฒนาเว็บตามมาตรฐาน WCAG 2.1 (Web Accessibility)', 'การสร้างระบบ CRUD Backend API เชื่อมต่อฐานข้อมูล'],
+      passedCriteria: [0, 1, 2],
+      note: 'ทำระบบ CRUD และต่อเชื่อมฐานข้อมูล PostgreSQL ได้อย่างราบรื่น ออกแบบ UI รองรับ Screen Reader ได้ตามเกณฑ์',
+      plan: 'รวมชิ้นงานทำ Mini Project Full-Stack สำหรับสหกิจศึกษา',
+      userSelfScore: 75,
+      userSelfStatus: 'รองรับ Accessibility',
+      userSelfNote: 'ออกแบบระบบฐานข้อมูล PostgreSQL และปรับปรุงหน้า UI ให้รองรับ Screen Reader สำหรับผู้พิการทางสายตา',
+      userSelfEvidence: 'https://github.com/sut-student/accessible-postgres-crud',
+      userSelfPassedCriteria: [0, 1, 2],
+    },
+    {
+      monthKey: '06',
+      monthName: 'มิถุนายน 2568',
+      shortMonth: 'มิ.ย.',
+      topic: 'Full-Stack Mini Project & การทดสอบระบบ (Testing)',
+      shortTopic: 'Mini Project',
+      score: 78,
+      passedSkills: '6 ทักษะ',
+      hours: '25 ชม.',
+      status: 'กำลังพัฒนาได้ดี',
+      criteria: ['การพัฒนา Full-Stack Web Application ฉบับสมบูรณ์', 'การเขียน Unit Test & Integration Test', 'การ Deploy Application ขึ้น Cloud Platform (Vercel/Render)'],
+      passedCriteria: [0, 1, 2],
+      note: 'ทำ Mini Project Full-Stack Web App สำเร็จตามกำหนด เขียน Unit Test ผ่านเกณฑ์ 80%',
+      plan: 'จัดทำ Portfolio และเตรียมตัวสอบวัดระดับทักษะวิชาชีพ',
+      userSelfScore: 80,
+      userSelfStatus: 'Mini Project สำเร็จสมบูรณ์',
+      userSelfNote: 'ส่งมอบ Full-Stack Web Application พร้อม Deploy ขึ้น Vercel และผ่าน Unit Test 82%',
+      userSelfEvidence: 'https://sut-icp-mini-project.vercel.app',
+      userSelfPassedCriteria: [0, 1, 2],
+    },
+    {
+      monthKey: '07',
+      monthName: 'กรกฎาคม 2568',
+      shortMonth: 'ก.ค.',
+      topic: 'ทดสอบทักษะวิชาชีพ & จัดทำแฟ้มผลงาน Portfolio',
+      shortTopic: 'Portfolio',
+      score: 82,
+      passedSkills: '7 ทักษะ',
+      hours: '28 ชม.',
+      status: 'พร้อมยื่นสมัครงานแล้ว',
+      criteria: ['สอบผ่านเกณฑ์มาตรฐานสมรรถนะวิชาชีพด้านซอฟต์แวร์', 'จัดทำ Live Portfolio & GitHub Showcases', 'จัดทำเรซูเม่ฉบับสองภาษา (ไทย-อังกฤษ) สำหรับสหกิจศึกษา'],
+      passedCriteria: [0, 1, 2],
+      note: 'ผ่านการทดสอบทักษะ Frontend & Backend ได้คะแนนสูงมาก Portfolio มีชิ้นงานจริงครบถ้วน',
+      plan: 'เตรียมตัวซ้อมสัมภาษณ์งาน Mock Interview',
+      userSelfScore: 85,
+      userSelfStatus: 'Portfolio ครบถ้วนพร้อมยื่น',
+      userSelfNote: 'จัดทำเว็บไซต์ Portfolio และเรซูเม่ภาษาไทย-อังกฤษ พร้อม Link ผลงาน GitHub ครบถ้วน',
+      userSelfEvidence: 'https://thanakorn-dev.portfolio.sut.ac.th',
+      userSelfPassedCriteria: [0, 1, 2],
+    },
+    {
+      monthKey: '08',
+      monthName: 'สิงหาคม 2568',
+      shortMonth: 'ส.ค.',
+      topic: 'เตรียมความพร้อมสหกิจศึกษา & ซ้อมสัมภาษณ์งาน',
+      shortTopic: 'สหกิจ/สัมภาษณ์',
+      score: 85,
+      passedSkills: '8 ทักษะ',
+      hours: '30 ชม.',
+      status: 'พร้อมยื่นสมัครงานแล้ว',
+      criteria: ['การซ้อมสัมภาษณ์งานจำลอง (Mock Interview กับสถานประกอบการ)', 'การเตรียมความพร้อมด้าน Soft Skills และวัฒนธรรมองค์กร', 'การจับคู่สถานประกอบการโครงการสหกิจศึกษา มทส.'],
+      passedCriteria: [0, 1, 2],
+      note: 'ผ่านเกณฑ์ประเมิน React & SQL และโครงงานสหกิจศึกษา มทส. มีความมั่นใจและพร้อมเริ่มงาน',
+      plan: 'ส่งเอกสารเข้าร่วมสหกิจศึกษาในสถานประกอบการจริง',
+      userSelfScore: 88,
+      userSelfStatus: 'พร้อมเริ่มสหกิจศึกษา',
+      userSelfNote: 'ผ่านการซ้อมสัมภาษณ์ Mock Interview กับพี่เลี้ยง DSS ได้รับข้อเสนอแนะในการตอบคำถามเชิงเทคนิคดีมาก',
+      userSelfEvidence: 'https://drive.google.com/mock-interview-sut-dss-cert',
+      userSelfPassedCriteria: [0, 1, 2],
+    },
+    {
+      monthKey: '09',
+      monthName: 'กันยายน 2568',
+      shortMonth: 'ก.ย.',
+      topic: 'เริ่มปฏิบัติงานสหกิจศึกษา & ติดตามการปรับตัวในองค์กร',
+      shortTopic: 'เริ่มสหกิจ',
+      score: 0,
+      passedSkills: '-',
+      hours: '-',
+      status: 'ยังไม่ถึงรอบประเมิน',
+      criteria: ['การปรับตัวเข้ากับทีมงานและกระบวนการทำงานจริงในองค์กร', 'การใช้เครื่องมือสื่อสารและการประสานงานในที่ทำงาน', 'การส่งรายงานผลการปฏิบัติงานสัปดาห์แรกต่อศูนย์ DSS มทส.'],
+      passedCriteria: [],
+      note: 'รอรอบประเมินประจำเดือนกันยายน 2568 (ช่วงเริ่มปฏิบัติงานสหกิจศึกษา)',
+      plan: 'บันทึก Daily Log การทำงานและปรึกษาพี่เลี้ยง DSS ประจำสัปดาห์',
+      userSelfScore: 0,
+      userSelfStatus: 'ยังไม่ถึงรอบประเมิน',
+      userSelfNote: '',
+      userSelfEvidence: '',
+      userSelfPassedCriteria: [],
+    },
+    {
+      monthKey: '10',
+      monthName: 'ตุลาคม 2568',
+      shortMonth: 'ต.ค.',
+      topic: 'ประเมินผลการปฏิบัติงานกลางเทอม (Midterm Assessment)',
+      shortTopic: 'Midterm',
+      score: 0,
+      passedSkills: '-',
+      hours: '-',
+      status: 'ยังไม่ถึงรอบประเมิน',
+      criteria: ['การประเมินผลงานจากหัวหน้างานสถานประกอบการรอบกลางเทอม', 'การแก้ไขปัญหาทางเทคนิคและข้อติดขัดในการปฏิบัติงานจริง', 'ความก้าวหน้าของโครงงานสหกิจศึกษาบรรลุเป้าหมาย 50%'],
+      passedCriteria: [],
+      note: 'รอรอบประเมินประจำเดือนตุลาคม 2568 (รอบประเมินกลางเทอม)',
+      plan: 'เตรียมสรุปผลงานกลางเทอมร่วมกับอาจารย์นิเทศก์ มทส.',
+      userSelfScore: 0,
+      userSelfStatus: 'ยังไม่ถึงรอบประเมิน',
+      userSelfNote: '',
+      userSelfEvidence: '',
+      userSelfPassedCriteria: [],
+    },
+    {
+      monthKey: '11',
+      monthName: 'พฤศจิกายน 2568',
+      shortMonth: 'พ.ย.',
+      topic: 'นำเสนอโครงงานสหกิจศึกษา & สรุปผลสัมฤทธิ์หน้างาน',
+      shortTopic: 'Final Project',
+      score: 0,
+      passedSkills: '-',
+      hours: '-',
+      status: 'ยังไม่ถึงรอบประเมิน',
+      criteria: ['ความสมบูรณ์ของโครงงานสหกิจศึกษา 100% พร้อมใช้งานจริง', 'การจัดทำรายงานสรุปผลการปฏิบัติงานสหกิจศึกษาฉบับสมบูรณ์', 'การนำเสนอโครงงานต่อคณะกรรมการสถานประกอบการและ มทส.'],
+      passedCriteria: [],
+      note: 'รอรอบประเมินประจำเดือนพฤศจิกายน 2568 (รอบส่งมอบโครงงาน)',
+      plan: 'เตรียมเอกสารส่งมอบงานและขอใบรับรองการผ่านงาน',
+      userSelfScore: 0,
+      userSelfStatus: 'ยังไม่ถึงรอบประเมิน',
+      userSelfNote: '',
+      userSelfEvidence: '',
+      userSelfPassedCriteria: [],
+    },
+    {
+      monthKey: '12',
+      monthName: 'ธันวาคม 2568',
+      shortMonth: 'ธ.ค.',
+      topic: 'สรุปผลสัมฤทธิ์แผนพัฒนารายบุคคล (ICP) & บรรจุเข้าทำงาน',
+      shortTopic: 'บรรจุเข้าทำงาน',
+      score: 0,
+      passedSkills: '-',
+      hours: '-',
+      status: 'ยังไม่ถึงรอบประเมิน',
+      criteria: ['การประเมินสรุปผลสัมฤทธิ์ตามแผนพัฒนารายบุคคล (ICP)', 'การเซ็นสัญญาจ้างงาน / บรรจุเข้าทำงานประจำในสถานประกอบการ', 'การส่งต่อข้อมูลเข้าสู่เครือข่ายศิษย์เก่าคนพิการ มทส.'],
+      passedCriteria: [],
+      note: 'รอรอบประเมินสรุปผลสิ้นปี 2568 (Final Career Placement)',
+      plan: 'สรุปรายงานผลสำเร็จการพัฒนาอาชีพรายบุคคล',
+      userSelfScore: 0,
+      userSelfStatus: 'ยังไม่ถึงรอบประเมิน',
+      userSelfNote: '',
+      userSelfEvidence: '',
+      userSelfPassedCriteria: [],
+    },
+  ]
+
+  // Helper to find preset skills for member
+  const getInitialMemberSkills = (member) => {
+    if (member?.skills && Array.isArray(member.skills) && member.skills.length > 0) {
+      return member.skills
+    }
+    const matchedPreset = CAREER_PRESETS.find(
+      (p) => member?.careerGoal?.includes(p.shortTitle) || member?.careerGoal?.includes(p.id) || p.title.includes(member?.careerGoal)
+    )
+    return matchedPreset ? matchedPreset.skills : CAREER_PRESETS[0].skills
+  }
+
+  // Helper for 12 months structure
+  const getMonthsList = (member) => {
+    if (member?.monthlyProgress && Array.isArray(member.monthlyProgress) && member.monthlyProgress.length === 12) {
+      return member.monthlyProgress
+    }
+    return DEFAULT_12_MONTHS_SYLLABUS
+  }
+
+  // Automatic Score Calculation based on Passed Criteria
+  const calcAutoScore = (passedList = [], criteriaList = []) => {
+    if (!criteriaList || criteriaList.length === 0) return 0
+    return Math.min(100, Math.round((passedList.length / criteriaList.length) * 100))
+  }
+
+  // Status mapping from score
+  const getStatusFromScore = (sc) => {
+    if (sc >= 80) return 'พร้อมยื่นสมัครงานแล้ว'
+    if (sc >= 60) return 'กำลังพัฒนาได้ดี'
+    if (sc >= 40) return 'ต้องการคำแนะนำเพิ่มเติม'
+    if (sc > 0) return 'ต้องเร่งปรับปรุงทักษะ'
+    return 'ยังไม่ถึงรอบประเมิน'
+  }
+
+  // Monthly Evaluation & Feedback Form State
+  const [evaluationData, setEvaluationData] = useState({
+    topic: 'เตรียมความพร้อมสหกิจศึกษา & ซ้อมสัมภาษณ์งาน',
+    score: 85,
+    status: 'พร้อมยื่นสมัครงานแล้ว',
+    passedSkills: '8 ทักษะ',
+    hours: '30 ชม.',
+    criteria: ['การซ้อมสัมภาษณ์งานจำลอง (Mock Interview กับสถานประกอบการ)', 'การเตรียมความพร้อมด้าน Soft Skills และวัฒนธรรมองค์กร', 'การจับคู่สถานประกอบการโครงการสหกิจศึกษา มทส.'],
+    passedCriteria: [0, 1, 2],
+    mentorNote: '',
+    advicePlan: '',
+    userSelfScore: 88,
+    userSelfStatus: 'พร้อมเริ่มสหกิจศึกษา',
+    userSelfNote: '',
+    userSelfEvidence: '',
+    userSelfPassedCriteria: [0, 1, 2],
+  })
+
+  const [saveSuccessMsg, setSaveSuccessMsg] = useState('')
+
+  // Open member detail modal
+  const handleOpenMemberDetail = (member) => {
+    const months = getMonthsList(member)
+    const latestEvaluatedIdx = 7
+    const initialSkills = getInitialMemberSkills(member)
+    
+    setSelectedMember({
+      ...member,
+      monthlyProgress: months,
+      skills: initialSkills,
+    })
+    setMemberSkills(initialSkills)
+    setActiveMonthIdx(latestEvaluatedIdx)
+    setModalSubTab('monthly')
+
+    const curMonthData = months[latestEvaluatedIdx]
+    const criteria = curMonthData.criteria || DEFAULT_12_MONTHS_SYLLABUS[latestEvaluatedIdx].criteria
+    const passedCriteria = curMonthData.passedCriteria || (curMonthData.score > 0 ? [0, 1, 2] : [])
+
+    setEvaluationData({
+      topic: curMonthData.topic || DEFAULT_12_MONTHS_SYLLABUS[latestEvaluatedIdx].topic,
+      score: curMonthData.score !== undefined ? curMonthData.score : (member.progressPct || 80),
+      status: curMonthData.status || member.status || 'กำลังพัฒนาได้ดี',
+      passedSkills: curMonthData.passedSkills || `${passedCriteria.length} ทักษะ`,
+      hours: curMonthData.hours || '30 ชม.',
+      criteria: criteria,
+      passedCriteria: passedCriteria,
+      mentorNote: curMonthData.note || member.mentorNote || '',
+      advicePlan: curMonthData.plan || member.advicePlan || '',
+      userSelfScore: curMonthData.userSelfScore !== undefined ? curMonthData.userSelfScore : 85,
+      userSelfStatus: curMonthData.userSelfStatus || 'ประเมินแล้ว',
+      userSelfNote: curMonthData.userSelfNote || 'นักศึกษาได้บันทึกการเรียนรู้และส่งผลงานในเดือนนี้เรียบร้อยแล้ว',
+      userSelfEvidence: curMonthData.userSelfEvidence || 'https://github.com/sut-student/project-portfolio',
+      userSelfPassedCriteria: curMonthData.userSelfPassedCriteria || passedCriteria,
+    })
+    setSaveSuccessMsg('')
+    setCustomSkillText('')
+    setShowMemberDetailModal(true)
+  }
+
+  // Switch member inside modal
+  const handleSwitchMember = (targetIdx) => {
+    const mems = activeGroup?.members || []
+    if (targetIdx >= 0 && targetIdx < mems.length) {
+      handleOpenMemberDetail(mems[targetIdx])
+    }
+  }
+
+  // Career Selection & Preset Loading
+  const handleSelectCareerPreset = (careerTitle, autoLoad = false) => {
+    if (!selectedMember) return
+    const matched = CAREER_PRESETS.find((p) => p.title === careerTitle || p.id === careerTitle || p.shortTitle === careerTitle)
+    const newCareer = matched ? matched.title : careerTitle
+
+    const updatedMember = {
+      ...selectedMember,
+      careerGoal: newCareer,
+    }
+
+    if (autoLoad && matched) {
+      setMemberSkills(matched.skills)
+      updatedMember.skills = matched.skills
+    }
+
+    setSelectedMember(updatedMember)
+    onUpdateMemberProgress(activeGroup.id, updatedMember)
+    setSaveSuccessMsg(`อัปเดตอาชีพเป้าหมายของ "${selectedMember.name}" เป็น "${newCareer}" เรียบร้อย!`)
+    setTimeout(() => setSaveSuccessMsg(''), 3500)
+  }
+
+  // Update Individual Skill Rating (1-5 Stars)
+  const handleSkillRatingChange = (skillId, newLevel) => {
+    const updated = memberSkills.map((s) => (s.id === skillId ? { ...s, level: newLevel } : s))
+    setMemberSkills(updated)
+  }
+
+  // Update Individual Skill Status
+  const handleSkillStatusChange = (skillId, newStatus) => {
+    const updated = memberSkills.map((s) => (s.id === skillId ? { ...s, status: newStatus } : s))
+    setMemberSkills(updated)
+  }
+
+  // Delete Individual Skill
+  const handleDeleteIndividualSkill = (skillId) => {
+    const updated = memberSkills.filter((s) => s.id !== skillId)
+    setMemberSkills(updated)
+  }
+
+  // Add New Individual Skill (with category & custom category support)
+  const handleAddIndividualSkill = (e) => {
+    e?.preventDefault?.()
+    if (!newSkillForm.name.trim()) return
+
+    let finalCategory = 'ทักษะทางเทคนิค (Technical Skills)'
+    if (selectedCatId === 'other') {
+      finalCategory = customCatText.trim() ? customCatText.trim() : 'อื่นๆ (กำหนดเอง)'
+    } else {
+      const found = categoryOptions.find((c) => c.id === selectedCatId)
+      finalCategory = found ? found.name : 'ทักษะทางเทคนิค (Technical Skills)'
+    }
+
+    const newSkill = {
+      id: Date.now(),
+      name: newSkillForm.name.trim(),
+      category: finalCategory,
+      level: 4,
+      targetLevel: Number(newSkillForm.targetLevel) || 5,
+      status: 'กำลังพัฒนา',
+      hours: newSkillHours || '15',
+      images: [],
+      note: '',
+      evalLevel: '4.ได้ใช้ทักษะนี้ประจำหรือในงานและทำได้ดีกว่าคนทั่วไป',
+    }
+
+    setMemberSkills([...memberSkills, newSkill])
+    setNewSkillForm({
+      name: '',
+      category: 'Technical Skills',
+      targetLevel: 5,
+    })
+    setCustomCatText('')
+    setIsCatDropdownOpen(false)
+  }
+
+  // Open Assessment Modal for specific member skill
+  const handleOpenSkillEvalModal = (skill) => {
+    setSelectedSkillEvalModal(skill)
+    setIsEvalDropdownOpen(false)
+    setEvalModalData({
+      name: skill.name || '',
+      level: skill.evalLevel || (skill.level === 5 ? evaluationOptions[4] : skill.level === 4 ? evaluationOptions[3] : skill.level === 3 ? evaluationOptions[2] : evaluationOptions[1]),
+      hours: skill.hours ? skill.hours.replace(/[^0-9.]/g, '') || '25' : '25',
+      images: skill.images || [],
+      note: skill.note || '',
+    })
+  }
+
+  // Open Assessment Modal from Monthly Evaluation (+ เพิ่มทักษะ หรือคลิกที่เกณฑ์)
+  const handleOpenMonthlySkillModal = (skillNameOrIdx) => {
+    const activeMonthsList = getMonthsList(selectedMember)
+    const currentMonthDef = activeMonthsList[activeMonthIdx] || DEFAULT_12_MONTHS_SYLLABUS[activeMonthIdx]
+    const currentMonthName = currentMonthDef?.shortMonth 
+      ? `${currentMonthDef.shortMonth} 2568 (เดือนล่าสุด)` 
+      : 'สิงหาคม 2568 (เดือนล่าสุด)'
+    const categoryName = selectedMember?.careerGoal || 'เทคโนโลยีสารสนเทศ/IT'
+
+    let skillObj = null
+    if (typeof skillNameOrIdx === 'number') {
+      const name = evaluationData.criteria[skillNameOrIdx]
+      const isPassed = (evaluationData.passedCriteria || []).includes(skillNameOrIdx)
+      skillObj = {
+        id: `criteria-${skillNameOrIdx}`,
+        name: name,
+        category: categoryName,
+        monthContext: currentMonthName,
+        isCriteria: true,
+        criteriaIdx: skillNameOrIdx,
+        evalLevel: isPassed ? evaluationOptions[4] : evaluationOptions[1], // 5.ได้ถ่ายทอด หรือ 2.ได้เรียน
+        hours: evaluationData.hours ? evaluationData.hours.replace(/[^0-9.]/g, '') || '25' : '25',
+        images: [],
+        note: '',
+      }
+    } else {
+      const initialName = (typeof skillNameOrIdx === 'string' && skillNameOrIdx.trim()) 
+        ? skillNameOrIdx.trim() 
+        : (customSkillText.trim() || 'คอมพิวเตอร์และเทคโนโลยีสารสนเทศ')
+      skillObj = {
+        id: `new-criteria-${Date.now()}`,
+        name: initialName,
+        category: categoryName,
+        monthContext: currentMonthName,
+        isNewCriteria: true,
+        evalLevel: evaluationOptions[4], // 5. ได้ถ่ายทอดทักษะนี้แก่ผู้อื่น
+        hours: '25',
+        images: [],
+        note: '',
+      }
+    }
+
+    setSelectedSkillEvalModal(skillObj)
+    setIsEvalDropdownOpen(false)
+    setEvalModalData({
+      name: skillObj.name,
+      level: skillObj.evalLevel || evaluationOptions[4],
+      hours: skillObj.hours || '25',
+      images: skillObj.images || [],
+      note: skillObj.note || '',
+    })
+  }
+
+  // Close Skill Eval Modal
+  const handleCloseSkillEvalModal = () => {
+    setSelectedSkillEvalModal(null)
+    setIsEvalDropdownOpen(false)
+  }
+
+  // Image Upload for Super User Skill Assessment
+  const handleSkillImageUpload = (e) => {
+    const files = e.target.files
+    if (!files || files.length === 0) return
+
+    Array.from(files).forEach((file) => {
+      const reader = new FileReader()
+      reader.onload = (uploadEvent) => {
+        const dataUrl = uploadEvent.target.result
+        setEvalModalData((prev) => ({
+          ...prev,
+          images: [...(prev.images || []), dataUrl],
+        }))
+      }
+      reader.readAsDataURL(file)
+    })
+  }
+
+  // Remove Photo from Super User Skill Assessment
+  const handleRemoveSkillImage = (imageIndex) => {
+    setEvalModalData((prev) => ({
+      ...prev,
+      images: (prev.images || []).filter((_, idx) => idx !== imageIndex),
+    }))
+  }
+
+  // AI Assist Evaluation for Super User
+  const handleAiAssistSkillEval = () => {
+    const suggested = evaluationOptions[4] || evaluationOptions[3]
+    setEvalModalData((prev) => ({
+      ...prev,
+      level: suggested,
+    }))
+    setIsEvalDropdownOpen(false)
+    alert(`AI แนะนำระดับการประเมินสำหรับ "${evalModalData.name || selectedSkillEvalModal.name}":\n\nระดับ 5: "ได้ถ่ายทอดทักษะนี้แก่ผู้อื่น หรือเป็นต้นแบบของทักษะนี้แก่ผู้อื่น"`)
+  }
+
+  // Save Skill Eval Modal
+  const handleSaveSkillEval = () => {
+    if (!selectedSkillEvalModal || !selectedMember) return
+    const skillName = evalModalData.name || selectedSkillEvalModal.name
+    const isMastered = evalModalData.level?.includes('5.') || evalModalData.level?.includes('4.') || evalModalData.level?.includes('3.') || evalModalData.level?.includes('(Yes)')
+    const newStarLevel = evalModalData.level?.includes('5.') ? 5 : evalModalData.level?.includes('4.') ? 4 : evalModalData.level?.includes('3.') ? 3 : evalModalData.level?.includes('2.') ? 2 : 1
+
+    if (selectedSkillEvalModal.isNewCriteria) {
+      // Add as new skill in Monthly Evaluation criteria
+      const updatedCriteria = [...(evaluationData.criteria || []), skillName]
+      const newIdx = updatedCriteria.length - 1
+      const updatedPassed = isMastered 
+        ? [...(evaluationData.passedCriteria || []), newIdx]
+        : (evaluationData.passedCriteria || [])
+      const calculatedScore = calcAutoScore(updatedPassed, updatedCriteria)
+
+      setEvaluationData({
+        ...evaluationData,
+        criteria: updatedCriteria,
+        passedCriteria: updatedPassed,
+        score: autoSyncScore ? calculatedScore : evaluationData.score,
+        status: autoSyncScore ? getStatusFromScore(calculatedScore) : evaluationData.status,
+        passedSkills: `${updatedPassed.length} ทักษะ`,
+        hours: evalModalData.hours ? `${evalModalData.hours} ชม.` : evaluationData.hours,
+      })
+      setCustomSkillText('')
+
+      // Also add to member individual skills matrix
+      const newMemberSkill = {
+        id: Date.now(),
+        name: skillName,
+        category: selectedSkillEvalModal.category || 'Technical Skills',
+        level: newStarLevel,
+        status: isMastered ? 'ผ่านเกณฑ์แล้ว' : 'กำลังพัฒนา',
+        hours: evalModalData.hours ? `${evalModalData.hours} ชม.` : '25 ชม.',
+        images: evalModalData.images || [],
+        note: evalModalData.note || '',
+        evalLevel: evalModalData.level,
+      }
+      setMemberSkills((prev) => [...prev, newMemberSkill])
+    } else if (selectedSkillEvalModal.isCriteria) {
+      // Update existing Monthly Evaluation criteria
+      const cIdx = selectedSkillEvalModal.criteriaIdx
+      const currentPassed = evaluationData.passedCriteria || []
+      let updatedPassed = currentPassed
+      if (isMastered && !currentPassed.includes(cIdx)) {
+        updatedPassed = [...currentPassed, cIdx]
+      } else if (!isMastered && currentPassed.includes(cIdx)) {
+        updatedPassed = currentPassed.filter((x) => x !== cIdx)
+      }
+
+      const updatedCriteria = [...(evaluationData.criteria || [])]
+      updatedCriteria[cIdx] = skillName
+      const calculatedScore = calcAutoScore(updatedPassed, updatedCriteria)
+
+      setEvaluationData({
+        ...evaluationData,
+        criteria: updatedCriteria,
+        passedCriteria: updatedPassed,
+        score: autoSyncScore ? calculatedScore : evaluationData.score,
+        status: autoSyncScore ? getStatusFromScore(calculatedScore) : evaluationData.status,
+        passedSkills: `${updatedPassed.length} ทักษะ`,
+        hours: evalModalData.hours ? `${evalModalData.hours} ชม.` : evaluationData.hours,
+      })
+    } else {
+      // Update Individual Skill in Subtab 2
+      const updatedSkills = memberSkills.map((s) => {
+        if (s.id === selectedSkillEvalModal.id) {
+          return {
+            ...s,
+            name: skillName,
+            evalLevel: evalModalData.level,
+            level: newStarLevel,
+            hours: evalModalData.hours ? `${evalModalData.hours} ชม.` : s.hours,
+            images: evalModalData.images,
+            note: evalModalData.note,
+            status: isMastered ? 'ผ่านเกณฑ์แล้ว' : 'กำลังพัฒนา',
+          }
+        }
+        return s
+      })
+
+      setMemberSkills(updatedSkills)
+      const updatedMember = {
+        ...selectedMember,
+        skills: updatedSkills,
+      }
+      setSelectedMember(updatedMember)
+      onUpdateMemberProgress(activeGroup.id, updatedMember)
+    }
+
+    alert(`บันทึกผลการประเมินทักษะ "${skillName}" เรียบร้อยแล้ว! (เวลาที่ใช้: ${evalModalData.hours || 0} ชม., รูปภาพ ${evalModalData.images?.length || 0} รูป)`)
+    handleCloseSkillEvalModal()
+  }
+
+  // Save Member Individual Skills Matrix
+  const handleSaveMemberSkills = (e) => {
+    e?.preventDefault?.()
+    if (!selectedMember || !activeGroup) return
+
+    const updatedMember = {
+      ...selectedMember,
+      skills: memberSkills,
+    }
+
+    setSelectedMember(updatedMember)
+    onUpdateMemberProgress(activeGroup.id, updatedMember)
+    setSaveSuccessMsg(`บันทึกชุดทักษะเฉพาะบุคคลของ "${selectedMember.name}" เรียบร้อยแล้ว! (${memberSkills.length} ทักษะ)`)
+    setTimeout(() => setSaveSuccessMsg(''), 4000)
+  }
+
+  // Switch active month in modal
+  const handleSelectMonth = (idx) => {
+    if (!selectedMember) return
+    setActiveMonthIdx(idx)
+    const months = getMonthsList(selectedMember)
+    const targetMonth = months[idx] || DEFAULT_12_MONTHS_SYLLABUS[idx]
+    const criteria = targetMonth.criteria || DEFAULT_12_MONTHS_SYLLABUS[idx]?.criteria || []
+    const passedCriteria = targetMonth.passedCriteria || (targetMonth.score > 0 ? [0, 1, 2] : [])
+
+    setEvaluationData({
+      topic: targetMonth.topic || DEFAULT_12_MONTHS_SYLLABUS[idx]?.topic || '',
+      score: targetMonth.score !== undefined ? targetMonth.score : 0,
+      status: targetMonth.status || 'ยังไม่ถึงรอบประเมิน',
+      passedSkills: targetMonth.passedSkills || (passedCriteria.length > 0 ? `${passedCriteria.length} ทักษะ` : '-'),
+      hours: targetMonth.hours || '-',
+      criteria: criteria,
+      passedCriteria: passedCriteria,
+      mentorNote: targetMonth.note || '',
+      advicePlan: targetMonth.plan || '',
+      userSelfScore: targetMonth.userSelfScore !== undefined ? targetMonth.userSelfScore : (targetMonth.score > 0 ? targetMonth.score : 0),
+      userSelfStatus: targetMonth.userSelfStatus || (targetMonth.score > 0 ? 'ประเมินตนเองแล้ว' : 'ยังไม่ถึงรอบประเมิน'),
+      userSelfNote: targetMonth.userSelfNote || '',
+      userSelfEvidence: targetMonth.userSelfEvidence || '',
+      userSelfPassedCriteria: targetMonth.userSelfPassedCriteria || passedCriteria,
+    })
+    setSaveSuccessMsg('')
+    setCustomSkillText('')
+  }
+
+  // Toggle criteria item passed/pending & auto-adjust score
+  const handleToggleCriteria = (cIdx) => {
+    const currentPassed = evaluationData.passedCriteria || []
+    let newPassed = []
+    if (currentPassed.includes(cIdx)) {
+      newPassed = currentPassed.filter((item) => item !== cIdx)
+    } else {
+      newPassed = [...currentPassed, cIdx]
+    }
+
+    const calculatedScore = calcAutoScore(newPassed, evaluationData.criteria)
+    const calculatedStatus = getStatusFromScore(calculatedScore)
+
+    setEvaluationData({
+      ...evaluationData,
+      passedCriteria: newPassed,
+      score: autoSyncScore ? calculatedScore : evaluationData.score,
+      status: autoSyncScore ? calculatedStatus : evaluationData.status,
+      passedSkills: `${newPassed.length} ทักษะ`,
+    })
+  }
+
+  // Add Custom Skill / Criteria to this month
+  const handleAddCustomSkill = (e) => {
+    e?.preventDefault?.()
+    const trimmed = customSkillText.trim()
+    if (!trimmed) return
+
+    const updatedCriteria = [...(evaluationData.criteria || []), trimmed]
+    const updatedPassed = [...(evaluationData.passedCriteria || []), updatedCriteria.length - 1] // Auto-check the newly added skill
+    const calculatedScore = calcAutoScore(updatedPassed, updatedCriteria)
+
+    setEvaluationData({
+      ...evaluationData,
+      criteria: updatedCriteria,
+      passedCriteria: updatedPassed,
+      score: autoSyncScore ? calculatedScore : evaluationData.score,
+      status: autoSyncScore ? getStatusFromScore(calculatedScore) : evaluationData.status,
+      passedSkills: `${updatedPassed.length} ทักษะ`,
+    })
+    setCustomSkillText('')
+  }
+
+  // Remove Criteria from this month
+  const handleRemoveCriteria = (indexToRemove, e) => {
+    e?.stopPropagation?.()
+    const updatedCriteria = (evaluationData.criteria || []).filter((_, idx) => idx !== indexToRemove)
+    const updatedPassed = (evaluationData.passedCriteria || [])
+      .filter((idx) => idx !== indexToRemove)
+      .map((idx) => (idx > indexToRemove ? idx - 1 : idx))
+
+    const calculatedScore = calcAutoScore(updatedPassed, updatedCriteria)
+
+    setEvaluationData({
+      ...evaluationData,
+      criteria: updatedCriteria,
+      passedCriteria: updatedPassed,
+      score: autoSyncScore ? calculatedScore : evaluationData.score,
+      status: autoSyncScore ? getStatusFromScore(calculatedScore) : evaluationData.status,
+      passedSkills: `${updatedPassed.length} ทักษะ`,
+    })
+  }
+
+  // Force sync score from passed criteria now
+  const handleForceSyncScore = () => {
+    const calculatedScore = calcAutoScore(evaluationData.passedCriteria, evaluationData.criteria)
+    setEvaluationData({
+      ...evaluationData,
+      score: calculatedScore,
+      status: getStatusFromScore(calculatedScore),
+      passedSkills: `${evaluationData.passedCriteria?.length || 0} ทักษะ`,
+    })
+  }
+
+  // Save monthly evaluation & feedback
+  const handleSaveMonthlyEvaluation = (e) => {
+    e.preventDefault()
+    if (!activeGroup || !selectedMember) return
+
+    const months = [...getMonthsList(selectedMember)]
+    const currentMonthDef = months[activeMonthIdx] || DEFAULT_12_MONTHS_SYLLABUS[activeMonthIdx]
+
+    // Updated single month data
+    const updatedMonthData = {
+      ...currentMonthDef,
+      topic: evaluationData.topic,
+      score: Number(evaluationData.score),
+      status: evaluationData.status,
+      passedSkills: evaluationData.passedSkills,
+      hours: evaluationData.hours,
+      criteria: evaluationData.criteria,
+      passedCriteria: evaluationData.passedCriteria,
+      note: evaluationData.mentorNote,
+      plan: evaluationData.advicePlan,
+      userSelfScore: evaluationData.userSelfScore,
+      userSelfStatus: evaluationData.userSelfStatus,
+      userSelfNote: evaluationData.userSelfNote,
+      userSelfEvidence: evaluationData.userSelfEvidence,
+      userSelfPassedCriteria: evaluationData.userSelfPassedCriteria,
+    }
+
+    months[activeMonthIdx] = updatedMonthData
+
+    // Calculate overall progress from the most recent evaluated month or active month
+    const evaluatedMonths = months.filter((m) => m.status !== 'ยังไม่ถึงรอบประเมิน' && m.score > 0)
+    const latestScore = Number(evaluationData.score) > 0 
+      ? Number(evaluationData.score) 
+      : (evaluatedMonths.length > 0 ? evaluatedMonths[evaluatedMonths.length - 1].score : selectedMember.progressPct)
+
+    const updatedMember = {
+      ...selectedMember,
+      progressPct: latestScore,
+      status: evaluationData.status !== 'ยังไม่ถึงรอบประเมิน' ? evaluationData.status : selectedMember.status,
+      mentorNote: evaluationData.mentorNote || selectedMember.mentorNote,
+      advicePlan: evaluationData.advicePlan || selectedMember.advicePlan,
+      lastEvaluated: `${currentMonthDef.monthName} (โดย Super User DSS)`,
+      monthlyProgress: months,
+      skills: memberSkills,
+    }
+
+    setSelectedMember(updatedMember)
+    onUpdateMemberProgress(activeGroup.id, updatedMember)
+
+    setSaveSuccessMsg(`บันทึกผลการประเมินรอบเดือน ${currentMonthDef.monthName} เรียบร้อยแล้ว!`)
+    setTimeout(() => {
+      setSaveSuccessMsg('')
+    }, 4000)
+  }
+
+  // Copy data from previous month
+  const handleCopyFromPrevMonth = () => {
+    if (activeMonthIdx === 0 || !selectedMember) return
+    const months = getMonthsList(selectedMember)
+    const prevMonth = months[activeMonthIdx - 1]
+    if (prevMonth) {
+      setEvaluationData({
+        topic: prevMonth.topic || evaluationData.topic,
+        score: prevMonth.score || 50,
+        status: prevMonth.status || 'กำลังพัฒนาได้ดี',
+        passedSkills: prevMonth.passedSkills || '1 ทักษะ',
+        hours: prevMonth.hours || '15 ชม.',
+        criteria: prevMonth.criteria || evaluationData.criteria,
+        passedCriteria: prevMonth.passedCriteria || [0, 1],
+        mentorNote: prevMonth.note ? `(ต่อยอดจาก ${prevMonth.shortMonth}) ` + prevMonth.note : '',
+        advicePlan: prevMonth.plan || '',
+        userSelfScore: prevMonth.userSelfScore || 50,
+        userSelfStatus: prevMonth.userSelfStatus || 'ประเมินแล้ว',
+        userSelfNote: prevMonth.userSelfNote || '',
+        userSelfEvidence: prevMonth.userSelfEvidence || '',
+        userSelfPassedCriteria: prevMonth.userSelfPassedCriteria || [0, 1],
+      })
+    }
+  }
+
+  // Create group submit
+  const handleCreateGroupSubmit = (e) => {
+    e.preventDefault()
+    if (!groupFormData.name) {
+      alert('กรุณากรอกชื่อกลุ่ม')
+      return
+    }
+
+    const newGroup = {
+      id: Date.now(),
+      name: groupFormData.name,
+      description: groupFormData.description || 'กลุ่มติดตามความก้าวหน้าและการพัฒนาอาชีพ ศูนย์บริการนักศึกษาพิการ (DSS)',
+      dssName: groupFormData.dssName || 'มหาวิทยาลัยเทคโนโลยีสุรนารี',
+      mentorName: groupFormData.mentorName || 'อ.ที่ปรึกษา / พี่เลี้ยงศูนย์บริการ DSS',
+      createdAt: new Date().toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: '2-digit' }),
+      members: [],
+    }
+
+    onAddGroup(newGroup)
+    setSelectedGroupId(newGroup.id)
+    setShowCreateGroupModal(false)
+    setGroupFormData({
+      name: '',
+      description: '',
+      dssName: 'มหาวิทยาลัยเทคโนโลยีสุรนารี',
+      mentorName: 'อ.ที่ปรึกษา / พี่เลี้ยงศูนย์บริการ DSS',
+    })
+    alert(`สร้างกลุ่ม "${newGroup.name}" สำเร็จ!`)
+  }
+
+  // Open Edit Group Modal
+  const handleOpenEditGroup = (groupToEdit = activeGroup) => {
+    if (!groupToEdit) return
+    setEditGroupFormData({
+      id: groupToEdit.id,
+      name: groupToEdit.name || '',
+      description: groupToEdit.description || '',
+      dssName: groupToEdit.dssName || groupToEdit.faculty || 'ศูนย์บริการนักศึกษาพิการ (DSS) มทส.',
+      mentorName: groupToEdit.mentorName || 'อ.ที่ปรึกษา / พี่เลี้ยงศูนย์บริการ DSS',
+    })
+    setShowEditGroupModal(true)
+  }
+
+  // Submit Edit Group
+  const handleEditGroupSubmit = (e) => {
+    e.preventDefault()
+    if (!editGroupFormData.name.trim()) {
+      alert('กรุณากรอกชื่อกลุ่ม')
+      return
+    }
+
+    const current = groupsList.find((g) => g.id === editGroupFormData.id) || activeGroup
+    const updated = {
+      ...current,
+      name: editGroupFormData.name.trim(),
+      description: editGroupFormData.description.trim() || 'กลุ่มติดตามความก้าวหน้าและการพัฒนาอาชีพ ศูนย์บริการนักศึกษาพิการ (DSS)',
+      dssName: editGroupFormData.dssName.trim() || 'ศูนย์บริการนักศึกษาพิการ (DSS) มทส.',
+      mentorName: editGroupFormData.mentorName.trim() || 'อ.ที่ปรึกษา / พี่เลี้ยงศูนย์บริการ DSS',
+    }
+
+    if (onUpdateGroup) {
+      onUpdateGroup(updated)
+    }
+    setShowEditGroupModal(false)
+    alert(`แก้ไขข้อมูลกลุ่ม "${updated.name}" สำเร็จเรียบร้อยแล้ว!`)
+  }
+
+  // Add member submit
+  const handleAddMemberSubmit = (e) => {
+    e.preventDefault()
+    if (!selectedUserToAdd) {
+      alert('กรุณาเลือกผู้ใช้งานที่ต้องการเพิ่มเข้ากลุ่ม')
+      return
+    }
+
+    const userObj = allAvailableUsers.find((u) => u.id === Number(selectedUserToAdd))
+    if (!userObj) return
+
+    const initialMonths = getMonthsList({ progressPct: 60, status: 'กำลังพัฒนาได้ดี' })
+
+    const newMember = {
+      id: userObj.id,
+      name: userObj.name,
+      studentId: userObj.studentId || `B65${Math.floor(1000 + Math.random() * 9000)}`,
+      email: userObj.email,
+      major: userObj.major || 'วิทยาการคอมพิวเตอร์ (มทส.)',
+      careerGoal: userObj.targetCareer || 'โปรแกรมเมอร์ (Full-Stack)',
+      progressPct: 60,
+      completedPlans: 2,
+      totalPlans: 5,
+      status: 'กำลังพัฒนาได้ดี',
+      mentorNote: 'เริ่มต้นเข้ากลุ่มติดตามความก้าวหน้า DSS มทส.',
+      advicePlan: 'จัดทำแผนพัฒนารายบุคคลประจำปี 2568',
+      lastEvaluated: 'สิงหาคม 2568 (เพิ่งเพิ่มเข้ากลุ่ม)',
+      monthlyProgress: initialMonths,
+    }
+
+    onAddMemberToGroup(activeGroup.id, newMember)
+    setShowAddMemberModal(false)
+    setSelectedUserToAdd('')
+    alert(`เพิ่ม "${newMember.name}" เข้ากลุ่ม "${activeGroup.name}" เรียบร้อยแล้ว`)
+  }
+
+  // Calculate Group Average Progress
+  const members = activeGroup?.members || []
+  const avgProgress = members.length > 0
+    ? Math.round(members.reduce((acc, m) => acc + (m.progressPct || 0), 0) / members.length)
+    : 0
+
+  // Filter available users to add with real-time search
+  const availableUsersToAdd = allAvailableUsers
+    .filter((u) => !members.some((m) => m.id === u.id))
+    .filter((u) => {
+      if (!userSearchQuery.trim()) return true
+      const q = userSearchQuery.toLowerCase()
+      return (
+        u.name?.toLowerCase().includes(q) ||
+        u.studentId?.toLowerCase().includes(q) ||
+        u.email?.toLowerCase().includes(q) ||
+        u.major?.toLowerCase().includes(q) ||
+        u.faculty?.toLowerCase().includes(q)
+      )
+    })
+
+  return (
+    <div className="group-mgmt-container">
+      {/* Top Banner */}
+      <div className="group-mgmt-banner">
+        <div className="group-banner-left">
+          <div className="group-crown-badge">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+            </svg>
+          </div>
+          <div>
+            <div className="group-role-tag">SUPER USER : GROUP MENTOR & SUPERVISOR</div>
+            <h1 className="group-banner-title">ระบบจัดการกลุ่มและติดตามความก้าวหน้า</h1>
+            <p className="group-banner-subtitle">
+              ดูแลผู้ใช้เฉพาะกลุ่มของตนเอง ตั้งกลุ่ม บันทึกผลการประเมิน ให้คำแนะนำ และติดตามพัฒนาการของสมาชิก
+            </p>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          className="btn-create-group"
+          onClick={() => setShowCreateGroupModal(true)}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4">
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
+          <span>สร้างกลุ่มใหม่</span>
+        </button>
+      </div>
+
+      {/* Group Selector Cards */}
+      <div className="group-tabs-scroll-row">
+        {groupsList.map((grp) => {
+          const isSelected = grp.id === activeGroup?.id
+          const count = grp.members?.length || 0
+          return (
+            <div
+              key={grp.id}
+              className={`group-selector-card ${isSelected ? 'active' : ''}`}
+              onClick={() => setSelectedGroupId(grp.id)}
+            >
+              <div className="group-card-top">
+                <span className="group-card-title">{grp.name}</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  {isSelected && <span className="group-active-dot">กำลังดูอยู่</span>}
+                  <button
+                    type="button"
+                    className="btn-card-quick-edit"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleOpenEditGroup(grp)
+                    }}
+                    title="แก้ไขข้อมูลกลุ่มนี้"
+                  >
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                    </svg>
+                  </button>
+                  {groupsList.length > 1 && (
+                    <button
+                      type="button"
+                      className="btn-card-quick-delete"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        if (window.confirm(`ต้องการลด/ลบกลุ่ม "${grp.name}" ใช่หรือไม่?`)) {
+                          onDeleteGroup(grp.id)
+                        }
+                      }}
+                      title="ลด/ลบกลุ่มนี้"
+                    >
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="3 6 5 6 21 6" />
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                      </svg>
+                    </button>
+                  )}
+                </div>
+              </div>
+              <span className="group-card-desc">{grp.description}</span>
+              <div className="group-card-footer">
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                  </svg>
+                  <span>{count} สมาชิก</span>
+                </span>
+                <span className="group-career-tag" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                    <line x1="3" y1="21" x2="21" y2="21" />
+                    <line x1="3" y1="10" x2="21" y2="10" />
+                    <polyline points="5 10 5 21" />
+                    <polyline points="19 10 19 21" />
+                    <polyline points="9 10 9 21" />
+                    <polyline points="15 10 15 21" />
+                    <polygon points="12 2 2 7 22 7" />
+                  </svg>
+                  <span>{grp.dssName || grp.faculty || 'DSS มทส.'}</span>
+                </span>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+
+      {/* Active Group Details & Summary */}
+      {activeGroup && (
+        <div className="active-group-panel">
+          <div className="group-summary-header">
+            <div>
+              <div className="group-active-badge" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                  <line x1="3" y1="21" x2="21" y2="21" />
+                  <line x1="3" y1="10" x2="21" y2="10" />
+                  <polyline points="5 10 5 21" />
+                  <polyline points="19 10 19 21" />
+                  <polyline points="9 10 9 21" />
+                  <polyline points="15 10 15 21" />
+                  <polygon points="12 2 2 7 22 7" />
+                </svg>
+                <span>{activeGroup.dssName || activeGroup.faculty || 'ศูนย์บริการนักศึกษาพิการ (DSS) มทส.'}</span>
+              </div>
+              <h2 className="active-group-name">{activeGroup.name}</h2>
+              <p className="active-group-meta">
+                ผู้ดูแลกลุ่ม: <strong>{activeGroup.mentorName || 'พี่เลี้ยงศูนย์บริการ DSS'}</strong> • สมาชิก: <strong>{members.length} คน</strong> • สร้างเมื่อ: {activeGroup.createdAt || '1 ม.ค. 68'}
+              </p>
+            </div>
+
+            <div className="group-actions-right">
+              <button
+                type="button"
+                className="btn-edit-group"
+                onClick={() => handleOpenEditGroup(activeGroup)}
+                title="แก้ไขข้อมูลกลุ่มนี้"
+              >
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                </svg>
+                <span>แก้ไขกลุ่ม</span>
+              </button>
+
+              <button
+                type="button"
+                className="btn-add-member"
+                onClick={() => setShowAddMemberModal(true)}
+              >
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                  <circle cx="9" cy="7" r="4" />
+                  <line x1="19" y1="8" x2="19" y2="14" />
+                  <line x1="22" y1="11" x2="16" y2="11" />
+                </svg>
+                <span>เพิ่มสมาชิกเข้ากลุ่ม</span>
+              </button>
+
+              {groupsList.length > 1 && (
+                <button
+                  type="button"
+                  className="btn-delete-group"
+                  onClick={() => {
+                    if (window.confirm(`ต้องการลบกลุ่ม "${activeGroup.name}" ใช่หรือไม่?`)) {
+                      onDeleteGroup(activeGroup.id)
+                    }
+                  }}
+                  title="ลบกลุ่มนี้"
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                    <polyline points="3 6 5 6 21 6" />
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                    <line x1="10" y1="11" x2="10" y2="17" />
+                    <line x1="14" y1="11" x2="14" y2="17" />
+                  </svg>
+                  <span>ลด/ลบกลุ่ม</span>
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Group Metric Stats */}
+          <div className="group-stats-strip">
+            <div className="group-stat-box">
+              <span className="stat-label">สมาชิกในกลุ่ม</span>
+              <span className="stat-value">{members.length} คน</span>
+            </div>
+            <div className="group-stat-box">
+              <span className="stat-label">ความก้าวหน้าเฉลี่ยของกลุ่ม</span>
+              <div className="stat-progress-wrap">
+                <span className="stat-value highlight">{avgProgress}%</span>
+                <div className="stat-mini-bar">
+                  <div className="stat-mini-fill" style={{ width: `${avgProgress}%` }}></div>
+                </div>
+              </div>
+            </div>
+            <div className="group-stat-box">
+              <span className="stat-label">สมาชิกที่พร้อมยื่นสมัครงาน (&gt;80%)</span>
+              <span className="stat-value text-green">
+                {members.filter((m) => (m.progressPct || 0) >= 80).length} คน
+              </span>
+            </div>
+          </div>
+
+          {/* Members Table */}
+          <div className="group-members-table-wrap">
+            <div className="members-table-header">
+              <h3 className="members-table-title">รายชื่อสมาชิกและความก้าวหน้ารายบุคคล</h3>
+              <span className="members-table-hint" style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.2">
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="16" x2="12" y2="12" />
+                  <line x1="12" y1="8" x2="12.01" y2="8" />
+                </svg>
+                <span>คลิก "ดูความก้าวหน้า &amp; บันทึกผล" เพื่อแก้ไขและประเมินสมาชิก</span>
+              </span>
+            </div>
+
+            {members.length === 0 ? (
+              <div className="empty-members-box">
+                <p>ยังไม่มีสมาชิกในกลุ่มนี้</p>
+                <button
+                  type="button"
+                  className="btn-add-member"
+                  onClick={() => setShowAddMemberModal(true)}
+                >
+                  + เพิ่มสมาชิกคนแรก
+                </button>
+              </div>
+            ) : (
+              <table className="members-table">
+                <thead>
+                  <tr>
+                    <th>สมาชิก</th>
+                    <th>รหัส / สาขา</th>
+                    <th>อาชีพเป้าหมาย</th>
+                    <th style={{ width: '220px' }}>ความก้าวหน้า (Progress)</th>
+                    <th>สถานะ / คำแนะนำล่าสุด</th>
+                    <th style={{ textAlign: 'center' }}>การจัดการ</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {members.map((member) => (
+                    <tr key={member.id}>
+                      {/* Member profile */}
+                      <td>
+                        <div className="member-profile-block">
+                          <div className="member-avatar">{member.name.charAt(0)}</div>
+                          <div>
+                            <span className="member-name">{member.name}</span>
+                            <span className="member-email">{member.email}</span>
+                          </div>
+                        </div>
+                      </td>
+
+                      {/* ID & Major */}
+                      <td>
+                        <div className="member-academic-info">
+                          <span className="member-code">{member.studentId}</span>
+                          <span className="member-major">{member.major}</span>
+                        </div>
+                      </td>
+
+                      {/* Career Goal */}
+                      <td>
+                        <span className="member-career-pill">{member.careerGoal}</span>
+                      </td>
+
+                      {/* Progress */}
+                      <td>
+                        <div className="member-progress-cell">
+                          <div className="progress-num-row">
+                            <span className="progress-num-text">{member.progressPct || 0}%</span>
+                            <span className="progress-plan-count">
+                              แผน: {member.completedPlans || 0}/{member.totalPlans || 4} สำเร็จ
+                            </span>
+                          </div>
+                          <div className="progress-bar-track">
+                            <div
+                              className="progress-bar-fill"
+                              style={{
+                                width: `${member.progressPct || 0}%`,
+                                backgroundColor: (member.progressPct || 0) >= 80 ? '#10b981' : (member.progressPct || 0) >= 60 ? '#2563eb' : '#f59e0b',
+                              }}
+                            ></div>
+                          </div>
+                        </div>
+                      </td>
+
+                      {/* Status & Mentor Note */}
+                      <td>
+                        <div className="mentor-note-block">
+                          <span className={`status-pill ${member.status?.includes('ดี') ? 'pill-good' : 'pill-warn'}`}>
+                            {member.status || 'กำลังพัฒนา'}
+                          </span>
+                          <p className="mentor-note-text" title={member.mentorNote}>
+                            {member.mentorNote || 'ยังไม่มีบันทึกคำแนะนำ'}
+                          </p>
+                        </div>
+                      </td>
+
+                      {/* Actions */}
+                      <td style={{ textAlign: 'center' }}>
+                        <div className="member-actions-row">
+                          <button
+                            type="button"
+                            className="btn-track-progress"
+                            onClick={() => handleOpenMemberDetail(member)}
+                            title="ดูความก้าวหน้าและบันทึกผล"
+                            style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}
+                          >
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                            </svg>
+                            <span>บันทึก / ดูผล</span>
+                          </button>
+                          <button
+                            type="button"
+                            className="btn-remove-member"
+                            onClick={() => {
+                              if (window.confirm(`ต้องการนำ "${member.name}" ออกจากกลุ่มนี้หรือไม่?`)) {
+                                onRemoveMemberFromGroup(activeGroup.id, member.id)
+                              }
+                            }}
+                            title="ลด/นำสมาชิกออกจากกลุ่ม"
+                            style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+                          >
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                              <line x1="18" y1="6" x2="6" y2="18" />
+                              <line x1="6" y1="6" x2="18" y2="18" />
+                            </svg>
+                            <span>นำออก</span>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Modal: Create Group */}
+      {showCreateGroupModal && (
+        <div className="mgmt-modal-overlay" onClick={() => setShowCreateGroupModal(false)}>
+          <div className="mgmt-modal-card" onClick={(e) => e.stopPropagation()}>
+            <div className="mgmt-modal-header">
+              <h2 className="mgmt-modal-title" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                </svg>
+                <span>สร้างกลุ่มดูแลผู้ใช้งานใหม่ (DSS)</span>
+              </h2>
+              <button type="button" className="mgmt-modal-close" onClick={() => setShowCreateGroupModal(false)}>✕</button>
+            </div>
+            <form onSubmit={handleCreateGroupSubmit}>
+              <div className="mgmt-modal-body">
+                <div className="form-group-row">
+                  <label className="modal-field-label">ชื่อกลุ่ม DSS *</label>
+                  <input
+                    type="text"
+                    className="modal-text-input"
+                    placeholder="เช่น กลุ่ม DSS มหาวิทยาลัยเทคโนโลยีสุรนารี หรือ กลุ่ม DSS มหาวิทยาลัยขอนแก่น"
+                    value={groupFormData.name}
+                    onChange={(e) => setGroupFormData({ ...groupFormData, name: e.target.value })}
+                    required
+                    autoFocus
+                  />
+                </div>
+
+                <div className="form-group-row">
+                  <label className="modal-field-label">ชื่อศูนย์บริการ DSS / สถาบัน</label>
+                  <input
+                    type="text"
+                    className="modal-text-input"
+                    placeholder="เช่น ศูนย์บริการนักศึกษาพิการ (DSS) มหาวิทยาลัยเทคโนโลยีสุรนารี"
+                    value={groupFormData.dssName}
+                    onChange={(e) => setGroupFormData({ ...groupFormData, dssName: e.target.value })}
+                  />
+                </div>
+
+                <div className="form-group-row">
+                  <label className="modal-field-label">ผู้ดูแลกลุ่ม / พี่เลี้ยง DSS</label>
+                  <input
+                    type="text"
+                    className="modal-text-input"
+                    placeholder="เช่น อ.ที่ปรึกษา / พี่เลี้ยงศูนย์บริการนักศึกษาพิการ DSS มทส."
+                    value={groupFormData.mentorName}
+                    onChange={(e) => setGroupFormData({ ...groupFormData, mentorName: e.target.value })}
+                  />
+                </div>
+
+                <div className="form-group-row">
+                  <label className="modal-field-label">คำอธิบายกลุ่ม</label>
+                  <textarea
+                    className="modal-text-area"
+                    placeholder="ระบุวัตถุประสงค์และการติดตามดูแลนักศึกษาในกลุ่ม..."
+                    value={groupFormData.description}
+                    onChange={(e) => setGroupFormData({ ...groupFormData, description: e.target.value })}
+                    rows={2}
+                  />
+                </div>
+              </div>
+
+              <div className="mgmt-modal-footer">
+                <button type="button" className="btn-modal-cancel" onClick={() => setShowCreateGroupModal(false)}>ยกเลิก</button>
+                <button type="submit" className="btn-modal-submit">สร้างกลุ่ม</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal: Edit Group */}
+      {showEditGroupModal && (
+        <div className="mgmt-modal-overlay" onClick={() => setShowEditGroupModal(false)}>
+          <div className="mgmt-modal-card" onClick={(e) => e.stopPropagation()}>
+            <div className="mgmt-modal-header">
+              <h2 className="mgmt-modal-title" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                </svg>
+                <span>แก้ไขข้อมูลกลุ่ม (DSS)</span>
+              </h2>
+              <button type="button" className="mgmt-modal-close" onClick={() => setShowEditGroupModal(false)}>✕</button>
+            </div>
+            <form onSubmit={handleEditGroupSubmit}>
+              <div className="mgmt-modal-body">
+                <div className="form-group-row">
+                  <label className="modal-field-label">ชื่อกลุ่ม DSS *</label>
+                  <input
+                    type="text"
+                    className="modal-text-input"
+                    placeholder="เช่น กลุ่ม DSS มหาวิทยาลัยเทคโนโลยีสุรนารี หรือ กลุ่ม DSS มหาวิทยาลัยขอนแก่น"
+                    value={editGroupFormData.name}
+                    onChange={(e) => setEditGroupFormData({ ...editGroupFormData, name: e.target.value })}
+                    required
+                    autoFocus
+                  />
+                </div>
+
+                <div className="form-group-row">
+                  <label className="modal-field-label">ชื่อศูนย์บริการ DSS / สถาบัน</label>
+                  <input
+                    type="text"
+                    className="modal-text-input"
+                    placeholder="เช่น ศูนย์บริการนักศึกษาพิการ (DSS) มหาวิทยาลัยเทคโนโลยีสุรนารี"
+                    value={editGroupFormData.dssName}
+                    onChange={(e) => setEditGroupFormData({ ...editGroupFormData, dssName: e.target.value })}
+                  />
+                </div>
+
+                <div className="form-group-row">
+                  <label className="modal-field-label">ผู้ดูแลกลุ่ม / พี่เลี้ยง DSS</label>
+                  <input
+                    type="text"
+                    className="modal-text-input"
+                    placeholder="เช่น อ.ที่ปรึกษา / พี่เลี้ยงศูนย์บริการนักศึกษาพิการ DSS มทส."
+                    value={editGroupFormData.mentorName}
+                    onChange={(e) => setEditGroupFormData({ ...editGroupFormData, mentorName: e.target.value })}
+                  />
+                </div>
+
+                <div className="form-group-row">
+                  <label className="modal-field-label">คำอธิบายกลุ่ม</label>
+                  <textarea
+                    className="modal-text-area"
+                    placeholder="ระบุวัตถุประสงค์และการติดตามดูแลนักศึกษาในกลุ่ม..."
+                    value={editGroupFormData.description}
+                    onChange={(e) => setEditGroupFormData({ ...editGroupFormData, description: e.target.value })}
+                    rows={3}
+                  />
+                </div>
+              </div>
+
+              <div className="mgmt-modal-footer">
+                <button type="button" className="btn-modal-cancel" onClick={() => setShowEditGroupModal(false)}>ยกเลิก</button>
+                <button type="submit" className="btn-modal-submit" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                    <polyline points="17 21 17 13 7 13 7 21" />
+                    <polyline points="7 3 7 8 15 8" />
+                  </svg>
+                  <span>บันทึกการแก้ไข</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal: Add Member to Group */}
+      {showAddMemberModal && (
+        <div
+          className="mgmt-modal-overlay"
+          onClick={() => {
+            setShowAddMemberModal(false)
+            setUserSearchQuery('')
+            setSelectedUserToAdd('')
+          }}
+        >
+          <div className="mgmt-modal-card modal-user-picker" onClick={(e) => e.stopPropagation()}>
+            <div className="mgmt-modal-header">
+              <div className="add-member-header-info">
+                <span className="add-member-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                  </svg>
+                </span>
+                <div>
+                  <h2 className="mgmt-modal-title">เพิ่มสมาชิกเข้ากลุ่ม</h2>
+                  <span className="member-modal-sub">กลุ่ม: <strong>{activeGroup?.name}</strong></span>
+                </div>
+              </div>
+              <button
+                type="button"
+                className="mgmt-modal-close"
+                onClick={() => {
+                  setShowAddMemberModal(false)
+                  setUserSearchQuery('')
+                  setSelectedUserToAdd('')
+                }}
+                title="ปิดหน้าต่าง"
+              >
+                ✕
+              </button>
+            </div>
+
+            <form onSubmit={handleAddMemberSubmit}>
+              <div className="mgmt-modal-body">
+                {/* Search Bar Input */}
+                <div className="user-search-box-wrap">
+                  <label className="modal-field-label" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.2">
+                      <circle cx="11" cy="11" r="8" />
+                      <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                    </svg>
+                    <span>ค้นหาผู้ใช้งานจากระบบ (ค้นหาด้วยชื่อ, รหัสนักศึกษา, สาขาวิชา หรืออีเมล):</span>
+                  </label>
+                  <div className="user-search-input-inner">
+                    <span className="search-icon-inside">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                        <circle cx="11" cy="11" r="8" />
+                        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                      </svg>
+                    </span>
+                    <input
+                      type="text"
+                      className="user-search-input"
+                      placeholder="พิมพ์ชื่อ, นามสกุล, รหัส B65xxxxx, สาขาวิชา หรืออีเมล..."
+                      value={userSearchQuery}
+                      onChange={(e) => setUserSearchQuery(e.target.value)}
+                      autoFocus
+                    />
+                    {userSearchQuery && (
+                      <button
+                        type="button"
+                        className="btn-clear-search"
+                        onClick={() => setUserSearchQuery('')}
+                        title="ล้างคำค้นหา"
+                      >
+                        ✕
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Available Users List Header */}
+                <div className="user-list-count-row">
+                  <span className="user-list-count-label">
+                    {userSearchQuery ? `ผลการค้นหาสำหรับ "${userSearchQuery}":` : 'รายชื่อผู้ใช้ที่พร้อมเพิ่มเข้ากลุ่ม:'}
+                  </span>
+                  <span className="user-list-count-badge">
+                    พบ {availableUsersToAdd.length} รายชื่อ
+                  </span>
+                </div>
+
+                {/* Users Selection Cards List */}
+                <div className="user-picker-list-container">
+                  {availableUsersToAdd.length === 0 ? (
+                    <div className="user-picker-empty">
+                      <span className="user-picker-empty-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="1.8">
+                          <circle cx="11" cy="11" r="8" />
+                          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                        </svg>
+                      </span>
+                      <p className="user-picker-empty-text">
+                        {userSearchQuery
+                          ? `ไม่พบผู้ใช้งานที่ตรงกับ "${userSearchQuery}"`
+                          : 'ผู้ใช้งานทุกคนในระบบได้ถูกเพิ่มเข้ากลุ่มนี้แล้ว'}
+                      </p>
+                      {userSearchQuery && (
+                        <button
+                          type="button"
+                          className="btn-reset-search"
+                          onClick={() => setUserSearchQuery('')}
+                        >
+                          ล้างคำค้นหาเพื่อดูทั้งหมด
+                        </button>
+                      )}
+                    </div>
+                  ) : (
+                    availableUsersToAdd.map((u) => {
+                      const isSelected = selectedUserToAdd === u.id || selectedUserToAdd === String(u.id)
+                      return (
+                        <div
+                          key={u.id}
+                          className={`user-picker-card ${isSelected ? 'selected' : ''}`}
+                          onClick={() => setSelectedUserToAdd(u.id)}
+                        >
+                          <div className="user-picker-radio-indicator">
+                            <input
+                              type="radio"
+                              name="selected_user_radio"
+                              checked={isSelected}
+                              onChange={() => setSelectedUserToAdd(u.id)}
+                            />
+                          </div>
+
+                          <div className="user-picker-avatar">
+                            {u.name?.charAt(0) || 'U'}
+                          </div>
+
+                          <div className="user-picker-info">
+                            <div className="user-picker-name-row">
+                              <span className="user-picker-name">{u.name}</span>
+                              {u.studentId && (
+                                <span className="user-picker-code-badge">รหัส: {u.studentId}</span>
+                              )}
+                            </div>
+                            <div className="user-picker-meta-row">
+                              <span className="user-picker-major" style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                                  <line x1="3" y1="21" x2="21" y2="21" />
+                                  <line x1="3" y1="10" x2="21" y2="10" />
+                                  <polyline points="5 10 5 21" />
+                                  <polyline points="19 10 19 21" />
+                                  <polygon points="12 2 2 7 22 7" />
+                                </svg>
+                                <span>{u.major || u.faculty || 'มทส.'}</span>
+                              </span>
+                              <span className="user-picker-email" style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                                  <polyline points="22,6 12,13 2,6" />
+                                </svg>
+                                <span>{u.email}</span>
+                              </span>
+                            </div>
+                          </div>
+
+                          {isSelected && (
+                            <span className="user-picker-selected-tag" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                                <polyline points="20 6 9 17 4 12" />
+                              </svg>
+                              <span>เลือกแล้ว</span>
+                            </span>
+                          )}
+                        </div>
+                      )
+                    })
+                  )}
+                </div>
+
+                <p className="modal-hint-text">
+                  เมื่อเลือกและเพิ่มสมาชิกเข้ากลุ่ม คุณในฐานะ Super User จะสามารถติดตามความก้าวหน้า เลือกอาชีพ และบันทึกผลการประเมินรายเดือนของสมาชิกคนนี้ได้
+                </p>
+              </div>
+
+              <div className="mgmt-modal-footer">
+                <button
+                  type="button"
+                  className="btn-modal-cancel"
+                  onClick={() => {
+                    setShowAddMemberModal(false)
+                    setUserSearchQuery('')
+                    setSelectedUserToAdd('')
+                  }}
+                >
+                  ยกเลิก
+                </button>
+                <button
+                  type="submit"
+                  className="btn-modal-submit"
+                  disabled={!selectedUserToAdd}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                  </svg>
+                  <span>เพิ่มเข้ากลุ่ม {selectedUserToAdd ? '(1 คน)' : ''}</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal: Member Detail & 12-Month Progress Evaluation / Feedback */}
+      {showMemberDetailModal && selectedMember && (
+        <div className="mgmt-modal-overlay" onClick={() => setShowMemberDetailModal(false)}>
+          <div className="mgmt-modal-card modal-large" onClick={(e) => e.stopPropagation()}>
+            {/* Modal Header */}
+            <div className="mgmt-modal-header">
+              <div className="member-modal-title-row">
+                <span className="member-modal-avatar">{selectedMember.name.charAt(0)}</span>
+                <div className="member-modal-info">
+                  <div className="member-modal-tag-row">
+                    <span className="member-inst-badge" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                        <line x1="3" y1="21" x2="21" y2="21" />
+                        <line x1="3" y1="10" x2="21" y2="10" />
+                        <polyline points="5 10 5 21" />
+                        <polyline points="19 10 19 21" />
+                        <polygon points="12 2 2 7 22 7" />
+                      </svg>
+                      <span>{selectedMember.major || 'มหาวิทยาลัยเทคโนโลยีสุรนารี'}</span>
+                    </span>
+                    <span className="member-code-badge">รหัส: {selectedMember.studentId}</span>
+                    <span className="member-career-badge" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                        <circle cx="12" cy="12" r="10" />
+                        <circle cx="12" cy="12" r="6" />
+                        <circle cx="12" cy="12" r="2" />
+                      </svg>
+                      <span>{selectedMember.careerGoal || 'โปรแกรมเมอร์'}</span>
+                    </span>
+                  </div>
+                  <h2 className="mgmt-modal-title">{selectedMember.name}</h2>
+                  <span className="member-modal-sub">
+                    กลุ่ม: <strong>{activeGroup?.name}</strong> • ศูนย์บริการนักศึกษาพิการ (DSS) มทส.
+                  </span>
+                </div>
+              </div>
+
+              <button type="button" className="mgmt-modal-close" onClick={() => setShowMemberDetailModal(false)} title="ปิดหน้าต่าง">✕</button>
+            </div>
+
+            <div className="mgmt-modal-body">
+              {/* Dedicated Full-Width Student Switcher Toolbar */}
+              <div className="student-switcher-toolbar">
+                <div className="switcher-info-group">
+                  <span className="switcher-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                      <circle cx="9" cy="7" r="4" />
+                      <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                  </span>
+                  <div className="switcher-text-group">
+                    <span className="switcher-main-label">เลือกประเมินนักศึกษาในกลุ่ม:</span>
+                    <span className="switcher-count-badge">
+                      คนที่ {members.findIndex((m) => m.id === selectedMember.id) + 1} จาก {members.length} คน
+                    </span>
+                  </div>
+                </div>
+
+                <div className="switcher-select-wrap">
+                  <select
+                    className="student-dropdown-select"
+                    value={members.findIndex((m) => m.id === selectedMember.id)}
+                    onChange={(e) => handleSwitchMember(Number(e.target.value))}
+                  >
+                    {members.map((m, idx) => (
+                      <option key={m.id} value={idx}>
+                        {idx + 1}. {m.name} — {m.careerGoal || 'ยังไม่ระบุอาชีพ'} ({m.progressPct || 0}%)
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="switcher-action-buttons">
+                  <button
+                    type="button"
+                    className="btn-switch-nav"
+                    disabled={members.findIndex((m) => m.id === selectedMember.id) <= 0}
+                    onClick={() => handleSwitchMember(members.findIndex((m) => m.id === selectedMember.id) - 1)}
+                    title="นักศึกษาก่อนหน้า"
+                  >
+                    ◀ ก่อนหน้า
+                  </button>
+                  <button
+                    type="button"
+                    className="btn-switch-nav"
+                    disabled={members.findIndex((m) => m.id === selectedMember.id) >= members.length - 1}
+                    onClick={() => handleSwitchMember(members.findIndex((m) => m.id === selectedMember.id) + 1)}
+                    title="นักศึกษาถัดไป"
+                  >
+                    ถัดไป ▶
+                  </button>
+                </div>
+              </div>
+              {/* Top Overview Bar */}
+              <div className="member-eval-stats-grid">
+                <div className="eval-stat-card">
+                  <span className="eval-label">ความพร้อมสู่อาชีพปัจจุบัน</span>
+                  <span className="eval-val highlight">{selectedMember.progressPct || 0}%</span>
+                </div>
+                <div className="eval-stat-card">
+                  <span className="eval-label">เป้าหมายอาชีพ</span>
+                  <span className="eval-val text-sm" style={{ fontWeight: 600, color: '#1e3a8a' }}>{selectedMember.careerGoal || 'โปรแกรมเมอร์'}</span>
+                </div>
+                <div className="eval-stat-card">
+                  <span className="eval-label">ทักษะเฉพาะบุคคล</span>
+                  <span className="eval-val text-sm" style={{ fontWeight: 600, color: '#059669' }}>
+                    {memberSkills.filter((s) => s.status === 'ผ่านเกณฑ์แล้ว').length} / {memberSkills.length} ทักษะ
+                  </span>
+                </div>
+                <div className="eval-stat-card">
+                  <span className="eval-label">รอบประเมินล่าสุด</span>
+                  <span className="eval-val text-sm">{selectedMember.lastEvaluated || 'สิงหาคม 2568'}</span>
+                </div>
+              </div>
+
+              {/* Modal Subtabs (12-Month vs Career & Skills) */}
+              <div className="modal-subtab-bar">
+                <button
+                  type="button"
+                  className={`modal-subtab-btn ${modalSubTab === 'monthly' ? 'active' : ''}`}
+                  onClick={() => setModalSubTab('monthly')}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                    <line x1="16" y1="2" x2="16" y2="6" />
+                    <line x1="8" y1="2" x2="8" y2="6" />
+                    <line x1="3" y1="10" x2="21" y2="10" />
+                  </svg>
+                  <span>การประเมินรายเดือน (12 เดือน & Dual Assessment)</span>
+                </button>
+                <button
+                  type="button"
+                  className={`modal-subtab-btn ${modalSubTab === 'skills' ? 'active' : ''}`}
+                  onClick={() => setModalSubTab('skills')}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                    <circle cx="12" cy="12" r="10" />
+                    <circle cx="12" cy="12" r="6" />
+                    <circle cx="12" cy="12" r="2" />
+                  </svg>
+                  <span>เลือกอาชีพ & กำหนดทักษะเฉพาะบุคคล ({memberSkills.length} ทักษะ)</span>
+                </button>
+              </div>
+
+              {/* SUBTAB 1: 12-MONTH EVALUATION */}
+              {modalSubTab === 'monthly' && (
+                <>
+
+              {/* 12-Month Interactive Navigator & Bar Chart Strip */}
+              <div className="months-tracker-section">
+                <div className="months-tracker-header">
+                  <div>
+                    <h3 className="months-tracker-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.2">
+                        <line x1="18" y1="20" x2="18" y2="10" />
+                        <line x1="12" y1="20" x2="12" y2="4" />
+                        <line x1="6" y1="20" x2="6" y2="14" />
+                      </svg>
+                      <span>แผนภูมิและประวัติความก้าวหน้า 12 เดือน (ประจำปี 2568)</span>
+                    </h3>
+                    <p className="months-tracker-subtitle">คลิกเลือกเดือนที่ต้องการ (ม.ค. - ธ.ค.) เพื่อดูเป้าหมาย ทักษะที่ประเมิน และบันทึกผล</p>
+                  </div>
+                  <span className="active-month-badge">
+                    กำลังดู: <strong>{getMonthsList(selectedMember)[activeMonthIdx]?.monthName}</strong>
+                  </span>
+                </div>
+
+                <div className="months-bars-row">
+                  {getMonthsList(selectedMember).map((mObj, idx) => {
+                    const isSelected = activeMonthIdx === idx
+                    const score = mObj.score || 0
+                    const isPending = mObj.status === 'ยังไม่ถึงรอบประเมิน' || score === 0
+
+                    return (
+                      <button
+                        type="button"
+                        key={mObj.monthKey || idx}
+                        className={`month-col-btn ${isSelected ? 'selected' : ''} ${isPending ? 'pending' : ''}`}
+                        onClick={() => handleSelectMonth(idx)}
+                        title={`${mObj.monthName}: ${mObj.topic} (คะแนน ${score}%)`}
+                      >
+                        {/* Mini vertical bar */}
+                        <div className="month-bar-track">
+                          <div
+                            className="month-bar-fill"
+                            style={{
+                              height: `${score}%`,
+                              backgroundColor: score >= 80 ? '#10b981' : score >= 60 ? '#2563eb' : score > 0 ? '#f59e0b' : '#cbd5e1',
+                            }}
+                          ></div>
+                        </div>
+
+                        {/* Score text */}
+                        <span className="month-score-tag">{isPending ? '-' : `${score}%`}</span>
+
+                        {/* Month Pill label */}
+                        <span className="month-short-name">{mObj.shortMonth}</span>
+
+                        {/* Month Short Topic Pill */}
+                        <span className="month-topic-pill" title={mObj.topic}>
+                          {mObj.shortTopic || mObj.topic?.slice(0, 10) || 'ประเมิน'}
+                        </span>
+
+                        {/* Status dot */}
+                        <span
+                          className="month-status-dot"
+                          style={{
+                            backgroundColor: score >= 80 ? '#10b981' : score >= 60 ? '#3b82f6' : score > 0 ? '#f59e0b' : '#cbd5e1',
+                          }}
+                        ></span>
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+
+              {/* Monthly Editor Card */}
+              <div className="monthly-edit-card">
+                <div className="monthly-edit-header">
+                  <div className="monthly-edit-title-group">
+                    <span className="monthly-calendar-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                        <line x1="16" y1="2" x2="16" y2="6" />
+                        <line x1="8" y1="2" x2="8" y2="6" />
+                        <line x1="3" y1="10" x2="21" y2="10" />
+                      </svg>
+                    </span>
+                    <div>
+                      <div className="monthly-module-pill">
+                        รอบประเมินที่ {activeMonthIdx + 1} จาก 12 เดือน • ศูนย์บริการนักศึกษาพิการ (DSS) มทส.
+                      </div>
+                      <h4 className="monthly-edit-title">
+                        การประเมินรอบเดือน: <span>{getMonthsList(selectedMember)[activeMonthIdx]?.monthName}</span>
+                      </h4>
+                    </div>
+                  </div>
+
+                  <div className="monthly-nav-controls">
+                    {activeMonthIdx > 0 && (
+                      <button
+                        type="button"
+                        className="btn-copy-prev"
+                        onClick={handleCopyFromPrevMonth}
+                        title="ดึงข้อมูลและเกณฑ์จากเดือนก่อนหน้ามาเป็นต้นแบบ"
+                        style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}
+                      >
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                          <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                        </svg>
+                        <span>คัดลอกจากเดือนก่อนหน้า</span>
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      className="btn-month-nav"
+                      disabled={activeMonthIdx === 0}
+                      onClick={() => handleSelectMonth(Math.max(0, activeMonthIdx - 1))}
+                    >
+                      ◀ ก่อนหน้า
+                    </button>
+                    <button
+                      type="button"
+                      className="btn-month-nav"
+                      disabled={activeMonthIdx === 11}
+                      onClick={() => handleSelectMonth(Math.min(11, activeMonthIdx + 1))}
+                    >
+                      ถัดไป ▶
+                    </button>
+                  </div>
+                </div>
+
+                {saveSuccessMsg && (
+                  <div className="month-save-alert">
+                    {saveSuccessMsg}
+                  </div>
+                )}
+
+                <form onSubmit={handleSaveMonthlyEvaluation} className="monthly-edit-form">
+                  {/* Dual Assessment Container */}
+                  <div className="dual-assessment-container">
+                    {/* SECTION 1: User Self-Assessment View */}
+                    <div className="user-self-eval-box">
+                      <div className="user-self-eval-header">
+                        <span className="user-self-eval-title" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                          </svg>
+                          <span>ส่วนที่ 1: ผลการประเมินตนเองของนักศึกษา (User Self-Assessment)</span>
+                        </span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <span className="user-self-eval-score-badge">
+                            คะแนนประเมินตนเอง: {evaluationData.userSelfScore || 0}%
+                          </span>
+                          <span className="status-pill pill-good">
+                            {evaluationData.userSelfStatus || 'ประเมินแล้ว'}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="user-self-eval-body">
+                        <div className="user-self-note-block">
+                          <span className="user-self-label" style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                            </svg>
+                            <span>บันทึกการเรียนรู้และการฝึกทักษะของนักศึกษา:</span>
+                          </span>
+                          <p className="user-self-text">
+                            {evaluationData.userSelfNote || 'นักศึกษาได้เรียนรู้ตามแผนพัฒนาตนเองและส่งหลักฐานผลงานเรียบร้อยแล้ว'}
+                          </p>
+                        </div>
+
+                        <div className="user-self-note-block">
+                          <span className="user-self-label" style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                            </svg>
+                            <span>แฟ้มผลงาน / หลักฐานแนบ (Evidence & Showcase):</span>
+                          </span>
+                          {evaluationData.userSelfEvidence ? (
+                            <a
+                              href={evaluationData.userSelfEvidence}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="user-self-text"
+                              style={{ color: '#2563eb', textDecoration: 'underline', wordBreak: 'break-all', display: 'inline-flex', alignItems: 'center', gap: '5px' }}
+                            >
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+                              </svg>
+                              <span>{evaluationData.userSelfEvidence}</span>
+                            </a>
+                          ) : (
+                            <span className="user-self-text" style={{ color: '#94a3b8', fontStyle: 'italic' }}>
+                              - แนบในระบบแฟ้มผลงานกลาง DSS -
+                            </span>
+                          )}
+                          <div style={{ marginTop: '6px', fontSize: '12px', color: '#047857', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                              <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            <span>ทักษะที่นักศึกษาประเมินว่าผ่าน: {evaluationData.userSelfPassedCriteria?.length || (evaluationData.passedCriteria?.length || 0)} รายการ</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* SECTION 2: Super User / Mentor Supervisor Evaluation */}
+                    <div className="monthly-milestone-box">
+                      <div className="milestone-box-header">
+                        <span className="milestone-badge-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                          </svg>
+                        </span>
+                        <div className="milestone-text-group">
+                          <label className="milestone-label">
+                            ส่วนที่ 2: การประเมินและให้คำแนะนำโดย Super User / Mentor (Supervisor Guidance)
+                          </label>
+                          <input
+                            type="text"
+                            className="milestone-input"
+                            value={evaluationData.topic}
+                            onChange={(e) => setEvaluationData({ ...evaluationData, topic: e.target.value })}
+                            placeholder="ระบุหัวข้อหรือสมรรถนะหลักที่ประเมินในเดือนนี้..."
+                            required
+                          />
+                        </div>
+                      </div>
+
+                      {/* Criteria Checklist for this month */}
+                      <div className="milestone-criteria-wrap">
+                        <div className="criteria-header-row">
+                          <span className="criteria-section-title" style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2.5">
+                              <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            <span>เกณฑ์และทักษะที่ประเมินประจำเดือน ({evaluationData.passedCriteria?.length || 0}/{(evaluationData.criteria || []).length} ผ่านแล้ว)</span>
+                          </span>
+                          <span className="criteria-hint">คลิกเพื่อเช็กผ่าน/ไม่ผ่าน หรือลบเกณฑ์ออก</span>
+                        </div>
+
+                        <div className="criteria-items-list">
+                          {(evaluationData.criteria || []).map((critText, cIdx) => {
+                            const isPassed = (evaluationData.passedCriteria || []).includes(cIdx)
+                            return (
+                              <div
+                                key={cIdx}
+                                className={`criteria-item-pill ${isPassed ? 'passed' : 'pending'}`}
+                                onClick={() => handleToggleCriteria(cIdx)}
+                                title="คลิกเพื่อสลับสถานะผ่าน/ไม่ผ่าน หรือคลิกที่ข้อความเพื่อดูและประเมินทักษะ"
+                              >
+                                <span className="criteria-checkbox-box" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                                  {isPassed ? (
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                                      <polyline points="20 6 9 17 4 12" />
+                                    </svg>
+                                  ) : (
+                                    <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', border: '1.5px solid #94a3b8' }} />
+                                  )}
+                                </span>
+                                <span
+                                  className="criteria-text"
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    handleOpenMonthlySkillModal(cIdx)
+                                  }}
+                                  style={{ cursor: 'pointer' }}
+                                  title="คลิกเพื่อเปิดป๊อปอัปประเมินทักษะนี้"
+                                >
+                                  {critText}
+                                </span>
+                                <span
+                                  className="criteria-status-badge"
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    handleOpenMonthlySkillModal(cIdx)
+                                  }}
+                                  style={{ cursor: 'pointer' }}
+                                  title="คลิกเพื่อเปิดป๊อปอัปประเมินทักษะนี้"
+                                >
+                                  {isPassed ? 'ผ่านเกณฑ์' : 'ยังไม่ผ่าน'}
+                                </span>
+                                {(evaluationData.criteria || []).length > 1 && (
+                                  <button
+                                    type="button"
+                                    className="btn-remove-criteria-item"
+                                    onClick={(e) => handleRemoveCriteria(cIdx, e)}
+                                    title="ลบทักษะนี้ออกจากเดือนนี้"
+                                  >
+                                    ✕
+                                  </button>
+                                )}
+                              </div>
+                            )
+                          })}
+                        </div>
+
+                        {/* Add Custom Skill / Criteria Input -> Opens Pop-up Modal like Image 2 */}
+                        <div className="add-custom-skill-wrap">
+                          <input
+                            type="text"
+                            className="add-custom-skill-input"
+                            placeholder="+ เพิ่มทักษะ / กำหนดเกณฑ์ประเมินใหม่ในเดือนนี้..."
+                            value={customSkillText}
+                            onChange={(e) => setCustomSkillText(e.target.value)}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') {
+                                e.preventDefault()
+                                handleOpenMonthlySkillModal(customSkillText)
+                              }
+                            }}
+                          />
+                          <button
+                            type="button"
+                            className="btn-add-custom-skill"
+                            onClick={() => handleOpenMonthlySkillModal(customSkillText)}
+                            title="คลิกเพื่อเปิดหน้าต่างป๊อปอัปเพิ่มและประเมินทักษะใหม่"
+                          >
+                            + เพิ่มทักษะ
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Auto Sync Percentage Bar */}
+                      <div className="auto-sync-bar">
+                        <div className="auto-sync-info" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="2.4">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                          </svg>
+                          <span>
+                            คำนวณคะแนนตามเกณฑ์อัตโนมัติ: <strong>{calcAutoScore(evaluationData.passedCriteria, evaluationData.criteria)}%</strong> (ผ่าน {evaluationData.passedCriteria?.length || 0}/{(evaluationData.criteria || []).length} ทักษะ)
+                          </span>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                          <label className="auto-sync-toggle-label">
+                            <input
+                              type="checkbox"
+                              checked={autoSyncScore}
+                              onChange={(e) => {
+                                setAutoSyncScore(e.target.checked)
+                                if (e.target.checked) {
+                                  handleForceSyncScore()
+                                }
+                              }}
+                            />
+                            <span>ซิงค์คะแนนอัตโนมัติ</span>
+                          </label>
+                          <button
+                            type="button"
+                            className="btn-sync-score-now"
+                            onClick={handleForceSyncScore}
+                            title="คำนวณและอัปเดตคะแนนทันที"
+                            style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}
+                          >
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                              <polyline points="23 4 23 10 17 10" />
+                              <polyline points="1 20 1 14 7 14" />
+                              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+                            </svg>
+                            <span>ซิงค์ทันที</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Balanced Two-column inputs: Score, Status, Skills & Hours */}
+                  <div className="form-two-cols">
+                    {/* Left Col: Score Slider & Input */}
+                    <div className="form-group-col">
+                      <div className="slider-header-row">
+                        <label className="modal-field-label">ความพร้อมสู่อาชีพประจำเดือนนี้ (%):</label>
+                        <span className="slider-current-val">{evaluationData.score}%</span>
+                      </div>
+                      <div className="score-input-slider-row">
+                        <input
+                          type="range"
+                          min="0"
+                          max="100"
+                          step="1"
+                          className="score-range-slider"
+                          value={evaluationData.score}
+                          onChange={(e) => setEvaluationData({ ...evaluationData, score: Number(e.target.value) })}
+                        />
+                        <input
+                          type="number"
+                          min="0"
+                          max="100"
+                          className="score-number-input"
+                          value={evaluationData.score}
+                          onChange={(e) => setEvaluationData({ ...evaluationData, score: Number(e.target.value) })}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Right Col: Status Select */}
+                    <div className="form-group-col">
+                      <label className="modal-field-label">สถานะการพัฒนาในเดือนนี้:</label>
+                      <select
+                        className="modal-select-input"
+                        value={evaluationData.status}
+                        onChange={(e) => setEvaluationData({ ...evaluationData, status: e.target.value })}
+                      >
+                        <option value="พร้อมยื่นสมัครงานแล้ว">พร้อมยื่นสมัครงานแล้ว (Job Ready / &gt;80%)</option>
+                        <option value="กำลังพัฒนาได้ดี">กำลังพัฒนาได้ดี (On Track / 60-79%)</option>
+                        <option value="ต้องการคำแนะนำเพิ่มเติม">ต้องการคำแนะนำเพิ่มเติม (40-59%)</option>
+                        <option value="ต้องเร่งปรับปรุงทักษะ">ต้องเร่งปรับปรุงทักษะ (&lt;40%)</option>
+                        <option value="ยังไม่ถึงรอบประเมิน">ยังไม่ถึงรอบประเมิน (Pending)</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Two-column inputs: Passed Skills & Hours */}
+                  <div className="form-two-cols">
+                    <div className="form-group-col">
+                      <label className="modal-field-label">จำนวนทักษะที่ผ่านเกณฑ์สะสมในเดือนนี้:</label>
+                      <input
+                        type="text"
+                        className="modal-text-input"
+                        placeholder="เช่น 8 ทักษะ หรือ 4 ทักษะ"
+                        value={evaluationData.passedSkills}
+                        onChange={(e) => setEvaluationData({ ...evaluationData, passedSkills: e.target.value })}
+                      />
+                    </div>
+
+                    <div className="form-group-col">
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <label className="modal-field-label">ชั่วโมงการเรียนรู้ / ฝึกอบรมในเดือนนี้:</label>
+                        <span style={{ fontSize: '12px', color: '#2563eb', fontWeight: '700', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12 6 12 12 16 14" />
+                          </svg>
+                          <span>{evaluationData.hours || '0 ชม.'}</span>
+                        </span>
+                      </div>
+                      <input
+                        type="text"
+                        className="modal-text-input"
+                        placeholder="เช่น 30 ชม. หรือ 24 ชม."
+                        value={evaluationData.hours}
+                        onChange={(e) => setEvaluationData({ ...evaluationData, hours: e.target.value })}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Mentor Feedback Note */}
+                  <div className="form-group-row">
+                    <label className="modal-field-label">
+                      บันทึกข้อเสนอแนะและผลการประเมินจาก Super User / Mentor (ประจำเดือน {getMonthsList(selectedMember)[activeMonthIdx]?.shortMonth}) *
+                    </label>
+                    <textarea
+                      className="modal-text-area"
+                      placeholder={`พิมพ์คำแนะนำและผลการประเมินสำหรับหัวข้อ "${evaluationData.topic}" เพื่อให้นักศึกษาได้ติดตามและปรับปรุงตัว...`}
+                      value={evaluationData.mentorNote}
+                      onChange={(e) => setEvaluationData({ ...evaluationData, mentorNote: e.target.value })}
+                      rows={3}
+                      required
+                    />
+                  </div>
+
+                  {/* Action Item Plan */}
+                  <div className="form-group-row">
+                    <label className="modal-field-label">
+                      แผนการพัฒนาต่อเนื่อง / มอบหมายงานในเดือนถัดไป (Action Item)
+                    </label>
+                    <input
+                      type="text"
+                      className="modal-text-input"
+                      placeholder="เช่น ทำ Mini Project เชื่อมต่อ API หรือ ฝึกซ้อม Mock Interview สหกิจศึกษา"
+                      value={evaluationData.advicePlan}
+                      onChange={(e) => setEvaluationData({ ...evaluationData, advicePlan: e.target.value })}
+                    />
+                  </div>
+
+                  <div className="monthly-edit-submit-row">
+                    <button type="submit" className="btn-save-month-eval" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                        <polyline points="17 21 17 13 7 13 7 21" />
+                        <polyline points="7 3 7 8 15 8" />
+                      </svg>
+                      <span>บันทึกผลการประเมินรอบเดือน ({getMonthsList(selectedMember)[activeMonthIdx]?.shortMonth} 2568)</span>
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              {/* 12-Month History Table */}
+              <div className="monthly-history-table-section">
+                <div className="history-table-header-row">
+                  <h4 className="monthly-history-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.2">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                    </svg>
+                    <span>ตารางสรุปผลการประเมินรายเดือนตลอดทั้งปี (12 เดือน)</span>
+                  </h4>
+                  <span className="history-table-subtitle">สรุปหัวข้อที่ประเมิน คะแนน ความพร้อม และข้อเสนอแนะรายเดือน</span>
+                </div>
+                <div className="history-table-wrap">
+                  <table className="history-table">
+                    <thead>
+                      <tr>
+                        <th style={{ width: '85px' }}>เดือน</th>
+                        <th style={{ width: '220px' }}>หัวข้อที่ประเมินประจำเดือน</th>
+                        <th style={{ width: '130px' }}>ความพร้อม (%)</th>
+                        <th style={{ width: '90px' }}>ทักษะผ่าน</th>
+                        <th style={{ width: '80px' }}>ชม. อบรม</th>
+                        <th style={{ width: '120px' }}>สถานะ</th>
+                        <th>ข้อเสนอแนะของ Super User / พี่เลี้ยง DSS</th>
+                        <th style={{ width: '70px', textAlign: 'center' }}>แก้ไข</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {getMonthsList(selectedMember).map((mObj, idx) => {
+                        const isCurActive = activeMonthIdx === idx
+                        return (
+                          <tr key={mObj.monthKey || idx} className={isCurActive ? 'row-active' : ''}>
+                            <td>
+                              <span className="table-month-name">{mObj.shortMonth}</span>
+                            </td>
+                            <td>
+                              <div className="table-topic-block">
+                                <span className="table-topic-text">{mObj.topic || DEFAULT_12_MONTHS_SYLLABUS[idx]?.topic}</span>
+                              </div>
+                            </td>
+                            <td>
+                              <div className="table-score-badge">
+                                <span className="score-badge-val">{mObj.score}%</span>
+                                <div className="table-mini-bar">
+                                  <div
+                                    className="table-mini-fill"
+                                    style={{
+                                      width: `${mObj.score}%`,
+                                      backgroundColor: mObj.score >= 80 ? '#10b981' : mObj.score >= 60 ? '#2563eb' : mObj.score > 0 ? '#f59e0b' : '#cbd5e1',
+                                    }}
+                                  ></div>
+                                </div>
+                              </div>
+                            </td>
+                            <td>{mObj.passedSkills || '-'}</td>
+                            <td>{mObj.hours || '-'}</td>
+                            <td>
+                              <span className={`status-pill-sm ${mObj.status?.includes('ดี') || mObj.status?.includes('พร้อม') ? 'pill-good' : mObj.status?.includes('ยังไม่ถึง') ? 'pill-pending' : 'pill-warn'}`}>
+                                {mObj.status || '-'}
+                              </span>
+                            </td>
+                            <td className="table-note-cell">
+                              <span className="table-note-text" title={mObj.note}>
+                                {mObj.note || <em className="text-gray">- ยังไม่มีบันทึก -</em>}
+                              </span>
+                            </td>
+                            <td style={{ textAlign: 'center' }}>
+                              <button
+                                type="button"
+                                className={`btn-edit-month-action ${isCurActive ? 'active' : ''}`}
+                                onClick={() => handleSelectMonth(idx)}
+                              >
+                                {isCurActive ? 'กำลังดู' : 'แก้ไข'}
+                              </button>
+                            </td>
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+                </>
+              )}
+
+              {/* SUBTAB 2: CAREER SELECTION & INDIVIDUAL SKILLS MATRIX */}
+              {modalSubTab === 'skills' && (
+                <div className="member-skills-section">
+                  {/* Career Selection Card */}
+                  <div className="career-select-card">
+                    <div className="career-select-header">
+                      <span className="career-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                          <circle cx="12" cy="12" r="10" />
+                          <circle cx="12" cy="12" r="6" />
+                          <circle cx="12" cy="12" r="2" />
+                        </svg>
+                      </span>
+                      <div>
+                        <h4 className="career-select-title">เลือกเส้นทางอาชีพและชุดทักษะมาตรฐานสำหรับ {selectedMember.name}</h4>
+                        <p className="career-select-sub">
+                          เลือกอาชีพที่นักศึกษาต้องการมุ่งเน้น Super User สามารถโหลดชุดทักษะมาตรฐานและปรับแต่งเพิ่ม/ลดระดับทักษะเฉพาะบุคคลได้
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="career-select-controls">
+                      <div className="career-select-dropdown-wrap">
+                        <label className="career-select-label">เลือกจากชุดอาชีพแนะนำ (Presets):</label>
+                        <select
+                          className="career-select-dropdown"
+                          value={CAREER_PRESETS.find((p) => p.shortTitle === selectedMember.careerGoal || p.title === selectedMember.careerGoal)?.shortTitle || ''}
+                          onChange={(e) => {
+                            if (e.target.value) {
+                              handleSelectCareerPreset(e.target.value, false)
+                            }
+                          }}
+                        >
+                          <option value="">-- เลือกอาชีพแนะนำ --</option>
+                          {CAREER_PRESETS.map((p) => (
+                            <option key={p.id} value={p.shortTitle}>
+                              {p.title} ({p.skills.length} ทักษะหลัก)
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div className="career-custom-input-wrap">
+                        <label className="career-select-label">หรือระบุชื่ออาชีพเป้าหมายเอง:</label>
+                        <input
+                          type="text"
+                          className="modal-text-input"
+                          value={selectedMember.careerGoal || ''}
+                          placeholder="เช่น Data Engineer, Web Developer..."
+                          onChange={(e) => {
+                            const updated = { ...selectedMember, careerGoal: e.target.value }
+                            setSelectedMember(updated)
+                          }}
+                        />
+                      </div>
+
+                      <button
+                        type="button"
+                        className="btn-load-preset"
+                        onClick={() => {
+                          const matched = CAREER_PRESETS.find(
+                            (p) => p.shortTitle === selectedMember.careerGoal || p.title === selectedMember.careerGoal
+                          ) || CAREER_PRESETS[0]
+                          handleSelectCareerPreset(matched.shortTitle, true)
+                        }}
+                      >
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '6px' }}>
+                          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                        </svg>
+                        <span>โหลดชุดทักษะแนะนำสำหรับอาชีพนี้</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {saveSuccessMsg && (
+                    <div className="month-save-alert" style={{ marginBottom: '16px' }}>
+                      {saveSuccessMsg}
+                    </div>
+                  )}
+
+                  {/* Skills Grid */}
+                  <div className="skills-matrix-header">
+                    <div>
+                      <h4 className="skills-matrix-title" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                        </svg>
+                        <span>รายการทักษะเฉพาะบุคคลและผลการประเมิน ({memberSkills.length} ทักษะ)</span>
+                      </h4>
+                      <p className="skills-matrix-sub">
+                        Super User สามารถประเมินระดับความเชี่ยวชาญ (1-5 ดาว) ปรับสถานะ หรือลบ/เพิ่มทักษะได้ตามศักยภาพของนักศึกษา
+                      </p>
+                    </div>
+                    <span className="skills-count-pill">
+                      ผ่านเกณฑ์แล้ว: {memberSkills.filter((s) => s.status === 'ผ่านเกณฑ์แล้ว').length} / {memberSkills.length} ทักษะ
+                    </span>
+                  </div>
+
+                  <div className="skills-cards-grid">
+                    {memberSkills.map((skill) => {
+                      const catBadgeClass =
+                        skill.category?.includes('Technical')
+                          ? 'cat-tech'
+                          : skill.category?.includes('Soft')
+                          ? 'cat-soft'
+                          : 'cat-assist'
+
+                      return (
+                        <div key={skill.id} className="skill-card-item">
+                          <div className="skill-card-top">
+                            <span className={`skill-cat-badge ${catBadgeClass}`}>{skill.category}</span>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                              {skill.hours && (
+                                <span className="skill-duration-tag" style={{ fontSize: '11px', padding: '2px 6px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <polyline points="12 6 12 12 16 14" />
+                                  </svg>
+                                  <span>{skill.hours.includes('ชม.') ? skill.hours : `${skill.hours} ชม.`}</span>
+                                </span>
+                              )}
+                              <button
+                                type="button"
+                                className="btn-skill-delete"
+                                title="ลบทักษะนี้"
+                                onClick={() => handleDeleteIndividualSkill(skill.id)}
+                              >
+                                ✕
+                              </button>
+                            </div>
+                          </div>
+
+                          <h5
+                            className="skill-card-name"
+                            onClick={() => handleOpenSkillEvalModal(skill)}
+                            style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+                            title="คลิกเพื่อเปิดป๊อปอัปประเมินทักษะ"
+                          >
+                            <span>{skill.name}</span>
+                            <span style={{ fontSize: '11px', color: '#2563eb', fontWeight: '600' }}>คลิกประเมิน ↗</span>
+                          </h5>
+                          <div className="skill-rating-box">
+                            <div className="rating-label-row">
+                              <span className="rating-label">ระดับความเชี่ยวชาญ:</span>
+                              <span className="rating-num-tag">{skill.level || 1} / 5</span>
+                            </div>
+                            <div className="star-rating-buttons">
+                              {[1, 2, 3, 4, 5].map((star) => (
+                                <button
+                                  key={star}
+                                  type="button"
+                                  className={`star-rate-btn ${star <= (skill.level || 0) ? 'active' : ''}`}
+                                  onClick={() => handleSkillRatingChange(skill.id, star)}
+                                  title={`ให้คะแนน ${star} ดาว`}
+                                >
+                                  <svg width="14" height="14" viewBox="0 0 24 24" fill={star <= (skill.level || 0) ? "#f59e0b" : "none"} stroke="#f59e0b" strokeWidth="2">
+                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                                  </svg>
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Status & Open Full Eval Button */}
+                          <div className="skill-status-box" style={{ marginTop: '8px' }}>
+                            <select
+                              className="skill-status-select"
+                              value={skill.status || 'กำลังพัฒนา'}
+                              onChange={(e) => handleSkillStatusChange(skill.id, e.target.value)}
+                            >
+                              <option value="ผ่านเกณฑ์แล้ว">ผ่านเกณฑ์แล้ว</option>
+                              <option value="กำลังพัฒนา">กำลังพัฒนา</option>
+                              <option value="ต้องปรับปรุง">ต้องปรับปรุง</option>
+                            </select>
+
+                            <button
+                              type="button"
+                              className="btn-open-popup-eval"
+                              style={{ padding: '5px 10px', fontSize: '12px' }}
+                              onClick={() => handleOpenSkillEvalModal(skill)}
+                              title="เปิดหน้าต่างประเมินทักษะ บันทึกเวลา และแนบหลักฐาน"
+                            >
+                              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                              </svg>
+                              <span>ประเมิน / ดูผล</span>
+                            </button>
+                          </div>
+                        </div>
+                      )
+                    })}
+
+                    {/* Add New Skill Form Card (Matching User Experience) */}
+                    <div className="add-skill-form-card">
+                      <h5 className="add-skill-card-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                          <line x1="12" y1="5" x2="12" y2="19" />
+                          <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg>
+                        <span>เพิ่มทักษะใหม่เฉพาะบุคคล</span>
+                      </h5>
+                      
+                      <div className="add-skill-field">
+                        <label className="modal-field-label">ชื่อทักษะ:</label>
+                        <input
+                          type="text"
+                          className="modal-text-input"
+                          placeholder="เช่น Docker, Figma, Data Modeling, Node.js..."
+                          value={newSkillForm.name}
+                          onChange={(e) => setNewSkillForm({ ...newSkillForm, name: e.target.value })}
+                        />
+                      </div>
+
+                      {/* Modern Category Dropdown */}
+                      <div className="add-skill-field" style={{ position: 'relative' }}>
+                        <label className="modal-field-label">หมวดหมู่ทักษะ:</label>
+                        <button
+                          type="button"
+                          className="custom-cat-dropdown-trigger"
+                          onClick={() => setIsCatDropdownOpen(!isCatDropdownOpen)}
+                          style={{ width: '100%', boxSizing: 'border-box' }}
+                        >
+                          <span>{categoryOptions.find((c) => c.id === selectedCatId)?.name || 'เลือกหมวดหมู่'}</span>
+                          <span style={{ color: '#2563eb', transition: 'transform 0.2s', transform: isCatDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                              <polyline points="6 9 12 15 18 9" />
+                            </svg>
+                          </span>
+                        </button>
+
+                        {isCatDropdownOpen && (
+                          <div className="custom-cat-dropdown-menu" style={{ width: '100%', boxSizing: 'border-box' }}>
+                            {categoryOptions.map((opt) => (
+                              <div
+                                key={opt.id}
+                                className={`custom-cat-dropdown-item ${selectedCatId === opt.id ? 'selected' : ''}`}
+                                onClick={() => {
+                                  setSelectedCatId(opt.id)
+                                  setIsCatDropdownOpen(false)
+                                }}
+                              >
+                                <span>{opt.name}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Custom Category Input if selectedCatId === 'other' */}
+                      {selectedCatId === 'other' && (
+                        <div className="add-skill-field">
+                          <label className="modal-field-label">ระบุชื่อหมวดหมู่ที่ต้องการ:</label>
+                          <input
+                            type="text"
+                            className="modal-text-input"
+                            placeholder="พิมพ์ชื่อหมวดหมู่ใหม่ เช่น IoT, Cloud, Cybersecurity..."
+                            value={customCatText}
+                            onChange={(e) => setCustomCatText(e.target.value)}
+                            autoFocus
+                          />
+                        </div>
+                      )}
+
+                      {/* Hours with Quick Preset Chips */}
+                      <div className="add-skill-field">
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <label className="modal-field-label">เวลาที่ใช้ฝึกฝน / ปฏิบัติ:</label>
+                          <span style={{ fontSize: '12px', color: '#2563eb', fontWeight: '700', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                              <circle cx="12" cy="12" r="10" />
+                              <polyline points="12 6 12 12 16 14" />
+                            </svg>
+                            <span>{newSkillHours || '0'} ชม.</span>
+                          </span>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <input
+                            type="number"
+                            min="0"
+                            className="modal-text-input"
+                            style={{ width: '80px' }}
+                            value={newSkillHours}
+                            onChange={(e) => setNewSkillHours(e.target.value)}
+                            placeholder="15"
+                          />
+                          <span style={{ fontSize: '13px', color: '#64748b' }}>ชั่วโมง</span>
+                        </div>
+                        <div className="modal-quick-hours-chips" style={{ marginTop: '4px' }}>
+                          <span className="quick-chip-label">เลือกด่วน:</span>
+                          {['2', '3', '5', '6', '9', '12', '15'].map((h) => (
+                            <button
+                              key={h}
+                              type="button"
+                              className={`btn-quick-hour-chip ${String(newSkillHours) === String(h) ? 'active' : ''}`}
+                              onClick={() => setNewSkillHours(h)}
+                            >
+                              +{h} ชม.
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        className="btn-add-skill-submit"
+                        disabled={!newSkillForm.name.trim()}
+                        onClick={handleAddIndividualSkill}
+                      >
+                        + เพิ่มทักษะลงในรายการ
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Save Skills Button */}
+                  <div className="skills-save-footer">
+                    <button
+                      type="button"
+                      className="btn-save-member-skills"
+                      onClick={handleSaveMemberSkills}
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" style={{ marginRight: '8px' }}>
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                        <polyline points="17 21 17 13 7 13 7 21" />
+                        <polyline points="7 3 7 8 15 8" />
+                      </svg>
+                      <span>บันทึกการเลือกอาชีพและชุดทักษะเฉพาะบุคคล ({selectedMember.name})</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="mgmt-modal-footer">
+              <button type="button" className="btn-modal-cancel" onClick={() => setShowMemberDetailModal(false)}>
+                ปิดหน้าต่าง
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================
+          Pop-up Modal: Super User Evaluation for Specific Skill
+          ======================================================== */}
+      {selectedSkillEvalModal && (
+        <div className="assessment-modal-overlay" onClick={handleCloseSkillEvalModal}>
+          <div className="assessment-modal-dialog" onClick={(e) => e.stopPropagation()}>
+            {/* Modal Header */}
+            <div className="assessment-modal-header">
+              <div className="modal-header-left-title">
+                <div className="modal-skill-icon-badge">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+                    <path d="M9 14l2 2 4-4" />
+                  </svg>
+                </div>
+                <div className="modal-skill-title-group">
+                  <h3 className="modal-skill-title">ประเมินทักษะ: {evalModalData.name || selectedSkillEvalModal.name}</h3>
+                  <div className="modal-skill-meta">
+                    <span>กลุ่ม: {selectedSkillEvalModal.category || selectedMember?.careerGoal || 'เทคโนโลยีสารสนเทศ/IT'}</span>
+                    <span>•</span>
+                    <span className="modal-month-badge">รอบเดือน: {selectedSkillEvalModal.monthContext || `${getMonthsList(selectedMember)[activeMonthIdx]?.monthName || 'สิงหาคม 2568'} (เดือนล่าสุด)`}</span>
+                  </div>
+                </div>
+              </div>
+
+              <button type="button" className="modal-close-btn" onClick={handleCloseSkillEvalModal} title="ปิดหน้าต่าง">
+                ✕
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="assessment-modal-body">
+              {/* Optional Skill Name Edit if New Skill */}
+              {selectedSkillEvalModal.isNewCriteria && (
+                <div className="modal-form-card-section" style={{ backgroundColor: '#eff6ff', borderColor: '#bfdbfe' }}>
+                  <label className="modal-section-label" style={{ marginBottom: '4px' }}>
+                    <div className="modal-section-label-left">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.2">
+                        <line x1="18" y1="2" x2="22" y2="6" />
+                        <path d="M7.5 20.5 19 9l-4-4L3.5 16.5 2 22z" />
+                      </svg>
+                      <span>ระบุชื่อทักษะที่ต้องการเพิ่ม:</span>
+                    </div>
+                  </label>
+                  <input
+                    type="text"
+                    className="modal-text-input"
+                    value={evalModalData.name}
+                    onChange={(e) => setEvalModalData({ ...evalModalData, name: e.target.value })}
+                    placeholder="เช่น คอมพิวเตอร์, การเขียนโปรแกรม Full-Stack..."
+                    required
+                  />
+                </div>
+              )}
+
+              {/* 1. Evaluation Dropdown Section */}
+              <div className="modal-form-card-section">
+                <div className="modal-section-label">
+                  <div className="modal-section-label-left">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.2">
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M12 8v4l3 3" />
+                    </svg>
+                    <span>ผลการประเมินทักษะ (7 ระดับมาตรฐาน):</span>
+                  </div>
+                  <span style={{ fontSize: '12px', color: '#64748b', fontWeight: '500' }}>เลือกตามระดับความสามารถจริง</span>
+                </div>
+
+                <div className="modal-eval-dropdown-row">
+                  <div className="modal-custom-dropdown">
+                    <button
+                      type="button"
+                      className={`modal-dropdown-trigger ${evalModalData.level ? 'has-value' : ''}`}
+                      onClick={() => setIsEvalDropdownOpen(!isEvalDropdownOpen)}
+                    >
+                      <span>{evalModalData.level || '— คลิกเลือกผลการประเมิน —'}</span>
+                      <span style={{ color: '#2563eb', display: 'flex', alignItems: 'center', transition: 'transform 0.2s ease', transform: isEvalDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="6 9 12 15 18 9" />
+                        </svg>
+                      </span>
+                    </button>
+
+                    {isEvalDropdownOpen && (
+                      <ul className="modal-dropdown-menu">
+                        {evaluationOptions.map((opt, idx) => (
+                          <li
+                            key={idx}
+                            className={`modal-dropdown-item ${evalModalData.level === opt ? 'selected' : ''}`}
+                            onClick={() => {
+                              setEvalModalData({ ...evalModalData, level: opt })
+                              setIsEvalDropdownOpen(false)
+                            }}
+                          >
+                            {opt}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+
+                  {/* AI Help Button */}
+                  <button
+                    type="button"
+                    className="btn-ai-assist-modern"
+                    onClick={handleAiAssistSkillEval}
+                  >
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" />
+                      <rect x="6" y="8" width="12" height="12" rx="3" />
+                      <circle cx="9.5" cy="13.5" r="1" fill="currentColor" />
+                      <circle cx="14.5" cy="13.5" r="1" fill="currentColor" />
+                    </svg>
+                    <span>AI ช่วยประเมิน</span>
+                  </button>
+                </div>
+
+                {/* Evidence Guide Inline Tip (ตรงตามรูปภาพ 100%) */}
+                <div className="modal-evidence-guide-box">
+                  <div className="modal-evidence-guide-text">
+                    <span className="modal-evidence-title" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                        <line x1="9" y1="18" x2="15" y2="18" />
+                        <line x1="10" y1="22" x2="14" y2="22" />
+                        <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14" />
+                      </svg>
+                      <span>เรียนรู้ทฤษฎีการเขียนโปรแกรม</span>
+                    </span>
+                    <span className="modal-evidence-sub">ช่องทาง: คอร์สออนไลน์, หนังสือ, เอกสารประกอบการสอน</span>
+                  </div>
+
+                  <button
+                    type="button"
+                    className="btn-modal-guide"
+                    onClick={() => alert(`คำแนะนำหลักฐานสำหรับ "${evalModalData.name || selectedSkillEvalModal.name}":\n\n- สามารถแนบภาพถ่ายหน้าจอโปรเจกต์งาน, ลิงก์ GitHub หรือภาพการเข้าร่วมกิจกรรม\n- บันทึกชั่วโมงการฝึกฝนจริงเพื่อให้พี่เลี้ยงและที่ปรึกษาประเมินความพร้อมได้แม่นยำ`)}
+                  >
+                    ขอคำแนะนำหลักฐาน
+                  </button>
+                </div>
+              </div>
+
+              {/* 2. Time Spent Section (เวลาในการทำ) */}
+              <div className="modal-form-card-section modal-time-spent-section">
+                <div className="modal-section-label">
+                  <div className="modal-section-label-left">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.2">
+                      <circle cx="12" cy="12" r="10" />
+                      <polyline points="12 6 12 12 16 14" />
+                    </svg>
+                    <span>เวลาในการทำ / ระยะเวลาและชั่วโมงที่ปฏิบัติ:</span>
+                  </div>
+                  <span style={{ fontSize: '12px', color: '#2563eb', fontWeight: '700', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                    {evalModalData.hours ? (
+                      <>
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                          <circle cx="12" cy="12" r="10" />
+                          <polyline points="12 6 12 12 16 14" />
+                        </svg>
+                        <span>รวม {evalModalData.hours} ชม.</span>
+                      </>
+                    ) : (
+                      'ระบุเวลาที่ใช้'
+                    )}
+                  </span>
+                </div>
+
+                <div className="modal-time-inputs-container">
+                  <div className="modal-time-row">
+                    <div className="modal-time-field-group">
+                      <label className="modal-time-field-label">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <circle cx="12" cy="12" r="10" />
+                          <line x1="12" y1="8" x2="12" y2="12" />
+                          <line x1="12" y1="16" x2="12.01" y2="16" />
+                        </svg>
+                        <span>จำนวนชั่วโมงที่ใช้ในการฝึกฝน / ปฏิบัติ:</span>
+                      </label>
+                      <div className="modal-hours-input-wrapper">
+                        <input
+                          type="number"
+                          min="0"
+                          step="0.5"
+                          className="modal-time-num-input"
+                          placeholder="เช่น 15"
+                          value={evalModalData.hours || ''}
+                          onChange={(e) => setEvalModalData({ ...evalModalData, hours: e.target.value })}
+                        />
+                        <span className="modal-hours-unit">ชั่วโมง</span>
+                      </div>
+                    </div>
+
+                    <div className="modal-quick-hours-chips">
+                      <span className="quick-chip-label">เลือกด่วน:</span>
+                      {['2', '3', '5', '6', '9', '12', '15'].map((hrs) => (
+                        <button
+                          key={hrs}
+                          type="button"
+                          className={`btn-quick-hour-chip ${String(evalModalData.hours) === String(hrs) ? 'active' : ''}`}
+                          onClick={() => setEvalModalData({ ...evalModalData, hours: hrs })}
+                        >
+                          +{hrs} ชม.
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* 3. Photo / Evidence Image Upload & Gallery */}
+              <div className="modal-form-card-section">
+                <div className="modal-section-label">
+                  <div className="modal-section-label-left">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.2">
+                      <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                      <circle cx="12" cy="13" r="4" />
+                    </svg>
+                    <span>รูปภาพผลงาน / หลักฐานประกอบการประเมิน:</span>
+                  </div>
+                  <span style={{ fontSize: '12px', color: '#2563eb', fontWeight: '700' }}>
+                    {evalModalData.images?.length || 0} รูปภาพ
+                  </span>
+                </div>
+
+                <div className="modal-photos-wrapper">
+                  <label className="modal-photo-upload-zone">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      style={{ display: 'none' }}
+                      onChange={handleSkillImageUpload}
+                    />
+                    <span className="upload-zone-text">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="17 8 12 3 7 8" />
+                        <line x1="12" y1="3" x2="12" y2="15" />
+                      </svg>
+                      <span>คลิกเพื่อแนบรูปภาพผลงาน หรือรูปกิจกรรม</span>
+                    </span>
+                    <span className="upload-zone-sub">รองรับไฟล์ JPG, PNG (สามารถเลือกได้หลายรูปพร้อมกัน)</span>
+                  </label>
+
+                  {evalModalData.images && evalModalData.images.length > 0 && (
+                    <div className="modal-photos-grid">
+                      {evalModalData.images.map((imgSrc, imgIdx) => (
+                        <div key={imgIdx} className="modal-photo-thumb-card">
+                          <img src={imgSrc} alt={`Evidence ${imgIdx + 1}`} className="modal-photo-img" />
+                          <button
+                            type="button"
+                            className="btn-modal-delete-photo"
+                            onClick={() => handleRemoveSkillImage(imgIdx)}
+                            title="ลบรูปภาพนี้"
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* 4. Notes Textarea */}
+              <div className="modal-form-card-section">
+                <div className="modal-section-label">
+                  <div className="modal-section-label-left">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.2">
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                    </svg>
+                    <span>บันทึกข้อเสนอแนะและผลการประเมินจาก Super User / Mentor:</span>
+                  </div>
+                  <span style={{ fontSize: '12px', color: '#64748b', fontWeight: '500' }}>คำแนะนำสำหรับนักศึกษา</span>
+                </div>
+
+                <textarea
+                  className="modal-textarea"
+                  placeholder={`บันทึกข้อเสนอแนะ ผลการพัฒนา หรือจุดที่ควรพัฒนาเพิ่มเติมในทักษะ ${selectedSkillEvalModal.name} สำหรับ ${selectedMember?.name}...`}
+                  value={evalModalData.note}
+                  onChange={(e) => setEvalModalData({ ...evalModalData, note: e.target.value })}
+                ></textarea>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="assessment-modal-footer">
+              <button type="button" className="btn-modal-cancel" onClick={handleCloseSkillEvalModal}>
+                ยกเลิก
+              </button>
+
+              <button
+                type="button"
+                className="btn-modal-save-eval"
+                onClick={handleSaveSkillEval}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                  <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                  <polyline points="17 21 17 13 7 13 7 21" />
+                  <polyline points="7 3 7 8 15 8" />
+                </svg>
+                <span>บันทึกผลการประเมิน</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}

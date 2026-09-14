@@ -1,0 +1,1369 @@
+/* ========================================================
+   ICP Dashboard Page Styles - Modern Ronasit Layout with Career Stream Selector
+   ======================================================== */
+.ronasit-dashboard-container {
+  width: 100%;
+  max-width: 1080px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+/* 1. Header & Greeting Bar */
+.ronasit-header-bar {
+  width: 100%;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1.5px solid #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  padding: 16px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  box-sizing: border-box;
+}
+
+.ronasit-greeting-left-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ronasit-app-brand-badge {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 3px 10px rgba(37, 99, 235, 0.25);
+}
+
+.ronasit-greeting-text-block {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ronasit-greeting-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.3px;
+}
+
+.ronasit-greeting-subtitle {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+}
+
+.ronasit-header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ronasit-sync-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  color: #64748b;
+  background-color: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-weight: 600;
+}
+
+.ronasit-sync-dot {
+  color: #10b981;
+  font-size: 10px;
+}
+
+.ronasit-btn-quick-assess {
+  background-color: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.2);
+  transition: background-color 0.15s ease;
+}
+
+.ronasit-btn-quick-assess:hover {
+  background-color: #1d4ed8;
+}
+
+/* 2. Career Stream Selector Bar (แถบเลือกสายอาชีพ) */
+.dashboard-career-filter-card {
+  width: 100%;
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1.5px solid #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  box-sizing: border-box;
+}
+
+.career-filter-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.career-filter-pills-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.dashboard-career-pill-btn {
+  background-color: #f8fafc;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  color: #334155;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.15s ease;
+}
+
+.dashboard-career-pill-btn:hover {
+  border-color: #93c5fd;
+  background-color: #f0f7ff;
+}
+
+.dashboard-career-pill-btn.active {
+  background-color: #eff6ff;
+  border-color: #2563eb;
+  color: #1d4ed8;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.15);
+}
+
+.career-readiness-chip {
+  font-size: 11.5px;
+  font-weight: 800;
+  padding: 2px 6px;
+  background-color: #2563eb;
+  color: #ffffff;
+  border-radius: 4px;
+}
+
+.dashboard-career-pill-btn:not(.active) .career-readiness-chip {
+  background-color: #e2e8f0;
+  color: #334155;
+}
+
+/* 3. Main 2-Column Dashboard Grid */
+.ronasit-dashboard-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 310px;
+  gap: 18px;
+  align-items: start;
+  box-sizing: border-box;
+}
+
+@media (max-width: 992px) {
+  .ronasit-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Clickable Card Hover Animations & Hints */
+.clickable-card {
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+}
+
+.clickable-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.12) !important;
+  border-color: #93c5fd !important;
+}
+
+.card-clickable-hint {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #2563eb;
+  background-color: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 6px;
+  padding: 2px 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  transition: all 0.15s ease;
+}
+
+.clickable-card:hover .card-clickable-hint {
+  background-color: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+}
+
+.card-clickable-hint.white {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.clickable-card:hover .card-clickable-hint.white {
+  background-color: #ffffff;
+  color: #1d4ed8;
+}
+
+.card-clickable-hint.light-blue {
+  background-color: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.3);
+}
+
+.clickable-card:hover .card-clickable-hint.light-blue {
+  background-color: #38bdf8;
+  color: #0f172a;
+}
+
+/* Left Column Layout */
+.ronasit-left-col {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Top Row: 2 Metric Cards (Readiness & Active Plans) */
+.ronasit-top-metrics-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 600px) {
+  .ronasit-top-metrics-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ronasit-metric-card {
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1.5px solid #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-sizing: border-box;
+}
+
+.ronasit-card-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ronasit-card-title {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.ronasit-card-dots {
+  color: #94a3b8;
+  font-size: 13px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.ronasit-big-number-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ronasit-metric-big {
+  font-size: 32px;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1;
+  letter-spacing: -0.5px;
+}
+
+.ronasit-trend-pill {
+  font-size: 12px;
+  font-weight: 700;
+  background-color: #ecfdf5;
+  color: #059669;
+  padding: 2px 7px;
+  border-radius: 6px;
+}
+
+.ronasit-pending-label {
+  font-size: 12.5px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+/* Segmented Ticks Meter Bar */
+.ronasit-ticks-meter-wrap {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  width: 100%;
+  height: 18px;
+}
+
+.ronasit-tick {
+  flex: 1;
+  height: 14px;
+  border-radius: 2px;
+  background-color: #2dd4bf;
+}
+
+.ronasit-tick.active-blue {
+  background-color: #2563eb;
+}
+
+.ronasit-tick.inactive {
+  background-color: #e2e8f0;
+}
+
+/* Middle Row: Top Skills & Categories (2 Cards) */
+.ronasit-middle-row {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .ronasit-middle-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ronasit-mid-card {
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1.5px solid #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-sizing: border-box;
+}
+
+.ronasit-filter-dropdown-select {
+  background-color: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: #334155;
+  outline: none;
+  cursor: pointer;
+}
+
+/* Left: Segmented Stack Bar + Skills List */
+.ronasit-skills-overview-wrap {
+  display: flex;
+  align-items: stretch;
+  gap: 16px;
+}
+
+.ronasit-segmented-stack-bar {
+  width: 20px;
+  border-radius: 10px;
+  background-color: #f1f5f9;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.ronasit-stack-segment {
+  width: 100%;
+}
+
+.ronasit-stack-segment.seg-1 {
+  height: 40%;
+  background-color: #2dd4bf;
+}
+
+.ronasit-stack-segment.seg-2 {
+  height: 35%;
+  background-color: #3b82f6;
+}
+
+.ronasit-stack-segment.seg-3 {
+  height: 25%;
+  background-color: #8b5cf6;
+}
+
+.ronasit-skills-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ronasit-skill-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12.5px;
+}
+
+.ronasit-skill-name-col {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  color: #1e293b;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ronasit-skill-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.ronasit-skill-dot.turq { background-color: #2dd4bf; }
+.ronasit-skill-dot.blue { background-color: #3b82f6; }
+.ronasit-skill-dot.purple { background-color: #8b5cf6; }
+.ronasit-skill-dot.gray { background-color: #cbd5e1; }
+
+.ronasit-skill-pct {
+  font-size: 11.5px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.ronasit-skill-val {
+  font-size: 12px;
+  font-weight: 700;
+  color: #2563eb;
+  background-color: #eff6ff;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+/* Right: Donut Chart Section */
+.ronasit-donut-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.ronasit-donut-graphic-wrap {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ronasit-donut-center-text {
+  position: absolute;
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #0f172a;
+  background: #ffffff;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.ronasit-donut-legends {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.ronasit-donut-legend-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  gap: 6px;
+}
+
+.ronasit-donut-legend-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.ronasit-donut-trend-chip {
+  font-size: 11px;
+  font-weight: 700;
+  background-color: #eff6ff;
+  color: #2563eb;
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+/* Bottom: Monthly Progress Bar Chart Card (Jan - Dec) */
+.ronasit-monthly-chart-card {
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1.5px solid #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-sizing: border-box;
+}
+
+.ronasit-chart-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ronasit-chart-title-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.ronasit-chart-legends-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.ronasit-chart-legend-circle {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.ronasit-chart-legend-circle.open {
+  background: repeating-linear-gradient(
+    -45deg,
+    #bfdbfe,
+    #bfdbfe 2px,
+    #e0f2fe 2px,
+    #e0f2fe 4px
+  );
+  border: 1px solid #93c5fd;
+}
+
+.ronasit-chart-legend-circle.closed {
+  background-color: #2563eb;
+}
+
+/* Bars Container (12 Months Jan - Dec) */
+.ronasit-bars-chart-container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px;
+  height: 200px;
+  padding: 24px 8px 8px;
+  border-bottom: 1.5px solid #e2e8f0;
+  position: relative;
+}
+
+.ronasit-month-bar-col {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  position: relative;
+  cursor: pointer;
+}
+
+/* Floating Dark Tooltip */
+.ronasit-floating-dark-tooltip {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #0f172a;
+  color: #ffffff;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.ronasit-pillar-bar {
+  width: 22px;
+  border-radius: 11px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.ronasit-month-bar-col:hover .ronasit-pillar-bar {
+  transform: scaleY(1.04);
+}
+
+.ronasit-pillar-top-striped {
+  width: 100%;
+  background: repeating-linear-gradient(
+    -45deg,
+    #bfdbfe,
+    #bfdbfe 3px,
+    #e0f2fe 3px,
+    #e0f2fe 6px
+  );
+}
+
+.ronasit-pillar-bottom-solid {
+  width: 100%;
+  background-color: #93c5fd;
+}
+
+.ronasit-pillar-bottom-solid.active {
+  background-color: #2563eb;
+}
+
+.ronasit-month-label {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #64748b;
+  margin-top: 6px;
+}
+
+.ronasit-month-label.active {
+  color: #2563eb;
+}
+
+/* 4. Right Column: 3 Stacked Widgets */
+.ronasit-right-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Widget 1: Blue Oceanic Gradient Card (Study Hours) */
+.ronasit-widget-blue-gradient {
+  background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%);
+  border-radius: 14px;
+  color: #ffffff;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.2);
+  box-sizing: border-box;
+}
+
+.ronasit-widget-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ronasit-widget-title-white {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.ronasit-widget-big-white {
+  font-size: 30px;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1;
+  letter-spacing: -0.5px;
+}
+
+.ronasit-widget-sub-white {
+  font-size: 12px;
+  color: #bfdbfe;
+  font-weight: 600;
+}
+
+/* Mini Bar Chart inside Blue Widget */
+.ronasit-blue-mini-bars {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 6px;
+  height: 60px;
+  padding-top: 6px;
+}
+
+.ronasit-blue-pillar {
+  flex: 1;
+  background-color: #ffffff;
+  border-radius: 9999px;
+  transition: all 0.2s ease;
+}
+
+.ronasit-blue-pillar.striped {
+  background: repeating-linear-gradient(
+    -45deg,
+    rgba(255, 255, 255, 0.7),
+    rgba(255, 255, 255, 0.7) 2px,
+    rgba(255, 255, 255, 0.3) 2px,
+    rgba(255, 255, 255, 0.3) 4px
+  );
+}
+
+/* Widget 2: Portfolio / Certificates Card */
+.ronasit-widget-credits-card {
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1.5px solid #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-sizing: border-box;
+}
+
+.ronasit-credits-big-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ronasit-credits-big-val {
+  font-size: 24px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.ronasit-credits-used-label {
+  font-size: 12px;
+  color: #059669;
+  font-weight: 600;
+}
+
+.ronasit-credits-plus-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #2563eb;
+  color: #ffffff;
+  border: none;
+  font-size: 15px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.ronasit-credits-plus-btn:hover {
+  background-color: #1d4ed8;
+  transform: scale(1.08);
+}
+
+/* Widget 3: Assessment Logs Card (Dark Charcoal) */
+.ronasit-widget-dark-card {
+  background: #0f172a;
+  border-radius: 14px;
+  color: #ffffff;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.2);
+  box-sizing: border-box;
+}
+
+.ronasit-dark-dropdown {
+  background-color: #1e293b;
+  border: 1px solid #334155;
+  color: #cbd5e1;
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 600;
+  outline: none;
+}
+
+.ronasit-dark-big-number {
+  font-size: 28px;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.ronasit-dark-sub-label {
+  font-size: 12px;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ronasit-dark-sub-pill {
+  color: #38bdf8;
+  font-weight: 700;
+}
+
+/* Wave Curve Line inside Dark Widget */
+.ronasit-dark-wave-container {
+  width: 100%;
+  height: 42px;
+  margin-top: 4px;
+}
+
+/* ========================================================
+   Interactive Dashboard Pop-up Modal Dialogs
+   ======================================================== */
+.dashboard-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+  padding: 16px;
+  box-sizing: border-box;
+  animation: fadeInModal 0.2s ease-out;
+}
+
+.dashboard-modal-dialog {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.28);
+  width: 100%;
+  max-width: 680px;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: scaleInModal 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+@keyframes fadeInModal {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleInModal {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.dashboard-modal-header {
+  padding: 18px 24px;
+  background: #f8fafc;
+  border-bottom: 1.5px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.dashboard-modal-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.modal-header-badge {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.modal-header-badge.blue { background-color: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; }
+.modal-header-badge.green { background-color: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; }
+.modal-header-badge.purple { background-color: #ede9fe; color: #7c3aed; border: 1px solid #ddd6fe; }
+.modal-header-badge.cyan { background-color: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd; }
+.modal-header-badge.amber { background-color: #fef3c7; color: #d97706; border: 1px solid #fde68a; }
+.modal-header-badge.dark { background-color: #0f172a; color: #38bdf8; border: 1px solid #334155; }
+
+.dashboard-modal-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.dashboard-modal-subtitle {
+  font-size: 13px;
+  color: #64748b;
+  margin: 2px 0 0;
+}
+
+.dashboard-modal-close-btn {
+  background: transparent;
+  border: none;
+  color: #64748b;
+  font-size: 18px;
+  font-weight: 700;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+
+.dashboard-modal-close-btn:hover {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+.dashboard-modal-body {
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.dashboard-modal-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Modal Summary Banner */
+.modal-summary-banner {
+  border-radius: 12px;
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-sizing: border-box;
+}
+
+.modal-summary-banner.blue {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  border: 1.5px solid #bfdbfe;
+}
+
+.modal-summary-banner.green {
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  border: 1.5px solid #a7f3d0;
+}
+
+.modal-summary-banner.amber {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  border: 1.5px solid #fde68a;
+}
+
+.summary-score-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.summary-big-score {
+  font-size: 28px;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1;
+}
+
+.summary-badge-green {
+  font-size: 11px;
+  font-weight: 700;
+  background-color: #059669;
+  color: #ffffff;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  white-space: nowrap;
+}
+
+.summary-text-box h4 {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 4px;
+}
+
+.summary-text-box p {
+  font-size: 13px;
+  color: #475569;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.modal-section-heading {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 4px 0 0;
+}
+
+.modal-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.modal-detail-row-card {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  transition: all 0.15s ease;
+}
+
+.modal-detail-row-card:hover {
+  border-color: #93c5fd;
+  background-color: #fafbfc;
+}
+
+.detail-row-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.detail-skill-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.detail-skill-dot.turq { background-color: #2dd4bf; }
+.detail-skill-dot.blue { background-color: #3b82f6; }
+.detail-skill-dot.purple { background-color: #8b5cf6; }
+.detail-skill-dot.gray { background-color: #94a3b8; }
+
+.detail-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.detail-desc {
+  font-size: 12.5px;
+  color: #64748b;
+  margin: 2px 0 0;
+  line-height: 1.35;
+}
+
+.detail-row-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.detail-level-pill {
+  font-size: 12px;
+  font-weight: 700;
+  color: #475569;
+  background-color: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
+.detail-val-badge {
+  font-size: 13px;
+  font-weight: 800;
+  color: #1d4ed8;
+  background-color: #eff6ff;
+  border: 1px solid #bfdbfe;
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
+.detail-trend-pill {
+  font-size: 12px;
+  font-weight: 700;
+  color: #059669;
+  background-color: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  padding: 2px 6px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.detail-status-pill {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.detail-status-pill.green {
+  background-color: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+}
+
+.plan-status-icon-box {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.plan-status-icon-box.completed {
+  background-color: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+}
+
+.plan-status-icon-box.in-progress {
+  background-color: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+}
+
+.plan-status-badge {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.plan-status-badge.completed {
+  background-color: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+}
+
+.plan-status-badge.in-progress {
+  background-color: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+}
+
+.plan-meta-sub {
+  font-size: 12px;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 3px;
+}
+
+.meta-tag {
+  background-color: #f1f5f9;
+  color: #475569;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.hour-badge-box {
+  background-color: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1d4ed8;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-weight: 800;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.cert-medal-box, .log-avatar-box {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background-color: #fef3c7;
+  color: #d97706;
+  border: 1px solid #fde68a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.log-avatar-box {
+  background-color: #f1f5f9;
+  color: #334155;
+  border-color: #cbd5e1;
+}
+
+.modal-month-selector-pills {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.modal-month-pill-btn {
+  background-color: #f8fafc;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.modal-month-pill-btn:hover {
+  background-color: #eff6ff;
+  border-color: #93c5fd;
+  color: #1d4ed8;
+}
+
+.modal-month-pill-btn.active {
+  background-color: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+}
+
+.dashboard-modal-footer {
+  padding: 14px 24px;
+  background: #f8fafc;
+  border-top: 1.5px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-dashboard-modal-cancel {
+  background-color: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  color: #475569;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-dashboard-modal-cancel:hover {
+  background-color: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.btn-dashboard-modal-action {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 20px;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+  transition: all 0.15s;
+}
+
+.btn-dashboard-modal-action:hover {
+  background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.35);
+}

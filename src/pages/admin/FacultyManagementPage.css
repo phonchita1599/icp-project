@@ -1,0 +1,410 @@
+/* Faculty Management Page Styles */
+.faculty-page-container {
+  width: 100%;
+  max-width: 1020px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.faculty-card-container {
+  width: 100%;
+  background: #ffffff;
+  border-radius: var(--radius-card, 12px);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 24px;
+}
+
+.faculty-top-banner {
+  background-color: var(--banner-blue, #2962ff);
+  color: #ffffff;
+  padding: 16px 24px;
+  text-align: center;
+}
+
+.faculty-banner-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.2px;
+}
+
+.faculty-inner-body {
+  padding: 32px 36px 36px;
+  background-color: #ffffff;
+}
+
+.faculty-section-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.faculty-header-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e40af;
+  margin-bottom: 12px;
+}
+
+.faculty-pill-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.faculty-pill-btn {
+  background-color: #1976d2;
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-pill, 9999px);
+  padding: 7px 20px;
+  font-family: inherit;
+  font-size: 14.5px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(25, 118, 210, 0.2);
+  transition: all 0.15s ease;
+}
+
+.faculty-pill-btn:hover {
+  background-color: #1565c0;
+  transform: translateY(-1px);
+}
+
+.faculty-pill-btn:active {
+  transform: translateY(0);
+}
+
+.faculty-grid-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px 24px;
+  margin-bottom: 24px;
+}
+
+.dropdown-underline-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1.5px solid #cbd5e1;
+  transition: border-color 0.2s ease;
+}
+
+.dropdown-underline-row:focus-within {
+  border-bottom-color: #1976d2;
+}
+
+.dropdown-icon-box {
+  color: #475569;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dropdown-content-box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown-label {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #64748b;
+  margin-bottom: 2px;
+}
+
+.dropdown-select-input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: inherit;
+  font-size: 15.5px;
+  color: #1e293b;
+  width: 100%;
+  cursor: pointer;
+}
+
+.dropdown-icons-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #64748b;
+}
+
+.icon-clear-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #64748b;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  border-radius: 50%;
+  transition: color 0.15s;
+}
+
+.icon-clear-btn:hover {
+  color: #ef4444;
+}
+
+/* Highlight Blue Field (สาขาวิชา *) - โค้งมน */
+.highlight-blue-field-box {
+  width: 100%;
+  background-color: #3b82f6;
+  border-radius: var(--radius-input, 8px);
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3);
+  margin-top: 10px;
+  box-sizing: border-box;
+}
+
+.highlight-left-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.highlight-icon {
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.highlight-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+  width: 100%;
+}
+
+.highlight-input::placeholder {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.highlight-right-badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.badge-alert-circle {
+  background-color: #ef4444;
+  color: #ffffff;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.badge-heart-icon {
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+}
+
+.error-text-under {
+  color: #ef4444;
+  font-size: 13.5px;
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+/* Quick Suggestion Chips */
+.major-chips-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.major-chip-label {
+  font-size: 13.5px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.major-chip-btn {
+  background-color: #f1f5f9;
+  color: #1e40af;
+  border: 1px solid #dbeafe;
+  border-radius: var(--radius-pill, 9999px);
+  padding: 4px 12px;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.major-chip-btn:hover {
+  background-color: #e0edff;
+  border-color: #93c5fd;
+}
+
+.faculty-buttons-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 14px;
+  margin-top: 24px;
+  padding-top: 16px;
+  flex-wrap: wrap;
+}
+
+.btn-nav-career-goal {
+  background-color: #e0edff;
+  color: #1e40af;
+  border: 1px solid #bfdbfe;
+  padding: 9px 18px;
+  border-radius: var(--radius-btn, 8px);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: auto;
+  transition: all 0.15s ease;
+}
+
+.btn-nav-career-goal:hover {
+  background-color: #dbeafe;
+}
+
+/* Majors Table Card */
+.majors-list-card {
+  width: 100%;
+  background: #ffffff;
+  border-radius: var(--radius-card, 12px);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+  padding: 24px 28px;
+  box-sizing: border-box;
+}
+
+.majors-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1.5px solid #e2e8f0;
+}
+
+.majors-list-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-dark, #0f172a);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.majors-count-badge {
+  background-color: #e0edff;
+  color: #1d4ed8;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill, 9999px);
+}
+
+.majors-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-input, 8px);
+}
+
+.majors-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 15px;
+}
+
+.majors-table th {
+  background-color: #f1f5f9;
+  color: #334155;
+  font-weight: 700;
+  padding: 12px 16px;
+  border-bottom: 1.5px solid #e2e8f0;
+}
+
+.majors-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f1f5f9;
+  color: var(--text-body, #1e293b);
+}
+
+.majors-table tr:last-child td {
+  border-bottom: none;
+}
+
+.majors-table tr:hover {
+  background-color: #f8fafc;
+}
+
+.major-name-cell {
+  font-weight: 700;
+  color: #1e40af;
+}
+
+.btn-delete-row {
+  background: transparent;
+  border: none;
+  color: #ef4444;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s ease;
+}
+
+.btn-delete-row:hover {
+  background-color: #fee2e2;
+}
+
+@media (max-width: 900px) {
+  .faculty-grid-2col {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .faculty-inner-body {
+    padding: 20px 18px 24px;
+  }
+
+  .btn-nav-career-goal {
+    margin-left: 0;
+    width: 100%;
+    justify-content: center;
+  }
+}

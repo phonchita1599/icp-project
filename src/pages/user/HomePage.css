@@ -1,0 +1,65 @@
+/* Home Page Styles */
+.home-page-container {
+  width: 100%;
+  max-width: 1020px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.banner-card {
+  width: 100%;
+  background-color: var(--banner-blue, #2962ff);
+  border-radius: var(--radius-banner, 10px);
+  padding: 16px 24px;
+  text-align: center;
+  box-shadow: 0 3px 10px rgba(41, 98, 255, 0.18);
+  margin-bottom: 24px;
+  box-sizing: border-box;
+}
+
+.banner-title {
+  color: #ffffff;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.hero-image-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.hero-image {
+  width: 100%;
+  max-width: 1020px;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+  border-radius: var(--radius-card, 12px);
+  display: block;
+}
+
+.welcome-user-footer {
+  text-align: center;
+  font-size: 18px;
+  color: #334155;
+  margin-top: 8px;
+  padding: 12px 24px;
+  background-color: #ffffff;
+  border-radius: var(--radius-btn, 8px);
+  border: 1px solid var(--border-light, #cbd5e1);
+  width: fit-content;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.welcome-user-name {
+  color: #1d4ed8;
+  font-weight: 700;
+  font-size: 19px;
+}

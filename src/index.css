@@ -1,0 +1,30 @@
+:root {
+  --primary-blue: #2563eb;
+  --header-blue: #1d4ed8;
+  --banner-blue: #2563eb;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --bg-page: #ffffff;
+  --font-family: 'Sarabun', 'TH Sarabun New', 'Krub', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-page);
+  color: var(--text-main);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
