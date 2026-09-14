@@ -59,14 +59,14 @@ export const CAREER_PRESETS = [
   },
   {
     id: 'it-support',
-    title: 'เจ้าหน้าที่บริการเทคโนโลยีสารสนเทศ (IT Support & Network Specialist)',
+    title: 'เจ้าหน้าที่สนับสนุนเทคโนโลยีสารสนเทศ (IT Support & Network Specialist)',
     shortTitle: 'IT Support & Network',
     category: 'สนับสนุนและเครือข่าย',
     skills: [
       { id: 301, name: 'การแก้ปัญหาคอมพิวเตอร์และระบบปฏิบัติการ (Windows/Linux)', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
       { id: 302, name: 'การจัดการระบบเครือข่ายพื้นฐาน (LAN, Wi-Fi, VPN, DHCP)', category: 'Technical Skills', level: 3, targetLevel: 4, status: 'กำลังพัฒนา' },
       { id: 303, name: 'การติดตั้งและตั้งค่าซอฟต์แวร์/อุปกรณ์ช่วยเหลือคนพิการ DSS', category: 'Assistive & Accessibility', level: 5, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
-      { id: 304, name: 'การบริการและการสื่อสารประสานงานกับผู้ใช้งาน', category: 'Soft Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 304, name: 'การดูแลและการสื่อสารประสานงานกับผู้ใช้งาน', category: 'Soft Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
     ],
   },
   {
@@ -204,12 +204,12 @@ export const CAREER_PRESETS = [
     ],
   },
 
-  // --- กลุ่มการบริหาร บริการ & สนับสนุน ---
+  // --- กลุ่มการบริหาร & สนับสนุน ---
   {
     id: 'hr-talent',
     title: 'เจ้าหน้าที่บริหารทรัพยากรมนุษย์ (HR Specialist & Talent Development)',
     shortTitle: 'เจ้าหน้าที่ HR & ฝึกอบรม',
-    category: 'การบริหาร & บริการองค์กร',
+    category: 'การบริหาร & สนับสนุนองค์กร',
     skills: [
       { id: 501, name: 'การสรรหาว่าจ้างและการจัดทำหลักสูตรฝึกอบรม (Recruitment & Training)', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
       { id: 502, name: 'การจัดการข้อมูลพนักงานและระบบ HRIS', category: 'Technical Skills', level: 3, targetLevel: 4, status: 'กำลังพัฒนา' },
@@ -222,7 +222,7 @@ export const CAREER_PRESETS = [
     id: 'admin-officer',
     title: 'เจ้าหน้าที่ธุรการและจัดการเอกสารดิจิทัล (Digital Administrative Officer)',
     shortTitle: 'เจ้าหน้าที่ธุรการดิจิทัล',
-    category: 'การบริหาร & บริการองค์กร',
+    category: 'การบริหาร & สนับสนุนองค์กร',
     skills: [
       { id: 521, name: 'การใช้ Microsoft 365 (Word, Excel, PowerPoint) / Google Workspace ขั้นสูง', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
       { id: 522, name: 'การจัดระบบเอกสารดิจิทัลและหนังสือราชการ/องค์กร', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
@@ -235,7 +235,7 @@ export const CAREER_PRESETS = [
     id: 'accounting-finance',
     title: 'นักบัญชีและการเงินดิจิทัล (Digital Accounting & Financial Officer)',
     shortTitle: 'นักบัญชีและการเงิน',
-    category: 'การบริหาร & บริการองค์กร',
+    category: 'การบริหาร & สนับสนุนองค์กร',
     skills: [
       { id: 541, name: 'การบันทึกบัญชีและการจัดทำรายงานทางการเงิน (Financial Reporting)', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
       { id: 542, name: 'การใช้โปรแกรมบัญชีสำเร็จรูป (Express / FlowAccount / Peak)', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
@@ -245,23 +245,10 @@ export const CAREER_PRESETS = [
     ],
   },
   {
-    id: 'customer-relations',
-    title: 'เจ้าหน้าที่ลูกค้าสัมพันธ์และบริการข้อมูล (Customer Relations & CRM Officer)',
-    shortTitle: 'เจ้าหน้าที่ลูกค้าสัมพันธ์ (CRM)',
-    category: 'การบริหาร & บริการองค์กร',
-    skills: [
-      { id: 561, name: 'ระบบบริหารความสัมพันธ์ลูกค้า CRM & Helpdesk Ticketing', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
-      { id: 562, name: 'การสื่อสารบริการลูกค้าผ่านช่องทาง Omnichannel (Chat / Email / Call)', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
-      { id: 563, name: 'การจัดการข้อร้องเรียนและการแก้ไขปัญหาเฉพาะหน้า', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
-      { id: 564, name: 'การสื่อสารอย่างเข้าอกเข้าใจและภาษาสุภาพ (Empathetic Service)', category: 'Assistive & Accessibility', level: 5, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
-      { id: 565, name: 'ความใจเย็น การควบคุมอารมณ์ และ Service Mind', category: 'Soft Skills', level: 5, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
-    ],
-  },
-  {
     id: 'translator-language',
     title: 'เจ้าหน้าที่แปลและสื่อสารภาษาต่างประเทศ (Translator & Language Specialist)',
     shortTitle: 'นักแปลและสื่อสารภาษาต่างประเทศ',
-    category: 'การบริหาร & บริการองค์กร',
+    category: 'การบริหาร & สนับสนุนองค์กร',
     skills: [
       { id: 581, name: 'การแปลเอกสารและบทความ (อังกฤษ - ไทย / อื่นๆ) ขั้นสูง', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
       { id: 582, name: 'การใช้เครื่องมือช่วยแปล CAT Tools & AI-assisted Translation', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
@@ -274,7 +261,7 @@ export const CAREER_PRESETS = [
     id: 'research-innovation',
     title: 'นักวิจัยและพัฒนานวัตกรรม (Research & Innovation Specialist)',
     shortTitle: 'นักวิจัยและนวัตกรรม',
-    category: 'การบริหาร & บริการองค์กร',
+    category: 'การบริหาร & สนับสนุนองค์กร',
     skills: [
       { id: 601, name: 'ระเบียบวิธีวิจัย การทบทวนวรรณกรรม และการเก็บข้อมูล', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
       { id: 602, name: 'การวิเคราะห์เชิงสถิติและการสรุปรายงานวิจัย', category: 'Technical Skills', level: 3, targetLevel: 4, status: 'กำลังพัฒนา' },
@@ -3931,9 +3918,9 @@ export default function GroupManagementPage({
                                   )
                                 })()}
 
-                                {/* Group 4: Administration & Services */}
+                                {/* Group 4: Administration & Support */}
                                 {(() => {
-                                  const list = CAREER_PRESETS.filter((p) => p.category.includes('บริหาร') || p.category.includes('บริการองค์กร')).filter(
+                                  const list = CAREER_PRESETS.filter((p) => p.category.includes('บริหาร') || p.category.includes('สนับสนุนองค์กร')).filter(
                                     (p) =>
                                       !careerSearchTerm.trim() ||
                                       p.title.toLowerCase().includes(careerSearchTerm.toLowerCase().trim()) ||
@@ -3946,7 +3933,7 @@ export default function GroupManagementPage({
                                       <div className="combobox-group-header">
                                         <span className="combobox-group-title">
                                           <span>🏢</span>
-                                          <span>สายงานบริหาร บริการ & สนับสนุน (Administration & Services)</span>
+                                          <span>สายงานบริหาร & สนับสนุน (Administration & Support)</span>
                                         </span>
                                         <span className="combobox-group-count">{list.length} อาชีพ</span>
                                       </div>

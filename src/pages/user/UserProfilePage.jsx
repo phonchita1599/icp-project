@@ -27,7 +27,7 @@ export default function UserProfilePage({
     // Organization / Academic Info
     institute: currentUser?.institute || 'มหาวิทยาลัยเทคโนโลยีสุรนารี',
     faculty: currentUser?.faculty || (isSuperAdmin ? 'ฝ่ายบริหารระบบและเทคโนโลยีสารสนเทศ (Admin Office)' : isStaff ? 'ศูนย์บริการนักศึกษาพิการ (DSS)' : 'สำนักวิชาเทคโนโลยีสารสนเทศ'),
-    major: currentUser?.major || (isSuperAdmin ? 'งานบริหารและพัฒนาระบบสารสนเทศ' : isStaff ? 'งานบริการและสนับสนุนนักศึกษาพิการ' : 'วิทยาการคอมพิวเตอร์'),
+    major: currentUser?.major || (isSuperAdmin ? 'งานบริหารและพัฒนาระบบสารสนเทศ' : isStaff ? 'งานสนับสนุนและพัฒนานักศึกษาพิการ' : 'วิทยาการคอมพิวเตอร์'),
     position: currentUser?.position || (isSuperAdmin ? 'ผู้ดูแลระบบสารสนเทศระดับสูง (System Administrator)' : isStaff ? 'เจ้าหน้าที่ศูนย์บริการนักศึกษาพิการ (DSS) / ที่ปรึกษา ICP' : 'นักศึกษา'),
     officeRoom: currentUser?.officeRoom || (isSuperAdmin ? 'อาคารบริหาร ชั้น 3 ห้องฝ่ายไอที' : isStaff ? 'อาคารกิจการนักศึกษา (สุรสัมมนาคาร) ชั้น 1 ห้อง DSS Center' : ''),
     studyYear: currentUser?.studyYear || (isStaff ? 'เจ้าหน้าที่ประจำ' : 'ปี 3 (หลักสูตร 4 ปี)'),
@@ -88,7 +88,7 @@ export default function UserProfilePage({
   ]
 
   const staffDepartmentOptions = [
-    'งานบริการและสนับสนุนนักศึกษาพิการ',
+    'งานสนับสนุนและพัฒนานักศึกษาพิการ',
     'งานแนะแนวอาชีพและสหกิจศึกษา DSS',
     'งานเทคโนโลยีสิ่งอำนวยความสะดวก (AT)',
     'งานบริหารและพัฒนาระบบสารสนเทศ',
@@ -246,7 +246,7 @@ export default function UserProfilePage({
         avatarUrl: currentUser?.avatarUrl || '',
         institute: currentUser?.institute || 'มหาวิทยาลัยเทคโนโลยีสุรนารี',
         faculty: currentUser?.faculty || (isSuperAdmin ? 'ฝ่ายบริหารระบบและเทคโนโลยีสารสนเทศ (Admin Office)' : isStaff ? 'ศูนย์บริการนักศึกษาพิการ (DSS)' : 'สำนักวิชาเทคโนโลยีสารสนเทศ'),
-        major: currentUser?.major || (isSuperAdmin ? 'งานบริหารและพัฒนาระบบสารสนเทศ' : isStaff ? 'งานบริการและสนับสนุนนักศึกษาพิการ' : 'วิทยาการคอมพิวเตอร์'),
+        major: currentUser?.major || (isSuperAdmin ? 'งานบริหารและพัฒนาระบบสารสนเทศ' : isStaff ? 'งานสนับสนุนและพัฒนานักศึกษาพิการ' : 'วิทยาการคอมพิวเตอร์'),
         position: currentUser?.position || (isSuperAdmin ? 'ผู้ดูแลระบบสารสนเทศระดับสูง (System Administrator)' : isStaff ? 'เจ้าหน้าที่ศูนย์บริการนักศึกษาพิการ (DSS) / ที่ปรึกษา ICP' : 'นักศึกษา'),
         officeRoom: currentUser?.officeRoom || (isSuperAdmin ? 'อาคารบริหาร ชั้น 3 ห้องฝ่ายไอที' : isStaff ? 'อาคารกิจการนักศึกษา (สุรสัมมนาคาร) ชั้น 1 ห้อง DSS Center' : ''),
         studyYear: currentUser?.studyYear || (isStaff ? 'เจ้าหน้าที่ประจำ' : 'ปี 3 (หลักสูตร 4 ปี)'),
@@ -422,7 +422,7 @@ export default function UserProfilePage({
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
             </svg>
-            <span>{isStaff ? 'งานบริการ & การดูแล DSS' : 'บริการช่วยเหลือ DSS'}</span>
+            <span>{isStaff ? 'งานสนับสนุน & การดูแล DSS' : 'การสนับสนุนช่วยเหลือ DSS'}</span>
           </button>
 
           <button
@@ -810,16 +810,16 @@ export default function UserProfilePage({
             </div>
           )}
 
-          {/* TAB 3: งานบริการ & การดูแล DSS (Staff) หรือ บริการช่วยเหลือ DSS (Student) */}
+          {/* TAB 3: งานสนับสนุน & การดูแล DSS (Staff) หรือ การสนับสนุนช่วยเหลือ DSS (Student) */}
           {activeTab === 'dss' && (
             <div className="tab-pane-content">
               <div className="section-intro">
                 <h3 className="section-title">
-                  {isStaff ? 'ขอบเขตงานบริการและการดูแลนักศึกษาพิการ (DSS)' : 'ข้อมูลสนับสนุนและการบริการศูนย์บริการนักศึกษาพิการ (DSS)'}
+                  {isStaff ? 'ขอบเขตงานสนับสนุนและการดูแลนักศึกษาพิการ (DSS)' : 'ข้อมูลการสนับสนุนและการดูแลศูนย์บริการนักศึกษาพิการ (DSS)'}
                 </h3>
                 <p className="section-subtitle">
                   {isStaff
-                    ? 'ข้อมูลกลุ่มนักศึกษาที่ดูแล ขอบเขตการสนับสนุน และบริการช่วยเหลือที่จัดสรรให้นักศึกษา'
+                    ? 'ข้อมูลกลุ่มนักศึกษาที่ดูแล ขอบเขตการสนับสนุน และความช่วยเหลือที่จัดสรรให้นักศึกษา'
                     : 'ระบุความต้องการสนับสนุนพิเศษ อุปกรณ์ หรือสิ่งอำนวยความสะดวก เพื่อให้ศูนย์ DSS จัดหาได้อย่างเหมาะสม'}
                 </p>
               </div>
@@ -843,7 +843,7 @@ export default function UserProfilePage({
                   </div>
 
                   <div className="form-field-group full-width">
-                    <label className="field-label">เครื่องมือ สิ่งอำนวยความสะดวก และบริการที่จัดหา/สนับสนุนให้นักศึกษา</label>
+                    <label className="field-label">เครื่องมือ สิ่งอำนวยความสะดวก และการสนับสนุนที่จัดหาให้นักศึกษา</label>
                     <textarea
                       rows="3"
                       className="form-control-textarea"
@@ -851,7 +851,7 @@ export default function UserProfilePage({
                       value={formData.assistiveNeeds}
                       onChange={(e) => handleChange('assistiveNeeds', e.target.value)}
                     />
-                    <small className="field-hint">ข้อมูลนี้จะใช้แสดงในระบบเพื่อเป็นแนวทางในการประสานงานบริการแก่นักศึกษาในศูนย์ DSS มทส.</small>
+                    <small className="field-hint">ข้อมูลนี้จะใช้แสดงในระบบเพื่อเป็นแนวทางในการประสานงานสนับสนุนแก่นักศึกษาในศูนย์ DSS มทส.</small>
                   </div>
 
                   <div className="form-field-group full-width">

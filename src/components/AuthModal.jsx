@@ -77,7 +77,7 @@ export default function AuthModal({
         role === 'super_admin'
           ? 'งานบริหารและพัฒนาระบบสารสนเทศ'
           : role === 'super_user'
-          ? 'งานบริการและสนับสนุนนักศึกษาพิการ'
+          ? 'งานสนับสนุนและพัฒนานักศึกษาพิการ'
           : 'วิทยาการคอมพิวเตอร์',
       position:
         role === 'super_admin'

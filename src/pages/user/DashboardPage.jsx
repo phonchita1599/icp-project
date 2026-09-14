@@ -254,13 +254,13 @@ export default function DashboardPage({
       topSkills: [
         { name: 'การตลาดดิจิทัลและยิงแอด (Digital Ads)', level: 'ระดับ 3', val: '70%', dot: 'turq', desc: 'วางแผนแคมเปญโฆษณาบน Facebook & TikTok' },
         { name: 'การคำนวณกำไร-ขาดทุน และวิเคราะห์ต้นทุน', level: 'ระดับ 3', val: '65%', dot: 'blue', desc: 'ทำบัญชีรายรับ-รายจ่าย และคำนวณจุดคุ้มทุน (BEP)' },
-        { name: 'การเจรจาต่อรองและบริการลูกค้า (CRM)', level: 'ระดับ 4', val: '85%', dot: 'purple', desc: 'ปิดการขายและดูแลลูกค้าเก่าเพื่อการซื้อซ้ำ' },
+        { name: 'การเจรจาต่อรองและการดูแลลูกค้า (CRM)', level: 'ระดับ 4', val: '85%', dot: 'purple', desc: 'ปิดการขายและดูแลลูกค้าเก่าเพื่อการซื้อซ้ำ' },
         { name: 'การบริหารจัดส่งและสต็อกสินค้า (Inventory)', level: 'ระดับ 3', val: '60%', dot: 'gray', desc: 'ควบคุมสต็อกสินค้าและประสานขนส่ง' },
       ],
       categories: [
         { name: 'ทักษะทางเทคนิค (Online Shop)', trendVal: '+12%', pct: '35%', dot: '#0f172a', desc: 'E-Commerce Platform, Live Streaming' },
         { name: 'ทักษะการเจรจาและการขาย', trendVal: '+18%', pct: '30%', dot: 'turq', desc: 'Sales, Negotiation, Customer Relations' },
-        { name: 'การสื่อสารและบริการลูกค้า', trendVal: '+14%', pct: '20%', dot: 'blue', desc: 'Content Creation, Copywriting' },
+        { name: 'การสื่อสารและการดูแลลูกค้า', trendVal: '+14%', pct: '20%', dot: 'blue', desc: 'Content Creation, Copywriting' },
         { name: 'คุณวุฒิและใบรับรองธุรกิจ', trendVal: '+8%', pct: '15%', dot: 'gray', desc: 'Digital Marketing Certificate' },
       ],
       plansList: [
