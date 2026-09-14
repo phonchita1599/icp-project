@@ -1970,6 +1970,20 @@
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
+.career-select-dropdown optgroup {
+  font-weight: 800;
+  color: #1d4ed8;
+  background-color: #f1f5f9;
+  padding: 6px 4px;
+}
+
+.career-select-dropdown option {
+  font-weight: 600;
+  color: #1e293b;
+  background-color: #ffffff;
+  padding: 6px 12px;
+}
+
 .btn-load-preset {
   background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
   color: #ffffff;

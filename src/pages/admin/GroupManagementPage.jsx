@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import './GroupManagementPage.css'
 
-// Standard Career Presets with Recommended Competencies for SUT DSS
+// Standard Career Presets with Recommended Competencies for SUT DSS (20+ Diverse Pathways)
 export const CAREER_PRESETS = [
+  // --- กลุ่มเทคโนโลยี & ซอฟต์แวร์ ---
   {
     id: 'programmer',
     title: 'โปรแกรมเมอร์ / นักพัฒนาซอฟต์แวร์ (Frontend / Full-Stack Developer)',
@@ -18,8 +19,21 @@ export const CAREER_PRESETS = [
     ],
   },
   {
+    id: 'mobile-dev',
+    title: 'นักพัฒนาโมบายแอปพลิเคชัน (Mobile Application Developer)',
+    shortTitle: 'นักพัฒนาโมบายแอปพลิเคชัน',
+    category: 'เทคโนโลยีสารสนเทศ & ซอฟต์แวร์',
+    skills: [
+      { id: 51, name: 'Flutter / React Native Cross-Platform Development', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 52, name: 'Mobile UI/UX Implementation & Responsive Layout', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 53, name: 'RESTful API Integration & Offline Data Storage', category: 'Technical Skills', level: 3, targetLevel: 4, status: 'กำลังพัฒนา' },
+      { id: 54, name: 'Mobile Accessibility (TalkBack / VoiceOver Support)', category: 'Assistive & Accessibility', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 55, name: 'การแก้ปัญหาเฉพาะหน้าและ Debugging', category: 'Soft Skills', level: 4, targetLevel: 4, status: 'ผ่านเกณฑ์แล้ว' },
+    ],
+  },
+  {
     id: 'data-analyst',
-    title: 'นักวิเคราะห์ข้อมูลและสารสนเทศ (Data Analyst)',
+    title: 'นักวิเคราะห์ข้อมูลและสารสนเทศ (Data Analyst & BI Specialist)',
     shortTitle: 'นักวิเคราะห์ข้อมูล (Data Analyst)',
     category: 'ข้อมูล & ปัญญาประดิษฐ์',
     skills: [
@@ -31,16 +45,16 @@ export const CAREER_PRESETS = [
     ],
   },
   {
-    id: 'uiux-designer',
-    title: 'นักออกแบบ UI/UX ดิจิทัล (UI/UX Designer)',
-    shortTitle: 'นักออกแบบ UI/UX',
-    category: 'ออกแบบดิจิทัล',
+    id: 'data-engineer-ai',
+    title: 'วิศวกรข้อมูลและปัญญาประดิษฐ์ (Data Engineer & AI Specialist)',
+    shortTitle: 'วิศวกรข้อมูล & AI',
+    category: 'ข้อมูล & ปัญญาประดิษฐ์',
     skills: [
-      { id: 201, name: 'UI Design & Component Design System ด้วย Figma', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
-      { id: 202, name: 'Inclusive User Research & Usability Testing', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
-      { id: 203, name: 'Wireframing & Interactive Prototyping', category: 'Technical Skills', level: 3, targetLevel: 4, status: 'กำลังพัฒนา' },
-      { id: 204, name: 'Accessibility Color Contrast & Readability', category: 'Assistive & Accessibility', level: 5, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
-      { id: 205, name: 'การนำเสนอ Design Showcase & การรับฟัง Feedback', category: 'Soft Skills', level: 4, targetLevel: 4, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 151, name: 'Data Pipeline Architecture & ETL Processing', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 152, name: 'Machine Learning Basics & Generative AI Integration', category: 'Technical Skills', level: 3, targetLevel: 4, status: 'กำลังพัฒนา' },
+      { id: 153, name: 'Big Data Tools & Cloud Storage (GCP / AWS / Azure)', category: 'Technical Skills', level: 3, targetLevel: 4, status: 'กำลังพัฒนา' },
+      { id: 154, name: 'จริยธรรม AI และความเป็นส่วนตัวของข้อมูล (AI Ethics)', category: 'Assistive & Accessibility', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 155, name: 'การคิดเชิงตรรกะและการวิเคราะห์เชิงระบบ', category: 'Soft Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
     ],
   },
   {
@@ -56,15 +70,217 @@ export const CAREER_PRESETS = [
     ],
   },
   {
+    id: 'cybersecurity',
+    title: 'วิศวกรความปลอดภัยทางไซเบอร์ (Cybersecurity Analyst)',
+    shortTitle: 'ความปลอดภัยไซเบอร์ (Cybersecurity)',
+    category: 'เทคโนโลยีสารสนเทศ & ซอฟต์แวร์',
+    skills: [
+      { id: 351, name: 'Network Security, Firewall & Vulnerability Assessment', category: 'Technical Skills', level: 3, targetLevel: 4, status: 'กำลังพัฒนา' },
+      { id: 352, name: 'การรักษาความมั่นคงปลอดภัยข้อมูลและกฎหมาย PDPA', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 353, name: 'Security Incident Response & Monitoring', category: 'Technical Skills', level: 3, targetLevel: 4, status: 'กำลังพัฒนา' },
+      { id: 354, name: 'การตระหนักรู้ด้านความปลอดภัยดิจิทัล (Security Awareness)', category: 'Assistive & Accessibility', level: 5, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 355, name: 'การตัดสินใจภายใต้สถานการณ์วิกฤต', category: 'Soft Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+    ],
+  },
+  {
+    id: 'qa-tester',
+    title: 'ผู้ทดสอบระบบและประกันคุณภาพซอฟต์แวร์ (Software QA & Tester)',
+    shortTitle: 'ผู้ทดสอบระบบ (QA Tester)',
+    category: 'เทคโนโลยีสารสนเทศ & ซอฟต์แวร์',
+    skills: [
+      { id: 371, name: 'การวางแผน Test Case, Test Scenario และ Bug Tracking', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 372, name: 'Manual Testing & API Testing (Postman)', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 373, name: 'Automated Testing Basics (Cypress / Playwright)', category: 'Technical Skills', level: 3, targetLevel: 4, status: 'กำลังพัฒนา' },
+      { id: 374, name: 'Accessibility Testing (Screen Reader & Contrast Check)', category: 'Assistive & Accessibility', level: 5, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 375, name: 'ความละเอียดรอบคอบและการสื่อสารข้อบกพร่อง', category: 'Soft Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+    ],
+  },
+  {
+    id: 'cloud-devops',
+    title: 'วิศวกรระบบคลาวด์และดูแลระบบ (Cloud & DevOps Engineer)',
+    shortTitle: 'Cloud & DevOps Engineer',
+    category: 'เทคโนโลยีสารสนเทศ & ซอฟต์แวร์',
+    skills: [
+      { id: 381, name: 'การบริหารจัดการ Cloud Platform (AWS / GCP / Azure)', category: 'Technical Skills', level: 3, targetLevel: 4, status: 'กำลังพัฒนา' },
+      { id: 382, name: 'Containerization & Docker Container Management', category: 'Technical Skills', level: 3, targetLevel: 4, status: 'กำลังพัฒนา' },
+      { id: 383, name: 'CI/CD Pipeline Automation (GitHub Actions)', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 384, name: 'ระบบติดตามและบันทึกข้อมูล (Monitoring & Logging)', category: 'Technical Skills', level: 3, targetLevel: 4, status: 'กำลังพัฒนา' },
+      { id: 385, name: 'การประสานงานระหว่างฝ่ายพัฒนาและฝ่ายปฏิบัติการ', category: 'Soft Skills', level: 4, targetLevel: 4, status: 'ผ่านเกณฑ์แล้ว' },
+    ],
+  },
+
+  // --- กลุ่มการออกแบบ สื่อ & ครีเอทีฟ ---
+  {
+    id: 'uiux-designer',
+    title: 'นักออกแบบ UI/UX ดิจิทัล (UI/UX Designer)',
+    shortTitle: 'นักออกแบบ UI/UX',
+    category: 'ออกแบบดิจิทัล & ครีเอทีฟ',
+    skills: [
+      { id: 201, name: 'UI Design & Component Design System ด้วย Figma', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 202, name: 'Inclusive User Research & Usability Testing', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 203, name: 'Wireframing & Interactive Prototyping', category: 'Technical Skills', level: 3, targetLevel: 4, status: 'กำลังพัฒนา' },
+      { id: 204, name: 'Accessibility Color Contrast & Readability', category: 'Assistive & Accessibility', level: 5, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 205, name: 'การนำเสนอ Design Showcase & การรับฟัง Feedback', category: 'Soft Skills', level: 4, targetLevel: 4, status: 'ผ่านเกณฑ์แล้ว' },
+    ],
+  },
+  {
+    id: 'graphic-designer',
+    title: 'นักออกแบบกราฟิกและสื่อดิจิทัล (Graphic Designer & Digital Media)',
+    shortTitle: 'นักออกแบบกราฟิก (Graphic Designer)',
+    category: 'ออกแบบดิจิทัล & ครีเอทีฟ',
+    skills: [
+      { id: 251, name: 'Adobe Photoshop / Illustrator / Canva Pro', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 252, name: 'Visual Branding, Identity & Typography Design', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 253, name: 'การออกแบบแบนเนอร์และสื่อโซเชียลมีเดีย', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 254, name: 'การออกแบบสื่อที่ทุกคนเข้าถึงได้ (Accessible Design)', category: 'Assistive & Accessibility', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 255, name: 'ความคิดสร้างสรรค์และการบริหารเวลาส่งงาน', category: 'Soft Skills', level: 4, targetLevel: 4, status: 'ผ่านเกณฑ์แล้ว' },
+    ],
+  },
+  {
+    id: 'video-motion',
+    title: 'นักตัดต่อวิดีโอและโมชั่นกราฟิก (Video Editor & Motion Designer)',
+    shortTitle: 'นักตัดต่อวิดีโอ & Motion',
+    category: 'ออกแบบดิจิทัล & ครีเอทีฟ',
+    skills: [
+      { id: 271, name: 'Video Editing (Premiere Pro / DaVinci Resolve / CapCut)', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 272, name: 'Motion Graphics & Animation (After Effects)', category: 'Technical Skills', level: 3, targetLevel: 4, status: 'กำลังพัฒนา' },
+      { id: 273, name: 'Sound Design & Audio Mixing สำหรับสื่อวิดีโอ', category: 'Technical Skills', level: 3, targetLevel: 4, status: 'กำลังพัฒนา' },
+      { id: 274, name: 'การจัดทำคำบรรยายแทนเสียงและซับไตเติล (Closed Caption)', category: 'Assistive & Accessibility', level: 5, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 275, name: 'การเล่าเรื่องผ่านภาพ (Visual Storytelling)', category: 'Soft Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+    ],
+  },
+  {
+    id: 'content-creator',
+    title: 'นักสร้างคอนเทนต์ดิจิทัลและสื่อออนไลน์ (Content Creator & Copywriter)',
+    shortTitle: 'Content Creator & Copywriter',
+    category: 'ออกแบบดิจิทัล & ครีเอทีฟ',
+    skills: [
+      { id: 281, name: 'การเขียนบทความ SEO, แคปชั่น และ Storytelling', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 282, name: 'การผลิตคอนเทนต์วิดีโอสั้น (TikTok / Reels / Shorts)', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 283, name: 'การวิเคราะห์ Engagement & Social Media Trends', category: 'Technical Skills', level: 3, targetLevel: 4, status: 'กำลังพัฒนา' },
+      { id: 284, name: 'การสื่อสารที่ครอบคลุมและไม่เลือกปฏิบัติ (Inclusive Language)', category: 'Assistive & Accessibility', level: 5, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 285, name: 'ทักษะการสื่อสารโน้มน้าวใจและความคิดริเริ่ม', category: 'Soft Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+    ],
+  },
+
+  // --- กลุ่มธุรกิจ การตลาด & การจัดการ ---
+  {
     id: 'digital-marketing',
-    title: 'นักการตลาดดิจิทัลและอีคอมเมิร์ซ (Digital Marketing & Content Creator)',
-    shortTitle: 'นักการตลาดดิจิทัล',
-    category: 'การตลาดและสื่อออนไลน์',
+    title: 'นักการตลาดดิจิทัลและอีคอมเมิร์ซ (Digital Marketing & E-Commerce)',
+    shortTitle: 'นักการตลาดดิจิทัล (Digital Marketing)',
+    category: 'ธุรกิจ & การตลาด',
     skills: [
       { id: 401, name: 'การวางแผนและสร้าง Content สื่อสังคมออนไลน์', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
       { id: 402, name: 'การยิงโฆษณาและการวิเคราะห์สถิติ (Meta / Google Ads / TikTok)', category: 'Technical Skills', level: 3, targetLevel: 4, status: 'กำลังพัฒนา' },
       { id: 403, name: 'การจัดการร้านค้าออนไลน์ E-commerce & Customer Service', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
-      { id: 404, name: 'การคิดสร้างสรรค์และการสื่อสารโน้มน้าวใจ', category: 'Soft Skills', level: 4, targetLevel: 4, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 404, name: 'การใช้เครื่องมือช่วยเหลือสำหรับการนำเสนองาน', category: 'Assistive & Accessibility', level: 4, targetLevel: 4, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 405, name: 'การคิดสร้างสรรค์และการสื่อสารโน้มน้าวใจ', category: 'Soft Skills', level: 4, targetLevel: 4, status: 'ผ่านเกณฑ์แล้ว' },
+    ],
+  },
+  {
+    id: 'product-project-manager',
+    title: 'ผู้จัดการโครงการดิจิทัล / เจ้าของผลิตภัณฑ์ (Project Manager / Product Owner)',
+    shortTitle: 'Project Manager / Product Owner',
+    category: 'ธุรกิจ & การตลาด',
+    skills: [
+      { id: 451, name: 'Agile & Scrum Framework Management (Jira / Trello)', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 452, name: 'Sprint Planning, Roadmap & Backlog Prioritization', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 453, name: 'Risk Management & Resource Allocation', category: 'Technical Skills', level: 3, targetLevel: 4, status: 'กำลังพัฒนา' },
+      { id: 454, name: 'Inclusive Workplace & Accommodations Planning', category: 'Assistive & Accessibility', level: 5, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 455, name: 'ภาวะผู้นำและการเจรจาต่อรอง (Leadership & Negotiation)', category: 'Soft Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+    ],
+  },
+  {
+    id: 'business-analyst',
+    title: 'นักวิเคราะห์ระบบและกระบวนการทางธุรกิจ (System & Business Analyst)',
+    shortTitle: 'นักวิเคราะห์ระบบ (Business Analyst)',
+    category: 'ธุรกิจ & การตลาด',
+    skills: [
+      { id: 471, name: 'Business Requirement Gathering & Process Flowchart (BPMN)', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 472, name: 'Software Specification & Functional Design', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 473, name: 'Data Modeling & Gap Analysis', category: 'Technical Skills', level: 3, targetLevel: 4, status: 'กำลังพัฒนา' },
+      { id: 474, name: 'Accessibility Compliance Assessment', category: 'Assistive & Accessibility', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 475, name: 'การเป็นตัวกลางประสานงานระหว่างฝ่ายธุรกิจและทีมไอที', category: 'Soft Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+    ],
+  },
+
+  // --- กลุ่มการบริหาร บริการ & สนับสนุน ---
+  {
+    id: 'hr-talent',
+    title: 'เจ้าหน้าที่บริหารทรัพยากรมนุษย์ (HR Specialist & Talent Development)',
+    shortTitle: 'เจ้าหน้าที่ HR & ฝึกอบรม',
+    category: 'การบริหาร & บริการองค์กร',
+    skills: [
+      { id: 501, name: 'การสรรหาว่าจ้างและการจัดทำหลักสูตรฝึกอบรม (Recruitment & Training)', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 502, name: 'การจัดการข้อมูลพนักงานและระบบ HRIS', category: 'Technical Skills', level: 3, targetLevel: 4, status: 'กำลังพัฒนา' },
+      { id: 503, name: 'กฎหมายแรงงานและการจ้างงานคนพิการตามมาตรา 33/35', category: 'Technical Skills', level: 5, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 504, name: 'Inclusive Diversity & Disability Support in Workplace', category: 'Assistive & Accessibility', level: 5, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 505, name: 'มนุษยสัมพันธ์ดีเด่นและการรับฟังเชิงลึก (Empathic Listening)', category: 'Soft Skills', level: 5, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+    ],
+  },
+  {
+    id: 'admin-officer',
+    title: 'เจ้าหน้าที่ธุรการและจัดการเอกสารดิจิทัล (Digital Administrative Officer)',
+    shortTitle: 'เจ้าหน้าที่ธุรการดิจิทัล',
+    category: 'การบริหาร & บริการองค์กร',
+    skills: [
+      { id: 521, name: 'การใช้ Microsoft 365 (Word, Excel, PowerPoint) / Google Workspace ขั้นสูง', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 522, name: 'การจัดระบบเอกสารดิจิทัลและหนังสือราชการ/องค์กร', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 523, name: 'การประสานงานการประชุมและบันทึกรายงานการประชุม', category: 'Technical Skills', level: 4, targetLevel: 4, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 524, name: 'การสร้างเอกสารและไฟล์ PDF ที่เข้าถึงได้ (Accessible PDF)', category: 'Assistive & Accessibility', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 525, name: 'ความรอบคอบ ละเอียดแม่นยำ และการจัดลำดับความสำคัญ', category: 'Soft Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+    ],
+  },
+  {
+    id: 'accounting-finance',
+    title: 'นักบัญชีและการเงินดิจิทัล (Digital Accounting & Financial Officer)',
+    shortTitle: 'นักบัญชีและการเงิน',
+    category: 'การบริหาร & บริการองค์กร',
+    skills: [
+      { id: 541, name: 'การบันทึกบัญชีและการจัดทำรายงานทางการเงิน (Financial Reporting)', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 542, name: 'การใช้โปรแกรมบัญชีสำเร็จรูป (Express / FlowAccount / Peak)', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 543, name: 'Advanced Excel formulas & Financial Modeling', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 544, name: 'ระบบบริหารการเงินดิจิทัลและภาษีอากร', category: 'Technical Skills', level: 3, targetLevel: 4, status: 'กำลังพัฒนา' },
+      { id: 545, name: 'ความซื่อสัตย์ ความรอบคอบ และจริยธรรมในวิชาชีพ', category: 'Soft Skills', level: 5, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+    ],
+  },
+  {
+    id: 'customer-relations',
+    title: 'เจ้าหน้าที่ลูกค้าสัมพันธ์และบริการข้อมูล (Customer Relations & CRM Officer)',
+    shortTitle: 'เจ้าหน้าที่ลูกค้าสัมพันธ์ (CRM)',
+    category: 'การบริหาร & บริการองค์กร',
+    skills: [
+      { id: 561, name: 'ระบบบริหารความสัมพันธ์ลูกค้า CRM & Helpdesk Ticketing', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 562, name: 'การสื่อสารบริการลูกค้าผ่านช่องทาง Omnichannel (Chat / Email / Call)', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 563, name: 'การจัดการข้อร้องเรียนและการแก้ไขปัญหาเฉพาะหน้า', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 564, name: 'การสื่อสารอย่างเข้าอกเข้าใจและภาษาสุภาพ (Empathetic Service)', category: 'Assistive & Accessibility', level: 5, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 565, name: 'ความใจเย็น การควบคุมอารมณ์ และ Service Mind', category: 'Soft Skills', level: 5, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+    ],
+  },
+  {
+    id: 'translator-language',
+    title: 'เจ้าหน้าที่แปลและสื่อสารภาษาต่างประเทศ (Translator & Language Specialist)',
+    shortTitle: 'นักแปลและสื่อสารภาษาต่างประเทศ',
+    category: 'การบริหาร & บริการองค์กร',
+    skills: [
+      { id: 581, name: 'การแปลเอกสารและบทความ (อังกฤษ - ไทย / อื่นๆ) ขั้นสูง', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 582, name: 'การใช้เครื่องมือช่วยแปล CAT Tools & AI-assisted Translation', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 583, name: 'การตรวจสอบและพิสูจน์อักษร (Proofreading & Editing)', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 584, name: 'การจัดทำเนื้อหาในรูปแบบ Accessible Multilingual Media', category: 'Assistive & Accessibility', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 585, name: 'ความเข้าใจข้ามวัฒนธรรมและการสื่อสารระดับสากล', category: 'Soft Skills', level: 5, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+    ],
+  },
+  {
+    id: 'research-innovation',
+    title: 'นักวิจัยและพัฒนานวัตกรรม (Research & Innovation Specialist)',
+    shortTitle: 'นักวิจัยและนวัตกรรม',
+    category: 'การบริหาร & บริการองค์กร',
+    skills: [
+      { id: 601, name: 'ระเบียบวิธีวิจัย การทบทวนวรรณกรรม และการเก็บข้อมูล', category: 'Technical Skills', level: 4, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 602, name: 'การวิเคราะห์เชิงสถิติและการสรุปรายงานวิจัย', category: 'Technical Skills', level: 3, targetLevel: 4, status: 'กำลังพัฒนา' },
+      { id: 603, name: 'การเขียนข้อเสนอโครงการนวัตกรรม (Grant Proposal Writing)', category: 'Technical Skills', level: 3, targetLevel: 4, status: 'กำลังพัฒนา' },
+      { id: 604, name: 'Inclusive Innovation for Persons with Disabilities (Universal Design)', category: 'Assistive & Accessibility', level: 5, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
+      { id: 605, name: 'การคิดเชิงวิพากษ์และใฝ่รู้สิ่งใหม่อย่างต่อเนื่อง (Lifelong Learning)', category: 'Soft Skills', level: 5, targetLevel: 5, status: 'ผ่านเกณฑ์แล้ว' },
     ],
   },
 ]
@@ -505,9 +721,44 @@ export default function GroupManagementPage({
     }
   }
 
+  // Get custom careers saved in localStorage
+  const getCustomCareersFromStorage = () => {
+    try {
+      const saved = localStorage.getItem('icp_career_list')
+      if (saved) {
+        const list = JSON.parse(saved)
+        if (Array.isArray(list)) {
+          return list.filter((c) => !CAREER_PRESETS.some((p) => p.id === c.id || p.shortTitle === c.title || p.title === c.title))
+        }
+      }
+    } catch (e) {
+      console.error('Error reading custom careers:', e)
+    }
+    return []
+  }
+
   // Career Selection & Preset Loading
   const handleSelectCareerPreset = (careerTitle, autoLoad = false) => {
     if (!selectedMember) return
+    if (careerTitle === 'other') {
+      const updatedMember = {
+        ...selectedMember,
+        careerGoal:
+          selectedMember.careerGoal &&
+          !CAREER_PRESETS.some((p) => p.shortTitle === selectedMember.careerGoal || p.title === selectedMember.careerGoal)
+            ? selectedMember.careerGoal
+            : 'อื่นๆ (ระบุชื่ออาชีพเอง)',
+      }
+      setSelectedMember(updatedMember)
+      onUpdateMemberProgress(activeGroup.id, updatedMember)
+      setSaveSuccessMsg(`เลือกโหมด "อื่นๆ" เรียบร้อย สามารถพิมพ์ชื่ออาชีพและเพิ่มทักษะเฉพาะด้านได้ตามต้องการ`)
+      setTimeout(() => setSaveSuccessMsg(''), 3500)
+      setTimeout(() => {
+        document.getElementById('member-career-custom-input')?.focus()
+      }, 150)
+      return
+    }
+
     const matched = CAREER_PRESETS.find((p) => p.title === careerTitle || p.id === careerTitle || p.shortTitle === careerTitle)
     const newCareer = matched ? matched.title : careerTitle
 
@@ -2564,32 +2815,78 @@ export default function GroupManagementPage({
 
                     <div className="career-select-controls">
                       <div className="career-select-dropdown-wrap">
-                        <label className="career-select-label">เลือกจากชุดอาชีพแนะนำ (Presets):</label>
+                        <label className="career-select-label">เลือกจากชุดอาชีพแนะนำ หรือเลือก "อื่นๆ":</label>
                         <select
                           className="career-select-dropdown"
-                          value={CAREER_PRESETS.find((p) => p.shortTitle === selectedMember.careerGoal || p.title === selectedMember.careerGoal)?.shortTitle || ''}
+                          value={
+                            CAREER_PRESETS.find((p) => p.shortTitle === selectedMember.careerGoal || p.title === selectedMember.careerGoal)?.shortTitle ||
+                            (selectedMember.careerGoal && (selectedMember.careerGoal.startsWith('อื่นๆ') || selectedMember.careerGoal.includes('กำหนดเอง')) ? 'other' : selectedMember.careerGoal || '')
+                          }
                           onChange={(e) => {
                             if (e.target.value) {
                               handleSelectCareerPreset(e.target.value, false)
                             }
                           }}
                         >
-                          <option value="">-- เลือกอาชีพแนะนำ --</option>
-                          {CAREER_PRESETS.map((p) => (
-                            <option key={p.id} value={p.shortTitle}>
-                              {p.title} ({p.skills.length} ทักษะหลัก)
-                            </option>
-                          ))}
+                          <option value="">-- 🎯 เลือกอาชีพแนะนำ หรือ อื่นๆ --</option>
+
+                          {/* Custom careers from localStorage */}
+                          {getCustomCareersFromStorage().length > 0 && (
+                            <optgroup label="📌 อาชีพที่บันทึกไว้ในระบบ (Custom Careers)">
+                              {getCustomCareersFromStorage().map((c) => (
+                                <option key={c.id} value={c.title}>
+                                  {c.title}
+                                </option>
+                              ))}
+                            </optgroup>
+                          )}
+
+                          <optgroup label="💻 สายงานเทคโนโลยี & ซอฟต์แวร์ (Technology & Software)">
+                            {CAREER_PRESETS.filter((p) => p.category.includes('เทคโนโลยี') || p.category.includes('ข้อมูล') || p.category.includes('สนับสนุน')).map((p) => (
+                              <option key={p.id} value={p.shortTitle}>
+                                {p.title} ({p.skills.length} ทักษะหลัก)
+                              </option>
+                            ))}
+                          </optgroup>
+
+                          <optgroup label="🎨 สายงานออกแบบ สื่อดิจิทัล & ครีเอทีฟ (Design & Media)">
+                            {CAREER_PRESETS.filter((p) => p.category.includes('ออกแบบ') || p.category.includes('ครีเอทีฟ')).map((p) => (
+                              <option key={p.id} value={p.shortTitle}>
+                                {p.title} ({p.skills.length} ทักษะหลัก)
+                              </option>
+                            ))}
+                          </optgroup>
+
+                          <optgroup label="📈 สายงานธุรกิจ การตลาด & การจัดการ (Business & Management)">
+                            {CAREER_PRESETS.filter((p) => p.category.includes('ธุรกิจ') || p.category.includes('การตลาด')).map((p) => (
+                              <option key={p.id} value={p.shortTitle}>
+                                {p.title} ({p.skills.length} ทักษะหลัก)
+                              </option>
+                            ))}
+                          </optgroup>
+
+                          <optgroup label="🏢 สายงานบริหาร บริการ & สนับสนุน (Administration & Services)">
+                            {CAREER_PRESETS.filter((p) => p.category.includes('บริหาร') || p.category.includes('บริการองค์กร')).map((p) => (
+                              <option key={p.id} value={p.shortTitle}>
+                                {p.title} ({p.skills.length} ทักษะหลัก)
+                              </option>
+                            ))}
+                          </optgroup>
+
+                          <optgroup label="✨ ตัวเลือกกำหนดเอง">
+                            <option value="other">⭐ อื่นๆ (ระบุชื่ออาชีพและกำหนดทักษะเอง)</option>
+                          </optgroup>
                         </select>
                       </div>
 
                       <div className="career-custom-input-wrap">
-                        <label className="career-select-label">หรือระบุชื่ออาชีพเป้าหมายเอง:</label>
+                        <label className="career-select-label">หรือระบุชื่ออาชีพเป้าหมายเอง (อิสระ):</label>
                         <input
+                          id="member-career-custom-input"
                           type="text"
                           className="modal-text-input"
                           value={selectedMember.careerGoal || ''}
-                          placeholder="เช่น Data Engineer, Web Developer..."
+                          placeholder="เช่น นักแปลภาษา, นักออกแบบเสียง, เจ้าหน้าที่ HR, ฯลฯ"
                           onChange={(e) => {
                             const updated = { ...selectedMember, careerGoal: e.target.value }
                             setSelectedMember(updated)
@@ -2603,8 +2900,13 @@ export default function GroupManagementPage({
                         onClick={() => {
                           const matched = CAREER_PRESETS.find(
                             (p) => p.shortTitle === selectedMember.careerGoal || p.title === selectedMember.careerGoal
-                          ) || CAREER_PRESETS[0]
-                          handleSelectCareerPreset(matched.shortTitle, true)
+                          )
+                          if (matched) {
+                            handleSelectCareerPreset(matched.shortTitle, true)
+                          } else {
+                            setSaveSuccessMsg('สำหรับอาชีพที่กำหนดเอง คุณสามารถใช้ปุ่ม "+ เพิ่มทักษะใหม่" ด้านล่างเพื่อเพิ่มทักษะเฉพาะด้านได้ตามต้องการ')
+                            setTimeout(() => setSaveSuccessMsg(''), 4500)
+                          }
                         }}
                       >
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '6px' }}>
