@@ -1072,6 +1072,7 @@ export default function GroupManagementPage({
     if (typeof skillNameOrIdx === 'number') {
       const name = evaluationData.criteria[skillNameOrIdx]
       const isPassed = (evaluationData.passedCriteria || []).includes(skillNameOrIdx)
+      const detail = (evaluationData.criteriaDetails || {})[skillNameOrIdx] || {}
       skillObj = {
         id: `criteria-${skillNameOrIdx}`,
         name: name,
@@ -1079,10 +1080,10 @@ export default function GroupManagementPage({
         monthContext: currentMonthName,
         isCriteria: true,
         criteriaIdx: skillNameOrIdx,
-        evalLevel: isPassed ? evaluationOptions[4] : evaluationOptions[1], // 5.ได้ถ่ายทอด หรือ 2.ได้เรียน
-        hours: evaluationData.hours ? evaluationData.hours.replace(/[^0-9.]/g, '') || '25' : '25',
-        images: [],
-        note: '',
+        evalLevel: detail.level || (isPassed ? evaluationOptions[4] : evaluationOptions[1]), // 5.ได้ถ่ายทอด หรือ 2.ได้เรียน
+        hours: detail.hours || (evaluationData.hours ? evaluationData.hours.replace(/[^0-9.]/g, '') || '25' : '25'),
+        images: detail.images || [],
+        note: detail.note || '',
       }
     } else {
       const initialName = (typeof skillNameOrIdx === 'string' && skillNameOrIdx.trim()) 
@@ -1170,11 +1171,21 @@ export default function GroupManagementPage({
         ? [...(evaluationData.passedCriteria || []), newIdx]
         : (evaluationData.passedCriteria || [])
       const calculatedScore = calcAutoScore(updatedPassed, updatedCriteria)
+      const updatedDetails = {
+        ...(evaluationData.criteriaDetails || {}),
+        [newIdx]: {
+          level: evalModalData.level,
+          hours: evalModalData.hours || '25',
+          images: evalModalData.images || [],
+          note: evalModalData.note || '',
+        },
+      }
 
       setEvaluationData({
         ...evaluationData,
         criteria: updatedCriteria,
         passedCriteria: updatedPassed,
+        criteriaDetails: updatedDetails,
         score: autoSyncScore ? calculatedScore : evaluationData.score,
         status: autoSyncScore ? getStatusFromScore(calculatedScore) : evaluationData.status,
         passedSkills: `${updatedPassed.length} ทักษะ`,
@@ -1209,11 +1220,21 @@ export default function GroupManagementPage({
       const updatedCriteria = [...(evaluationData.criteria || [])]
       updatedCriteria[cIdx] = skillName
       const calculatedScore = calcAutoScore(updatedPassed, updatedCriteria)
+      const updatedDetails = {
+        ...(evaluationData.criteriaDetails || {}),
+        [cIdx]: {
+          level: evalModalData.level,
+          hours: evalModalData.hours || '25',
+          images: evalModalData.images || [],
+          note: evalModalData.note || '',
+        },
+      }
 
       setEvaluationData({
         ...evaluationData,
         criteria: updatedCriteria,
         passedCriteria: updatedPassed,
+        criteriaDetails: updatedDetails,
         score: autoSyncScore ? calculatedScore : evaluationData.score,
         status: autoSyncScore ? getStatusFromScore(calculatedScore) : evaluationData.status,
         passedSkills: `${updatedPassed.length} ทักษะ`,
@@ -2698,20 +2719,30 @@ export default function GroupManagementPage({
                             </svg>
                             <span>เกณฑ์และทักษะที่ประเมินประจำเดือน ({evaluationData.passedCriteria?.length || 0}/{(evaluationData.criteria || []).length} ผ่านแล้ว)</span>
                           </span>
-                          <span className="criteria-hint">คลิกเพื่อเช็กผ่าน/ไม่ผ่าน หรือลบเกณฑ์ออก</span>
+                          <span className="criteria-hint">คลิกที่ทักษะเพื่อเปิดป๊อปอัปประเมิน 7 ระดับมาตรฐาน (แบบ User) หรือติ๊กเช็กผ่าน/ไม่ผ่าน</span>
                         </div>
 
                         <div className="criteria-items-list">
                           {(evaluationData.criteria || []).map((critText, cIdx) => {
                             const isPassed = (evaluationData.passedCriteria || []).includes(cIdx)
+                            const detail = (evaluationData.criteriaDetails || {})[cIdx]
                             return (
                               <div
                                 key={cIdx}
                                 className={`criteria-item-pill ${isPassed ? 'passed' : 'pending'}`}
-                                onClick={() => handleToggleCriteria(cIdx)}
-                                title="คลิกเพื่อสลับสถานะผ่าน/ไม่ผ่าน หรือคลิกที่ข้อความเพื่อดูและประเมินทักษะ"
+                                onClick={() => handleOpenMonthlySkillModal(cIdx)}
+                                title="คลิกเพื่อเปิดป๊อปอัปประเมินทักษะนี้ (7 ระดับมาตรฐาน แบบ User)"
+                                style={{ cursor: 'pointer' }}
                               >
-                                <span className="criteria-checkbox-box" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <span
+                                  className="criteria-checkbox-box"
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    handleToggleCriteria(cIdx)
+                                  }}
+                                  title="คลิกเพื่อสลับสถานะผ่าน/ไม่ผ่านทันที"
+                                  style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+                                >
                                   {isPassed ? (
                                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
                                       <polyline points="20 6 9 17 4 12" />
@@ -2720,33 +2751,86 @@ export default function GroupManagementPage({
                                     <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', border: '1.5px solid #94a3b8' }} />
                                   )}
                                 </span>
-                                <span
-                                  className="criteria-text"
-                                  onClick={(e) => {
-                                    e.stopPropagation()
-                                    handleOpenMonthlySkillModal(cIdx)
-                                  }}
-                                  style={{ cursor: 'pointer' }}
-                                  title="คลิกเพื่อเปิดป๊อปอัปประเมินทักษะนี้"
-                                >
+
+                                <span className="criteria-text" style={{ flex: 1, fontWeight: isPassed ? 700 : 600 }}>
                                   {critText}
                                 </span>
-                                <span
-                                  className="criteria-status-badge"
+
+                                {detail?.level && (
+                                  <span
+                                    style={{
+                                      fontSize: '11px',
+                                      fontWeight: 700,
+                                      padding: '2px 8px',
+                                      borderRadius: '6px',
+                                      background: '#eff6ff',
+                                      color: '#1d4ed8',
+                                      border: '1px solid #bfdbfe',
+                                      display: 'inline-flex',
+                                      alignItems: 'center',
+                                      gap: '4px',
+                                      maxWidth: '160px',
+                                      overflow: 'hidden',
+                                      textOverflow: 'ellipsis',
+                                      whiteSpace: 'nowrap',
+                                    }}
+                                    title={detail.level}
+                                  >
+                                    <span>⭐</span>
+                                    <span>{detail.level.split('.')[0] || 'ระดับ'}. {detail.level.slice(2, 14)}...</span>
+                                  </span>
+                                )}
+
+                                {detail?.hours && (
+                                  <span style={{ fontSize: '11px', color: '#0369a1', background: '#f0f9ff', padding: '2px 7px', borderRadius: '6px', fontWeight: 600, border: '1px solid #bae6fd' }}>
+                                    ⏱ {detail.hours} ชม.
+                                  </span>
+                                )}
+
+                                <span className="criteria-status-badge">
+                                  {isPassed ? 'ผ่านเกณฑ์' : 'ยังไม่ผ่าน'}
+                                </span>
+
+                                <button
+                                  type="button"
+                                  className="btn-criteria-eval-direct"
                                   onClick={(e) => {
                                     e.stopPropagation()
                                     handleOpenMonthlySkillModal(cIdx)
                                   }}
-                                  style={{ cursor: 'pointer' }}
-                                  title="คลิกเพื่อเปิดป๊อปอัปประเมินทักษะนี้"
+                                  style={{
+                                    background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
+                                    color: '#ffffff',
+                                    border: 'none',
+                                    borderRadius: '6px',
+                                    padding: '4px 10px',
+                                    fontSize: '11.5px',
+                                    fontWeight: 700,
+                                    cursor: 'pointer',
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '4px',
+                                    boxShadow: '0 1px 4px rgba(37, 99, 235, 0.25)',
+                                    transition: 'all 0.15s ease',
+                                    flexShrink: 0,
+                                  }}
+                                  title="เปิดหน้าต่างประเมินทักษะนี้แบบ User"
                                 >
-                                  {isPassed ? 'ผ่านเกณฑ์' : 'ยังไม่ผ่าน'}
-                                </span>
+                                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                  </svg>
+                                  <span>ประเมิน</span>
+                                </button>
+
                                 {(evaluationData.criteria || []).length > 1 && (
                                   <button
                                     type="button"
                                     className="btn-remove-criteria-item"
-                                    onClick={(e) => handleRemoveCriteria(cIdx, e)}
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      handleRemoveCriteria(cIdx, e)
+                                    }}
                                     title="ลบทักษะนี้ออกจากเดือนนี้"
                                   >
                                     ✕
@@ -3815,7 +3899,7 @@ export default function GroupManagementPage({
           Pop-up Modal: Super User Evaluation for Specific Skill
           ======================================================== */}
       {selectedSkillEvalModal && (
-        <div className="assessment-modal-overlay" onClick={handleCloseSkillEvalModal}>
+        <div className="assessment-modal-overlay" onClick={handleCloseSkillEvalModal} style={{ zIndex: 2600 }}>
           <div className="assessment-modal-dialog" onClick={(e) => e.stopPropagation()}>
             {/* Modal Header */}
             <div className="assessment-modal-header">
@@ -4641,6 +4725,7 @@ export default function GroupManagementPage({
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '8px' }}>
                     {(evaluationData.criteria || []).map((critText, cIdx) => {
                       const isPassed = (evaluationData.passedCriteria || []).includes(cIdx)
+                      const detail = (evaluationData.criteriaDetails || {})[cIdx]
                       return (
                         <div
                           key={cIdx}
@@ -4655,30 +4740,71 @@ export default function GroupManagementPage({
                             cursor: 'pointer',
                             transition: 'all 0.15s ease',
                           }}
-                          onClick={() => handleToggleCriteria(cIdx)}
+                          onClick={() => handleOpenMonthlySkillModal(cIdx)}
+                          title="คลิกเพื่อเปิดป๊อปอัปประเมินทักษะนี้ (7 ระดับมาตรฐาน แบบ User)"
                         >
                           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1 }}>
-                            <span style={{
-                              width: '18px',
-                              height: '18px',
-                              borderRadius: '5px',
-                              background: isPassed ? '#10b981' : '#ffffff',
-                              border: isPassed ? 'none' : '1.5px solid #cbd5e1',
-                              color: '#ffffff',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              fontSize: '11px',
-                              fontWeight: 900,
-                              flexShrink: 0,
-                            }}>
+                            <span
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                handleToggleCriteria(cIdx)
+                              }}
+                              title="คลิกเพื่อสลับสถานะผ่าน/ไม่ผ่านทันที"
+                              style={{
+                                width: '18px',
+                                height: '18px',
+                                borderRadius: '5px',
+                                background: isPassed ? '#10b981' : '#ffffff',
+                                border: isPassed ? 'none' : '1.5px solid #cbd5e1',
+                                color: '#ffffff',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '11px',
+                                fontWeight: 900,
+                                flexShrink: 0,
+                                cursor: 'pointer',
+                              }}
+                            >
                               {isPassed ? '✓' : ''}
                             </span>
                             <span style={{ fontSize: '13px', color: isPassed ? '#065f46' : '#334155', fontWeight: isPassed ? 700 : 500 }}>
                               {critText}
                             </span>
                           </div>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            {detail?.level && (
+                              <span
+                                style={{
+                                  fontSize: '11px',
+                                  fontWeight: 700,
+                                  padding: '2px 8px',
+                                  borderRadius: '6px',
+                                  background: '#eff6ff',
+                                  color: '#1d4ed8',
+                                  border: '1px solid #bfdbfe',
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: '3px',
+                                  maxWidth: '140px',
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  whiteSpace: 'nowrap',
+                                }}
+                                title={detail.level}
+                              >
+                                <span>⭐</span>
+                                <span>{detail.level.split('.')[0] || 'ระดับ'}. {detail.level.slice(2, 12)}...</span>
+                              </span>
+                            )}
+
+                            {detail?.hours && (
+                              <span style={{ fontSize: '11px', color: '#0369a1', background: '#f0f9ff', padding: '2px 6px', borderRadius: '5px', fontWeight: 600, border: '1px solid #bae6fd' }}>
+                                ⏱ {detail.hours} ชม.
+                              </span>
+                            )}
+
                             <span style={{
                               fontSize: '11px',
                               fontWeight: 700,
@@ -4689,10 +4815,43 @@ export default function GroupManagementPage({
                             }}>
                               {isPassed ? 'ผ่านเกณฑ์แล้ว' : 'ยังไม่ผ่าน'}
                             </span>
+
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                handleOpenMonthlySkillModal(cIdx)
+                              }}
+                              style={{
+                                background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
+                                color: '#ffffff',
+                                border: 'none',
+                                borderRadius: '6px',
+                                padding: '3px 8px',
+                                fontSize: '11px',
+                                fontWeight: 700,
+                                cursor: 'pointer',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '3px',
+                                boxShadow: '0 1px 4px rgba(37, 99, 235, 0.25)',
+                              }}
+                              title="เปิดหน้าต่างประเมินทักษะนี้แบบ User"
+                            >
+                              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                              </svg>
+                              <span>ประเมิน</span>
+                            </button>
+
                             {(evaluationData.criteria || []).length > 1 && (
                               <button
                                 type="button"
-                                onClick={(e) => handleRemoveCriteria(cIdx, e)}
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  handleRemoveCriteria(cIdx, e)
+                                }}
                                 style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '2px 4px', fontSize: '12px' }}
                                 title="ลบเกณฑ์นี้"
                               >
