@@ -2529,53 +2529,115 @@
   box-shadow: 0 4px 10px rgba(37, 99, 235, 0.35);
 }
 
-/* Add New Skill Form Card */
-.add-skill-form-card {
-  background: #f8fafc;
-  border: 2px dashed #cbd5e1;
-  border-radius: 12px;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  justify-content: space-between;
+/* Header Add Skill Button */
+.btn-open-add-skill-modal {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: #ffffff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+  transition: all 0.15s ease;
+  font-family: inherit;
 }
 
-.add-skill-card-title {
-  font-size: 13.5px;
+.btn-open-add-skill-modal:hover {
+  background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.35);
+}
+
+/* Add New Skill Trigger Card in Grid (Dashed Modern Card) */
+.add-skill-card-trigger {
+  background: #f8fafc;
+  border: 2px dashed #93c5fd;
+  border-radius: 16px;
+  padding: 22px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  min-height: 220px;
+  box-sizing: border-box;
+}
+
+.add-skill-card-trigger:hover {
+  background: #eff6ff;
+  border-color: #2563eb;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.12);
+}
+
+.add-skill-trigger-icon-wrap {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: #eff6ff;
+  border: 1.5px solid #bfdbfe;
+  color: #2563eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.add-skill-card-trigger:hover .add-skill-trigger-icon-wrap {
+  transform: scale(1.12);
+  background: #dbeafe;
+}
+
+.add-skill-trigger-title {
+  font-size: 14.5px;
   font-weight: 800;
-  color: #1e3a8a;
+  color: #1e40af;
   margin: 0;
 }
 
-.add-skill-field {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+.add-skill-trigger-desc {
+  font-size: 12px;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.4;
+  max-width: 220px;
 }
 
-.btn-add-skill-submit {
-  background-color: #2563eb;
-  color: #ffffff;
-  border: none;
-  padding: 9px 14px;
-  border-radius: 8px;
-  font-size: 13px;
+.btn-add-skill-trigger-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
   font-weight: 700;
-  cursor: pointer;
-  font-family: inherit;
+  color: #ffffff;
+  background: #2563eb;
+  padding: 6px 14px;
+  border-radius: 20px;
+  margin-top: 4px;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
   transition: all 0.15s ease;
-  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.2);
 }
 
-.btn-add-skill-submit:hover:not(:disabled) {
-  background-color: #1d4ed8;
-  transform: translateY(-1px);
+.add-skill-card-trigger:hover .btn-add-skill-trigger-badge {
+  background: #1d4ed8;
+  transform: scale(1.04);
 }
 
-.btn-add-skill-submit:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+/* Add Skill Popup Modal Custom Styling */
+.add-skill-popup-modal {
+  max-width: 580px !important;
+  width: 95% !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25) !important;
 }
 
 /* Save Member Skills Footer */
