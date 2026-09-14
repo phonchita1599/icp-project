@@ -527,7 +527,7 @@ export default function GroupManagementPage({
       score: 82,
       passedSkills: '7 ทักษะ',
       hours: '28 ชม.',
-      status: 'พร้อมยื่นสมัครงานแล้ว',
+      status: 'พัฒนาได้ดีมาก',
       criteria: ['สอบผ่านเกณฑ์มาตรฐานสมรรถนะวิชาชีพด้านซอฟต์แวร์', 'จัดทำ Live Portfolio & GitHub Showcases', 'จัดทำเรซูเม่ฉบับสองภาษา (ไทย-อังกฤษ) สำหรับสหกิจศึกษา'],
       passedCriteria: [0, 1, 2],
       note: 'ผ่านการทดสอบทักษะ Frontend & Backend ได้คะแนนสูงมาก Portfolio มีชิ้นงานจริงครบถ้วน',
@@ -547,7 +547,7 @@ export default function GroupManagementPage({
       score: 85,
       passedSkills: '8 ทักษะ',
       hours: '30 ชม.',
-      status: 'พร้อมยื่นสมัครงานแล้ว',
+      status: 'พัฒนาได้ดีมาก',
       criteria: ['การซ้อมสัมภาษณ์งานจำลอง (Mock Interview กับสถานประกอบการ)', 'การเตรียมความพร้อมด้าน Soft Skills และวัฒนธรรมองค์กร', 'การจับคู่สถานประกอบการโครงการสหกิจศึกษา มทส.'],
       passedCriteria: [0, 1, 2],
       note: 'ผ่านเกณฑ์ประเมิน React & SQL และโครงงานสหกิจศึกษา มทส. มีความมั่นใจและพร้อมเริ่มงาน',
@@ -653,10 +653,14 @@ export default function GroupManagementPage({
 
   // Helper for 12 months structure
   const getMonthsList = (member) => {
-    if (member?.monthlyProgress && Array.isArray(member.monthlyProgress) && member.monthlyProgress.length === 12) {
-      return member.monthlyProgress
-    }
-    return DEFAULT_12_MONTHS_SYLLABUS
+    const list =
+      member?.monthlyProgress && Array.isArray(member.monthlyProgress) && member.monthlyProgress.length === 12
+        ? member.monthlyProgress
+        : DEFAULT_12_MONTHS_SYLLABUS
+    return list.map((m) => ({
+      ...m,
+      status: m.status === 'พร้อมยื่นสมัครงานแล้ว' ? 'พัฒนาได้ดีมาก' : m.status,
+    }))
   }
 
   // Automatic Score Calculation based on Passed Criteria
@@ -667,7 +671,7 @@ export default function GroupManagementPage({
 
   // Status mapping from score
   const getStatusFromScore = (sc) => {
-    if (sc >= 80) return 'พร้อมยื่นสมัครงานแล้ว'
+    if (sc >= 80) return 'พัฒนาได้ดีมาก'
     if (sc >= 60) return 'กำลังพัฒนาได้ดี'
     if (sc >= 40) return 'ต้องการคำแนะนำเพิ่มเติม'
     if (sc > 0) return 'ต้องเร่งปรับปรุงทักษะ'
@@ -678,7 +682,7 @@ export default function GroupManagementPage({
   const [evaluationData, setEvaluationData] = useState({
     topic: 'เตรียมความพร้อมสหกิจศึกษา & ซ้อมสัมภาษณ์งาน',
     score: 85,
-    status: 'พร้อมยื่นสมัครงานแล้ว',
+    status: 'พัฒนาได้ดีมาก',
     passedSkills: '8 ทักษะ',
     hours: '30 ชม.',
     criteria: ['การซ้อมสัมภาษณ์งานจำลอง (Mock Interview กับสถานประกอบการ)', 'การเตรียมความพร้อมด้าน Soft Skills และวัฒนธรรมองค์กร', 'การจับคู่สถานประกอบการโครงการสหกิจศึกษา มทส.'],
@@ -716,7 +720,10 @@ export default function GroupManagementPage({
     setEvaluationData({
       topic: curMonthData.topic || DEFAULT_12_MONTHS_SYLLABUS[latestEvaluatedIdx].topic,
       score: curMonthData.score !== undefined ? curMonthData.score : (member.progressPct || 80),
-      status: curMonthData.status || member.status || 'กำลังพัฒนาได้ดี',
+      status:
+        (curMonthData.status === 'พร้อมยื่นสมัครงานแล้ว' ? 'พัฒนาได้ดีมาก' : curMonthData.status) ||
+        (member.status === 'พร้อมยื่นสมัครงานแล้ว' ? 'พัฒนาได้ดีมาก' : member.status) ||
+        'กำลังพัฒนาได้ดี',
       passedSkills: curMonthData.passedSkills || `${passedCriteria.length} ทักษะ`,
       hours: curMonthData.hours || '30 ชม.',
       criteria: criteria,
@@ -2778,10 +2785,10 @@ export default function GroupManagementPage({
                       <label className="modal-field-label">สถานะการพัฒนาในเดือนนี้:</label>
                       <select
                         className="modal-select-input"
-                        value={evaluationData.status}
+                        value={evaluationData.status === 'พร้อมยื่นสมัครงานแล้ว' ? 'พัฒนาได้ดีมาก' : evaluationData.status}
                         onChange={(e) => setEvaluationData({ ...evaluationData, status: e.target.value })}
                       >
-                        <option value="พร้อมยื่นสมัครงานแล้ว">พร้อมยื่นสมัครงานแล้ว (Job Ready / &gt;80%)</option>
+                        <option value="พัฒนาได้ดีมาก">พัฒนาได้ดีมาก (Very Good / &gt;80%)</option>
                         <option value="กำลังพัฒนาได้ดี">กำลังพัฒนาได้ดี (On Track / 60-79%)</option>
                         <option value="ต้องการคำแนะนำเพิ่มเติม">ต้องการคำแนะนำเพิ่มเติม (40-59%)</option>
                         <option value="ต้องเร่งปรับปรุงทักษะ">ต้องเร่งปรับปรุงทักษะ (&lt;40%)</option>
