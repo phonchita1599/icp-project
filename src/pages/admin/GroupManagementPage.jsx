@@ -372,6 +372,15 @@ export default function GroupManagementPage({
   const [customSkillText, setCustomSkillText] = useState('')
   const [autoSyncScore, setAutoSyncScore] = useState(true)
 
+  // Inline editing state for skill card name & hours
+  const [editingSkillId, setEditingSkillId] = useState(null)
+  const [editingSkillName, setEditingSkillName] = useState('')
+
+  // Quick Add Custom Skill Bar state at the top of cards grid
+  const [quickSkillName, setQuickSkillName] = useState('')
+  const [quickSkillCat, setQuickSkillCat] = useState('Technical Skills')
+  const [quickSkillHours, setQuickSkillHours] = useState('25')
+
   // Active month index for monthly evaluation (0 = Jan ... 7 = Aug ... 11 = Dec)
   const [activeMonthIdx, setActiveMonthIdx] = useState(7) // Default to สิงหาคม (Index 7)
 
@@ -794,6 +803,82 @@ export default function GroupManagementPage({
   const handleDeleteIndividualSkill = (skillId) => {
     const updated = memberSkills.filter((s) => s.id !== skillId)
     setMemberSkills(updated)
+    if (selectedMember) {
+      const updatedMember = { ...selectedMember, skills: updated }
+      setSelectedMember(updatedMember)
+      onUpdateMemberProgress(activeGroup.id, updatedMember)
+    }
+  }
+
+  // Inline edit skill name handlers
+  const handleStartEditSkill = (skill) => {
+    setEditingSkillId(skill.id)
+    setEditingSkillName(skill.name)
+  }
+
+  const handleSaveSkillName = (skillId) => {
+    if (!editingSkillName.trim()) return
+    const updated = memberSkills.map((s) => (s.id === skillId ? { ...s, name: editingSkillName.trim() } : s))
+    setMemberSkills(updated)
+    setEditingSkillId(null)
+    if (selectedMember) {
+      const updatedMember = { ...selectedMember, skills: updated }
+      setSelectedMember(updatedMember)
+      onUpdateMemberProgress(activeGroup.id, updatedMember)
+    }
+    setSaveSuccessMsg(`แก้ไขชื่อทักษะเป็น "${editingSkillName.trim()}" เรียบร้อย`)
+    setTimeout(() => setSaveSuccessMsg(''), 3000)
+  }
+
+  const handleCancelEditSkill = () => {
+    setEditingSkillId(null)
+    setEditingSkillName('')
+  }
+
+  // Quick edit hours directly on card
+  const handleSkillHoursChange = (skillId, newHours) => {
+    const updated = memberSkills.map((s) => (s.id === skillId ? { ...s, hours: newHours } : s))
+    setMemberSkills(updated)
+    if (selectedMember) {
+      const updatedMember = { ...selectedMember, skills: updated }
+      setSelectedMember(updatedMember)
+      onUpdateMemberProgress(activeGroup.id, updatedMember)
+    }
+  }
+
+  // Quick Add Custom Skill (Type directly from top bar)
+  const handleQuickAddSkill = (e) => {
+    e?.preventDefault?.()
+    if (!quickSkillName.trim()) {
+      alert('กรุณากรอกชื่อทักษะที่ต้องการเพิ่ม')
+      return
+    }
+
+    const newSkill = {
+      id: Date.now(),
+      name: quickSkillName.trim(),
+      category: quickSkillCat,
+      level: 4,
+      targetLevel: 5,
+      status: 'กำลังพัฒนา',
+      hours: quickSkillHours ? (quickSkillHours.includes('ชม.') ? quickSkillHours : `${quickSkillHours} ชม.`) : '25 ชม.',
+      images: [],
+      note: '',
+      evalLevel: '4.ได้ใช้ทักษะนี้ประจำหรือในงานและทำได้ดีกว่าคนทั่วไป',
+    }
+
+    const updated = [...memberSkills, newSkill]
+    setMemberSkills(updated)
+    if (selectedMember) {
+      const updatedMember = { ...selectedMember, skills: updated }
+      setSelectedMember(updatedMember)
+      onUpdateMemberProgress(activeGroup.id, updatedMember)
+    }
+
+    setQuickSkillName('')
+    setQuickSkillHours('25')
+    setSaveSuccessMsg(`เพิ่มทักษะ "${newSkill.name}" สำเร็จเรียบร้อย!`)
+    setTimeout(() => setSaveSuccessMsg(''), 3500)
   }
 
   // Add New Individual Skill (with category & custom category support)
@@ -2941,6 +3026,66 @@ export default function GroupManagementPage({
                     </span>
                   </div>
 
+                  {/* Quick Custom Skill Input Bar (กรอกทักษะเองด่วน) */}
+                  <div className="quick-custom-skill-panel">
+                    <div className="quick-panel-header">
+                      <div className="quick-panel-title">
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.5">
+                          <line x1="12" y1="5" x2="12" y2="19" />
+                          <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg>
+                        <span>กรอกทักษะใหม่ด้วยตนเอง (Custom Skill):</span>
+                      </div>
+                      <span className="quick-panel-hint">พิมพ์ชื่อทักษะใดๆ ที่ต้องการประเมิน แล้วกดเพิ่มลงในการ์ดได้ทันที</span>
+                    </div>
+
+                    <form onSubmit={handleQuickAddSkill} className="quick-panel-form">
+                      <div className="quick-field-name">
+                        <input
+                          type="text"
+                          className="quick-text-input"
+                          placeholder="พิมพ์ชื่อทักษะที่ต้องการกรอกเอง เช่น Docker, การสื่อสาร, Figma, Python..."
+                          value={quickSkillName}
+                          onChange={(e) => setQuickSkillName(e.target.value)}
+                        />
+                      </div>
+
+                      <div className="quick-field-cat">
+                        <select
+                          className="quick-select-input"
+                          value={quickSkillCat}
+                          onChange={(e) => setQuickSkillCat(e.target.value)}
+                        >
+                          <option value="Technical Skills">Technical Skills (ทักษะเฉพาะทาง)</option>
+                          <option value="Soft Skills">Soft Skills (ทักษะการทำงานร่วมกับผู้อื่น)</option>
+                          <option value="Assistive & Accessibility">Assistive & Accessibility (เครื่องมือช่วยเหลือ)</option>
+                          <option value="General & Communication">General Skills (ทักษะทั่วไป)</option>
+                          <option value="อื่นๆ (กำหนดเอง)">อื่นๆ (กำหนดเอง)</option>
+                        </select>
+                      </div>
+
+                      <div className="quick-field-hours">
+                        <input
+                          type="number"
+                          className="quick-hours-input"
+                          placeholder="25"
+                          value={quickSkillHours}
+                          onChange={(e) => setQuickSkillHours(e.target.value)}
+                          title="จำนวนชั่วโมงฝึกฝน"
+                        />
+                        <span className="quick-hours-unit">ชม.</span>
+                      </div>
+
+                      <button type="submit" className="btn-quick-submit-skill">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                          <line x1="12" y1="5" x2="12" y2="19" />
+                          <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg>
+                        <span>+ กรอกทักษะนี้เพิ่ม</span>
+                      </button>
+                    </form>
+                  </div>
+
                   <div className="skills-cards-grid">
                     {memberSkills.map((skill) => {
                       const catBadgeClass =
@@ -2955,15 +3100,20 @@ export default function GroupManagementPage({
                           <div className="skill-card-top">
                             <span className={`skill-cat-badge ${catBadgeClass}`}>{skill.category}</span>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                              {skill.hours && (
-                                <span className="skill-duration-tag" style={{ fontSize: '11px', padding: '2px 6px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
-                                    <circle cx="12" cy="12" r="10" />
-                                    <polyline points="12 6 12 12 16 14" />
-                                  </svg>
-                                  <span>{skill.hours.includes('ชม.') ? skill.hours : `${skill.hours} ชม.`}</span>
-                                </span>
-                              )}
+                              <div className="skill-direct-hours-wrap" title="ชั่วโมงฝึกฝน (พิมพ์ตัวเลขแก้ไขได้)">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2.2">
+                                  <circle cx="12" cy="12" r="10" />
+                                  <polyline points="12 6 12 12 16 14" />
+                                </svg>
+                                <input
+                                  type="number"
+                                  className="skill-direct-hours-input"
+                                  value={skill.hours ? skill.hours.replace(/[^0-9.]/g, '') : ''}
+                                  placeholder="ชม."
+                                  onChange={(e) => handleSkillHoursChange(skill.id, e.target.value ? `${e.target.value} ชม.` : '')}
+                                />
+                                <span className="skill-direct-hours-label">ชม.</span>
+                              </div>
                               <button
                                 type="button"
                                 className="btn-skill-delete"
@@ -2975,15 +3125,72 @@ export default function GroupManagementPage({
                             </div>
                           </div>
 
-                          <h5
-                            className="skill-card-name"
-                            onClick={() => handleOpenSkillEvalModal(skill)}
-                            style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
-                            title="คลิกเพื่อเปิดป๊อปอัปประเมินทักษะ"
-                          >
-                            <span>{skill.name}</span>
-                            <span style={{ fontSize: '11px', color: '#2563eb', fontWeight: '600' }}>คลิกประเมิน ↗</span>
-                          </h5>
+                          {/* Skill Name Row with Inline Edit */}
+                          {editingSkillId === skill.id ? (
+                            <div className="skill-card-inline-edit-wrap">
+                              <input
+                                type="text"
+                                className="skill-card-inline-edit-input"
+                                value={editingSkillName}
+                                autoFocus
+                                onChange={(e) => setEditingSkillName(e.target.value)}
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter') handleSaveSkillName(skill.id)
+                                  if (e.key === 'Escape') handleCancelEditSkill()
+                                }}
+                              />
+                              <div className="skill-card-inline-edit-btns">
+                                <button
+                                  type="button"
+                                  className="btn-inline-save"
+                                  onClick={() => handleSaveSkillName(skill.id)}
+                                >
+                                  บันทึก
+                                </button>
+                                <button
+                                  type="button"
+                                  className="btn-inline-cancel"
+                                  onClick={handleCancelEditSkill}
+                                >
+                                  ยกเลิก
+                                </button>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="skill-name-header-row">
+                              <h5
+                                className="skill-card-name"
+                                onClick={() => handleOpenSkillEvalModal(skill)}
+                                style={{ cursor: 'pointer', margin: 0 }}
+                                title="คลิกเพื่อเปิดป๊อปอัปประเมินทักษะ"
+                              >
+                                <span>{skill.name}</span>
+                              </h5>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
+                                <button
+                                  type="button"
+                                  className="btn-card-edit-skill"
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    handleStartEditSkill(skill)
+                                  }}
+                                  title="คลิกเพื่อพิมพ์แก้ไขชื่อทักษะนี้"
+                                >
+                                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                  </svg>
+                                  <span>แก้ชื่อ</span>
+                                </button>
+                                <span
+                                  style={{ fontSize: '11px', color: '#2563eb', fontWeight: '600', cursor: 'pointer' }}
+                                  onClick={() => handleOpenSkillEvalModal(skill)}
+                                >
+                                  ประเมิน ↗
+                                </span>
+                              </div>
+                            </div>
+                          )}
                           <div className="skill-rating-box">
                             <div className="rating-label-row">
                               <span className="rating-label">ระดับความเชี่ยวชาญ:</span>
@@ -3219,28 +3426,27 @@ export default function GroupManagementPage({
 
             {/* Modal Body */}
             <div className="assessment-modal-body">
-              {/* Optional Skill Name Edit if New Skill */}
-              {selectedSkillEvalModal.isNewCriteria && (
-                <div className="modal-form-card-section" style={{ backgroundColor: '#eff6ff', borderColor: '#bfdbfe' }}>
-                  <label className="modal-section-label" style={{ marginBottom: '4px' }}>
-                    <div className="modal-section-label-left">
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.2">
-                        <line x1="18" y1="2" x2="22" y2="6" />
-                        <path d="M7.5 20.5 19 9l-4-4L3.5 16.5 2 22z" />
-                      </svg>
-                      <span>ระบุชื่อทักษะที่ต้องการเพิ่ม:</span>
-                    </div>
-                  </label>
-                  <input
-                    type="text"
-                    className="modal-text-input"
-                    value={evalModalData.name}
-                    onChange={(e) => setEvalModalData({ ...evalModalData, name: e.target.value })}
-                    placeholder="เช่น คอมพิวเตอร์, การเขียนโปรแกรม Full-Stack..."
-                    required
-                  />
-                </div>
-              )}
+              {/* Skill Name Input (Always Editable / กรอกเองได้เสมอ) */}
+              <div className="modal-form-card-section" style={{ backgroundColor: '#f0f9ff', borderColor: '#bae6fd' }}>
+                <label className="modal-section-label" style={{ marginBottom: '6px' }}>
+                  <div className="modal-section-label-left">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0284c7" strokeWidth="2.2">
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                    </svg>
+                    <span style={{ fontWeight: 700, color: '#0369a1' }}>ชื่อทักษะ (สามารถพิมพ์แก้ไขหรือกรอกชื่อทักษะเองได้):</span>
+                  </div>
+                </label>
+                <input
+                  type="text"
+                  className="modal-text-input"
+                  value={evalModalData.name}
+                  onChange={(e) => setEvalModalData({ ...evalModalData, name: e.target.value })}
+                  placeholder="เช่น คอมพิวเตอร์, การเขียนโปรแกรม Full-Stack, การสื่อสาร..."
+                  required
+                  style={{ fontWeight: 600, fontSize: '14.5px', color: '#0f172a' }}
+                />
+              </div>
 
               {/* 1. Evaluation Dropdown Section */}
               <div className="modal-form-card-section">
