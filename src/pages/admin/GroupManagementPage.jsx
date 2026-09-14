@@ -582,19 +582,27 @@ export default function GroupManagementPage({
       shortMonth: 'ส.ค.',
       topic: 'เตรียมความพร้อมสหกิจศึกษา & ซ้อมสัมภาษณ์งาน',
       shortTopic: 'สหกิจ/สัมภาษณ์',
-      score: 85,
-      passedSkills: '8 ทักษะ',
+      score: 35,
+      passedSkills: '1 ทักษะ',
       hours: '30 ชม.',
-      status: 'พัฒนาได้ดีมาก',
+      status: 'ต้องการคำแนะนำเพิ่มเติม',
       criteria: ['การซ้อมสัมภาษณ์งานจำลอง (Mock Interview กับสถานประกอบการ)', 'การเตรียมความพร้อมด้าน Soft Skills และวัฒนธรรมองค์กร', 'การจับคู่สถานประกอบการโครงการสหกิจศึกษา มทส.'],
-      passedCriteria: [0, 1, 2],
-      note: 'ผ่านเกณฑ์ประเมิน React & SQL และโครงงานสหกิจศึกษา มทส. มีความมั่นใจและพร้อมเริ่มงาน',
+      passedCriteria: [0],
+      criteriaDetails: {
+        0: {
+          level: '5.ได้ถ่ายทอดทักษะนี้แก่ผู้อื่น หรือเป็นต้นแบบของทักษะนี้แก่ผู้อื่น',
+          hours: '30',
+          images: [],
+          note: 'ผ่านการซ้อมสัมภาษณ์ Mock Interview กับพี่เลี้ยง DSS มทส. มีความมั่นใจและตอบคำถามได้ยอดเยี่ยม',
+        },
+      },
+      note: 'ผ่านการซ้อมสัมภาษณ์ Mock Interview ได้ดีมาก รอส่งผลงาน Soft Skills และการจับคู่สถานประกอบการ',
       plan: 'ส่งเอกสารเข้าร่วมสหกิจศึกษาในสถานประกอบการจริง',
       userSelfScore: 88,
       userSelfStatus: 'พร้อมเริ่มสหกิจศึกษา',
       userSelfNote: 'ผ่านการซ้อมสัมภาษณ์ Mock Interview กับพี่เลี้ยง DSS ได้รับข้อเสนอแนะในการตอบคำถามเชิงเทคนิคดีมาก',
       userSelfEvidence: 'https://drive.google.com/mock-interview-sut-dss-cert',
-      userSelfPassedCriteria: [0, 1, 2],
+      userSelfPassedCriteria: [0],
     },
     {
       monthKey: '09',
@@ -727,22 +735,43 @@ export default function GroupManagementPage({
     return 'ยังไม่ถึงรอบประเมิน'
   }
 
+  // Helper to verify if a criterion has at least 1 piece of evidence/submission
+  // (Photo is NOT mandatory, but must have at least one: level, hours, note, images, or evidence link)
+  const hasCriterionSubmission = (cIdx, details = evaluationData?.criteriaDetails) => {
+    const detail = (details || {})[cIdx]
+    if (!detail) return false
+    const hasLevel = Boolean(detail.level && String(detail.level).trim() !== '')
+    const hasHours = Boolean(detail.hours && (parseInt(detail.hours, 10) > 0 || String(detail.hours).trim() !== ''))
+    const hasNote = Boolean(detail.note && String(detail.note).trim().length > 0)
+    const hasImages = Boolean(detail.images && Array.isArray(detail.images) && detail.images.length > 0)
+    const hasEvidenceUrl = Boolean(detail.evidenceUrl && String(detail.evidenceUrl).trim().length > 0)
+    return hasLevel || hasHours || hasNote || hasImages || hasEvidenceUrl
+  }
+
   // Monthly Evaluation & Feedback Form State
   const [evaluationData, setEvaluationData] = useState({
     topic: 'เตรียมความพร้อมสหกิจศึกษา & ซ้อมสัมภาษณ์งาน',
-    score: 85,
-    status: 'พัฒนาได้ดีมาก',
-    passedSkills: '8 ทักษะ',
+    score: 35,
+    status: 'ต้องการคำแนะนำเพิ่มเติม',
+    passedSkills: '1 ทักษะ',
     hours: '30 ชม.',
     criteria: ['การซ้อมสัมภาษณ์งานจำลอง (Mock Interview กับสถานประกอบการ)', 'การเตรียมความพร้อมด้าน Soft Skills และวัฒนธรรมองค์กร', 'การจับคู่สถานประกอบการโครงการสหกิจศึกษา มทส.'],
-    passedCriteria: [0, 1, 2],
-    mentorNote: '',
-    advicePlan: '',
+    passedCriteria: [0],
+    criteriaDetails: {
+      0: {
+        level: '5.ได้ถ่ายทอดทักษะนี้แก่ผู้อื่น หรือเป็นต้นแบบของทักษะนี้แก่ผู้อื่น',
+        hours: '30',
+        images: [],
+        note: 'ผ่านการซ้อมสัมภาษณ์ Mock Interview กับพี่เลี้ยง DSS มทส. มีความมั่นใจและตอบคำถามได้ยอดเยี่ยม',
+      },
+    },
+    mentorNote: 'ผ่านการซ้อมสัมภาษณ์ Mock Interview ได้ดีมาก รอส่งผลงาน Soft Skills และการจับคู่สถานประกอบการ',
+    advicePlan: 'จัดทำเอกสารและหลักฐานเพิ่มเติมสำหรับทักษะที่เหลือ',
     userSelfScore: 88,
     userSelfStatus: 'พร้อมเริ่มสหกิจศึกษา',
-    userSelfNote: '',
-    userSelfEvidence: '',
-    userSelfPassedCriteria: [0, 1, 2],
+    userSelfNote: 'นักศึกษาได้บันทึกการเรียนรู้และส่งผลงานในเดือนนี้เรียบร้อยแล้ว',
+    userSelfEvidence: 'https://github.com/sut-student/project-portfolio',
+    userSelfPassedCriteria: [0],
   })
 
   const [saveSuccessMsg, setSaveSuccessMsg] = useState('')
@@ -764,26 +793,39 @@ export default function GroupManagementPage({
 
     const curMonthData = months[latestEvaluatedIdx]
     const criteria = curMonthData.criteria || DEFAULT_12_MONTHS_SYLLABUS[latestEvaluatedIdx].criteria
-    const passedCriteria = curMonthData.passedCriteria || (curMonthData.score > 0 ? [0, 1, 2] : [])
+    const initialCriteriaDetails = curMonthData.criteriaDetails || {
+      0: {
+        level: '5.ได้ถ่ายทอดทักษะนี้แก่ผู้อื่น หรือเป็นต้นแบบของทักษะนี้แก่ผู้อื่น',
+        hours: curMonthData.hours ? String(parseInt(curMonthData.hours)) : '30',
+        images: [],
+        note: curMonthData.note || 'ผ่านการซ้อมสัมภาษณ์ Mock Interview กับพี่เลี้ยง DSS มทส. มีความมั่นใจและตอบคำถามได้ยอดเยี่ยม',
+      },
+    }
+
+    // A criterion can only pass if it has at least 1 form of submission/evidence!
+    const rawPassed = Array.isArray(curMonthData.passedCriteria) ? curMonthData.passedCriteria : [0]
+    const validPassed = rawPassed.filter((cIdx) => hasCriterionSubmission(cIdx, initialCriteriaDetails))
+    const calculatedScore = curMonthData.score !== undefined ? curMonthData.score : calcAutoScore(validPassed, criteria)
 
     setEvaluationData({
       topic: curMonthData.topic || DEFAULT_12_MONTHS_SYLLABUS[latestEvaluatedIdx].topic,
-      score: curMonthData.score !== undefined ? curMonthData.score : (member.progressPct || 80),
+      score: calculatedScore,
       status:
         (curMonthData.status === 'พร้อมยื่นสมัครงานแล้ว' ? 'พัฒนาได้ดีมาก' : curMonthData.status) ||
         (member.status === 'พร้อมยื่นสมัครงานแล้ว' ? 'พัฒนาได้ดีมาก' : member.status) ||
-        'กำลังพัฒนาได้ดี',
-      passedSkills: curMonthData.passedSkills || `${passedCriteria.length} ทักษะ`,
+        getStatusFromScore(calculatedScore),
+      passedSkills: `${validPassed.length} ทักษะ`,
       hours: curMonthData.hours || '30 ชม.',
       criteria: criteria,
-      passedCriteria: passedCriteria,
+      passedCriteria: validPassed,
+      criteriaDetails: initialCriteriaDetails,
       mentorNote: curMonthData.note || member.mentorNote || '',
       advicePlan: curMonthData.plan || member.advicePlan || '',
       userSelfScore: curMonthData.userSelfScore !== undefined ? curMonthData.userSelfScore : 85,
       userSelfStatus: curMonthData.userSelfStatus || 'ประเมินแล้ว',
       userSelfNote: curMonthData.userSelfNote || 'นักศึกษาได้บันทึกการเรียนรู้และส่งผลงานในเดือนนี้เรียบร้อยแล้ว',
       userSelfEvidence: curMonthData.userSelfEvidence || 'https://github.com/sut-student/project-portfolio',
-      userSelfPassedCriteria: curMonthData.userSelfPassedCriteria || passedCriteria,
+      userSelfPassedCriteria: curMonthData.userSelfPassedCriteria || validPassed,
     })
     setSaveSuccessMsg('')
     setCustomSkillText('')
@@ -1060,6 +1102,7 @@ export default function GroupManagementPage({
   }
 
   // Open Assessment Modal from Monthly Evaluation (+ เพิ่มทักษะ หรือคลิกที่เกณฑ์)
+  // Open Assessment Modal from Monthly Evaluation (+ เพิ่มทักษะ หรือคลิกที่เกณฑ์)
   const handleOpenMonthlySkillModal = (skillNameOrIdx) => {
     const activeMonthsList = getMonthsList(selectedMember)
     const currentMonthDef = activeMonthsList[activeMonthIdx] || DEFAULT_12_MONTHS_SYLLABUS[activeMonthIdx]
@@ -1080,8 +1123,8 @@ export default function GroupManagementPage({
         monthContext: currentMonthName,
         isCriteria: true,
         criteriaIdx: skillNameOrIdx,
-        evalLevel: detail.level || (isPassed ? evaluationOptions[4] : evaluationOptions[1]), // 5.ได้ถ่ายทอด หรือ 2.ได้เรียน
-        hours: detail.hours || (evaluationData.hours ? evaluationData.hours.replace(/[^0-9.]/g, '') || '25' : '25'),
+        evalLevel: detail.level || (isPassed ? evaluationOptions[4] : ''),
+        hours: detail.hours || (evaluationData.hours ? evaluationData.hours.replace(/[^0-9.]/g, '') || '' : ''),
         images: detail.images || [],
         note: detail.note || '',
       }
@@ -1095,8 +1138,8 @@ export default function GroupManagementPage({
         category: categoryName,
         monthContext: currentMonthName,
         isNewCriteria: true,
-        evalLevel: evaluationOptions[4], // 5. ได้ถ่ายทอดทักษะนี้แก่ผู้อื่น
-        hours: '25',
+        evalLevel: '',
+        hours: '20',
         images: [],
         note: '',
       }
@@ -1106,8 +1149,8 @@ export default function GroupManagementPage({
     setIsEvalDropdownOpen(false)
     setEvalModalData({
       name: skillObj.name,
-      level: skillObj.evalLevel || evaluationOptions[4],
-      hours: skillObj.hours || '25',
+      level: skillObj.evalLevel || '',
+      hours: skillObj.hours || '',
       images: skillObj.images || [],
       note: skillObj.note || '',
     })
@@ -1159,9 +1202,39 @@ export default function GroupManagementPage({
   // Save Skill Eval Modal
   const handleSaveSkillEval = () => {
     if (!selectedSkillEvalModal || !selectedMember) return
-    const skillName = evalModalData.name || selectedSkillEvalModal.name
-    const isMastered = evalModalData.level?.includes('5.') || evalModalData.level?.includes('4.') || evalModalData.level?.includes('3.') || evalModalData.level?.includes('(Yes)')
-    const newStarLevel = evalModalData.level?.includes('5.') ? 5 : evalModalData.level?.includes('4.') ? 4 : evalModalData.level?.includes('3.') ? 3 : evalModalData.level?.includes('2.') ? 2 : 1
+    const skillName = (evalModalData.name || selectedSkillEvalModal.name || '').trim()
+    if (!skillName) {
+      alert('กรุณาระบุชื่อทักษะ')
+      return
+    }
+
+    // Must have at least 1 form of evidence / submission (photo not mandatory, but must have at least one)
+    const hasAnySubmission = Boolean(
+      (evalModalData.level && evalModalData.level.trim() !== '') ||
+      (evalModalData.hours && (parseInt(evalModalData.hours, 10) > 0 || String(evalModalData.hours).trim() !== '')) ||
+      (evalModalData.note && evalModalData.note.trim().length > 0) ||
+      (evalModalData.images && evalModalData.images.length > 0)
+    )
+
+    if (!hasAnySubmission) {
+      alert(
+        '⚠️ ยังไม่สามารถบันทึกผลได้:\n\n' +
+        'กรุณาระบุข้อมูลอย่างน้อย 1 รายการ\n' +
+        '(เช่น เลือกระดับประเมิน, จำนวนชั่วโมง, เขียนบันทึกผลงาน หรือแนบรูปภาพ — ไม่จำเป็นต้องมีรูป แต่ต้องมีอย่างใดอย่างหนึ่ง) เพื่อใช้เป็นเกณฑ์การประเมิน'
+      )
+      return
+    }
+
+    // Determine whether criterion is mastered/passed
+    let isMastered = false
+    if (evalModalData.level) {
+      isMastered = evalModalData.level.includes('5.') || evalModalData.level.includes('4.') || evalModalData.level.includes('3.') || evalModalData.level.includes('(Yes)')
+    } else {
+      // If no level selected, but hours/note/images were provided -> counts as passed
+      isMastered = true
+    }
+
+    const newStarLevel = evalModalData.level?.includes('5.') ? 5 : evalModalData.level?.includes('4.') ? 4 : evalModalData.level?.includes('3.') ? 3 : evalModalData.level?.includes('2.') ? 2 : (evalModalData.level ? 1 : 3)
 
     if (selectedSkillEvalModal.isNewCriteria) {
       // Add as new skill in Monthly Evaluation criteria
@@ -1175,7 +1248,7 @@ export default function GroupManagementPage({
         ...(evaluationData.criteriaDetails || {}),
         [newIdx]: {
           level: evalModalData.level,
-          hours: evalModalData.hours || '25',
+          hours: evalModalData.hours || '',
           images: evalModalData.images || [],
           note: evalModalData.note || '',
         },
@@ -1200,7 +1273,7 @@ export default function GroupManagementPage({
         category: selectedSkillEvalModal.category || 'Technical Skills',
         level: newStarLevel,
         status: isMastered ? 'ผ่านเกณฑ์แล้ว' : 'กำลังพัฒนา',
-        hours: evalModalData.hours ? `${evalModalData.hours} ชม.` : '25 ชม.',
+        hours: evalModalData.hours ? `${evalModalData.hours} ชม.` : '20 ชม.',
         images: evalModalData.images || [],
         note: evalModalData.note || '',
         evalLevel: evalModalData.level,
@@ -1224,7 +1297,7 @@ export default function GroupManagementPage({
         ...(evaluationData.criteriaDetails || {}),
         [cIdx]: {
           level: evalModalData.level,
-          hours: evalModalData.hours || '25',
+          hours: evalModalData.hours || '',
           images: evalModalData.images || [],
           note: evalModalData.note || '',
         },
@@ -1267,7 +1340,8 @@ export default function GroupManagementPage({
       onUpdateMemberProgress(activeGroup.id, updatedMember)
     }
 
-    alert(`บันทึกผลการประเมินทักษะ "${skillName}" เรียบร้อยแล้ว! (เวลาที่ใช้: ${evalModalData.hours || 0} ชม., รูปภาพ ${evalModalData.images?.length || 0} รูป)`)
+    const durationInfo = evalModalData.hours ? `, เวลาที่ใช้: ${evalModalData.hours} ชม.` : ''
+    alert(`บันทึกผลการประเมินทักษะ "${skillName}" เรียบร้อยแล้ว! (${isMastered ? 'ผ่านเกณฑ์แล้ว' : 'บันทึกข้อมูลแล้ว'}${durationInfo}, รูปภาพ ${evalModalData.images?.length || 0} รูป)`)
     handleCloseSkillEvalModal()
   }
 
@@ -1294,23 +1368,35 @@ export default function GroupManagementPage({
     const months = getMonthsList(selectedMember)
     const targetMonth = months[idx] || DEFAULT_12_MONTHS_SYLLABUS[idx]
     const criteria = targetMonth.criteria || DEFAULT_12_MONTHS_SYLLABUS[idx]?.criteria || []
-    const passedCriteria = targetMonth.passedCriteria || (targetMonth.score > 0 ? [0, 1, 2] : [])
+    const targetDetails = targetMonth.criteriaDetails || (idx === 7 ? {
+      0: {
+        level: '5.ได้ถ่ายทอดทักษะนี้แก่ผู้อื่น หรือเป็นต้นแบบของทักษะนี้แก่ผู้อื่น',
+        hours: targetMonth.hours ? String(parseInt(targetMonth.hours)) : '30',
+        images: [],
+        note: targetMonth.note || 'ผ่านการซ้อมสัมภาษณ์ Mock Interview กับพี่เลี้ยง DSS มทส.',
+      },
+    } : {})
+
+    const rawPassed = Array.isArray(targetMonth.passedCriteria) ? targetMonth.passedCriteria : (targetMonth.score > 0 ? [0] : [])
+    const validPassed = rawPassed.filter((cIdx) => hasCriterionSubmission(cIdx, targetDetails))
+    const calculatedScore = targetMonth.score !== undefined ? targetMonth.score : calcAutoScore(validPassed, criteria)
 
     setEvaluationData({
       topic: targetMonth.topic || DEFAULT_12_MONTHS_SYLLABUS[idx]?.topic || '',
-      score: targetMonth.score !== undefined ? targetMonth.score : 0,
-      status: targetMonth.status || 'ยังไม่ถึงรอบประเมิน',
-      passedSkills: targetMonth.passedSkills || (passedCriteria.length > 0 ? `${passedCriteria.length} ทักษะ` : '-'),
+      score: calculatedScore,
+      status: targetMonth.status || getStatusFromScore(calculatedScore),
+      passedSkills: `${validPassed.length} ทักษะ`,
       hours: targetMonth.hours || '-',
       criteria: criteria,
-      passedCriteria: passedCriteria,
+      passedCriteria: validPassed,
+      criteriaDetails: targetDetails,
       mentorNote: targetMonth.note || '',
       advicePlan: targetMonth.plan || '',
       userSelfScore: targetMonth.userSelfScore !== undefined ? targetMonth.userSelfScore : (targetMonth.score > 0 ? targetMonth.score : 0),
       userSelfStatus: targetMonth.userSelfStatus || (targetMonth.score > 0 ? 'ประเมินตนเองแล้ว' : 'ยังไม่ถึงรอบประเมิน'),
       userSelfNote: targetMonth.userSelfNote || '',
       userSelfEvidence: targetMonth.userSelfEvidence || '',
-      userSelfPassedCriteria: targetMonth.userSelfPassedCriteria || passedCriteria,
+      userSelfPassedCriteria: targetMonth.userSelfPassedCriteria || validPassed,
     })
     setSaveSuccessMsg('')
     setCustomSkillText('')
@@ -1323,6 +1409,19 @@ export default function GroupManagementPage({
     if (currentPassed.includes(cIdx)) {
       newPassed = currentPassed.filter((item) => item !== cIdx)
     } else {
+      // Must have at least 1 piece of evidence/data to pass!
+      const hasSubmission = hasCriterionSubmission(cIdx, evaluationData.criteriaDetails)
+      if (!hasSubmission) {
+        alert(
+          `⚠️ ยังไม่สามารถให้ "ผ่านเกณฑ์" ได้\n\n` +
+          `เนื่องจากเกณฑ์ "${evaluationData.criteria[cIdx] || 'ข้อนี้'}" ยังไม่มีข้อมูลส่งหรือประเมิน\n\n` +
+          `📌 เงื่อนไขการผ่านเกณฑ์: ต้องมีข้อมูลอย่างน้อย 1 รายการ\n` +
+          `(เลือกระดับประเมิน, บันทึกชั่วโมง, เขียนบันทึกผลงาน หรือแนบรูปภาพ — ไม่จำเป็นต้องมีรูป แต่ต้องมีอย่างใดอย่างหนึ่ง)\n\n` +
+          `ระบบจะเปิดหน้าต่างประเมินให้คุณระบุข้อมูลทันที`
+        )
+        handleOpenMonthlySkillModal(cIdx)
+        return
+      }
       newPassed = [...currentPassed, cIdx]
     }
 
@@ -1345,18 +1444,17 @@ export default function GroupManagementPage({
     if (!trimmed) return
 
     const updatedCriteria = [...(evaluationData.criteria || []), trimmed]
-    const updatedPassed = [...(evaluationData.passedCriteria || []), updatedCriteria.length - 1] // Auto-check the newly added skill
-    const calculatedScore = calcAutoScore(updatedPassed, updatedCriteria)
+    // Do NOT auto-pass without evidence:
+    const calculatedScore = calcAutoScore(evaluationData.passedCriteria, updatedCriteria)
 
     setEvaluationData({
       ...evaluationData,
       criteria: updatedCriteria,
-      passedCriteria: updatedPassed,
       score: autoSyncScore ? calculatedScore : evaluationData.score,
       status: autoSyncScore ? getStatusFromScore(calculatedScore) : evaluationData.status,
-      passedSkills: `${updatedPassed.length} ทักษะ`,
     })
     setCustomSkillText('')
+    handleOpenMonthlySkillModal(updatedCriteria.length - 1)
   }
 
   // Remove Criteria from this month
@@ -2723,10 +2821,29 @@ export default function GroupManagementPage({
                           <span className="criteria-hint">คลิกที่ทักษะเพื่อเปิดป๊อปอัปประเมิน 7 ระดับมาตรฐาน (แบบ User) หรือติ๊กเช็กผ่าน/ไม่ผ่าน</span>
                         </div>
 
+                        {/* Evidence & Passing Condition Banner */}
+                        <div style={{
+                          background: '#f8fafc',
+                          border: '1px dashed #cbd5e1',
+                          borderRadius: '8px',
+                          padding: '6px 12px',
+                          marginBottom: '10px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          fontSize: '11.5px',
+                          color: '#334155',
+                          lineHeight: '1.4'
+                        }}>
+                          <span style={{ fontSize: '14px', flexShrink: 0 }}>💡</span>
+                          <span><strong>เงื่อนไขการผ่านเกณฑ์:</strong> ต้องมีข้อมูลการประเมินอย่างน้อย 1 รายการ (ระดับทักษะ, จำนวนชั่วโมง, บันทึกผลงาน หรือรูปภาพ — <em>ไม่จำเป็นต้องมีรูปภาพ แต่ต้องมีอย่างใดอย่างหนึ่ง</em>)</span>
+                        </div>
+
                         <div className="criteria-items-list">
                           {(evaluationData.criteria || []).map((critText, cIdx) => {
                             const isPassed = (evaluationData.passedCriteria || []).includes(cIdx)
                             const detail = (evaluationData.criteriaDetails || {})[cIdx]
+                            const hasSub = hasCriterionSubmission(cIdx, evaluationData.criteriaDetails)
                             return (
                               <div
                                 key={cIdx}
@@ -2741,7 +2858,7 @@ export default function GroupManagementPage({
                                     e.stopPropagation()
                                     handleToggleCriteria(cIdx)
                                   }}
-                                  title="คลิกเพื่อสลับสถานะผ่าน/ไม่ผ่านทันที"
+                                  title={isPassed ? "คลิกเพื่อยกเลิกสถานะผ่านเกณฑ์" : hasSub ? "คลิกเพื่อสลับเป็นผ่านเกณฑ์" : "ต้องมีข้อมูลอย่างน้อย 1 รายการจึงจะผ่านได้ (คลิกเพื่อประเมิน)"}
                                   style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
                                 >
                                   {isPassed ? (
@@ -2788,9 +2905,34 @@ export default function GroupManagementPage({
                                   </span>
                                 )}
 
-                                <span className="criteria-status-badge">
-                                  {isPassed ? 'ผ่านเกณฑ์' : 'ยังไม่ผ่าน'}
-                                </span>
+                                {detail?.note && detail.note.trim() && (
+                                  <span 
+                                    style={{ fontSize: '11px', color: '#475569', background: '#f1f5f9', padding: '2px 7px', borderRadius: '6px', fontWeight: 600, border: '1px solid #cbd5e1' }}
+                                    title={detail.note}
+                                  >
+                                    📝 มีบันทึก
+                                  </span>
+                                )}
+
+                                {detail?.images && detail.images.length > 0 && (
+                                  <span style={{ fontSize: '11px', color: '#7c3aed', background: '#f5f3ff', padding: '2px 7px', borderRadius: '6px', fontWeight: 700, border: '1px solid #ddd6fe' }}>
+                                    📷 {detail.images.length} รูป
+                                  </span>
+                                )}
+
+                                {isPassed ? (
+                                  <span className="criteria-status-badge passed">
+                                    ✓ ผ่านเกณฑ์
+                                  </span>
+                                ) : hasSub ? (
+                                  <span className="criteria-status-badge pending" style={{ background: '#fffbeb', color: '#b45309', borderColor: '#fde68a' }}>
+                                    🔄 กำลังพัฒนา
+                                  </span>
+                                ) : (
+                                  <span className="criteria-status-badge pending" style={{ background: '#f8fafc', color: '#64748b', borderColor: '#cbd5e1' }} title="ยังไม่มีข้อมูลส่ง (ไม่จำเป็นต้องมีรูป แต่ต้องมีอย่างใดอย่างหนึ่ง)">
+                                    ⏳ รอข้อมูล/ประเมิน
+                                  </span>
+                                )}
 
                                 <button
                                   type="button"
@@ -4047,6 +4189,26 @@ export default function GroupManagementPage({
 
             {/* Modal Body */}
             <div className="assessment-modal-body">
+              {/* Passing Rule Notice */}
+              <div style={{
+                background: '#f0fdf4',
+                border: '1.5px solid #86efac',
+                borderRadius: '10px',
+                padding: '10px 14px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                fontSize: '12.5px',
+                color: '#166534',
+                lineHeight: '1.4'
+              }}>
+                <span style={{ fontSize: '18px', flexShrink: 0 }}>💡</span>
+                <div>
+                  <strong>เงื่อนไขการผ่านเกณฑ์:</strong> ต้องระบุข้อมูลอย่างน้อย 1 รายการ 
+                  (เลือกระดับประเมิน, บันทึกชั่วโมง, เขียนบันทึกผลงาน หรือแนบรูปภาพ — <em>ไม่จำเป็นต้องมีรูปภาพ แต่ต้องมีอย่างใดอย่างหนึ่ง</em>)
+                </div>
+              </div>
+
               {/* Skill Name Input (Always Editable / กรอกเองได้เสมอ) */}
               <div className="modal-form-card-section" style={{ backgroundColor: '#ffffff', borderColor: '#e2e8f0', borderRadius: '10px' }}>
                 <label className="modal-section-label" style={{ marginBottom: '6px' }}>
@@ -4841,10 +5003,29 @@ export default function GroupManagementPage({
                     <span style={{ fontSize: '11px', color: '#64748b' }}>คลิกเพื่อสลับสถานะผ่าน/ไม่ผ่าน</span>
                   </div>
 
+                  {/* Evidence & Passing Condition Banner */}
+                  <div style={{
+                    background: '#f8fafc',
+                    border: '1px dashed #cbd5e1',
+                    borderRadius: '8px',
+                    padding: '6px 12px',
+                    marginBottom: '8px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    fontSize: '11.5px',
+                    color: '#334155',
+                    lineHeight: '1.4'
+                  }}>
+                    <span style={{ fontSize: '14px', flexShrink: 0 }}>💡</span>
+                    <span><strong>เงื่อนไขการผ่านเกณฑ์:</strong> ต้องมีข้อมูลการประเมินอย่างน้อย 1 รายการ (ระดับทักษะ, จำนวนชั่วโมง, บันทึกผลงาน หรือรูปภาพ — <em>ไม่จำเป็นต้องมีรูปภาพ แต่ต้องมีอย่างใดอย่างหนึ่ง</em>)</span>
+                  </div>
+
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '8px' }}>
                     {(evaluationData.criteria || []).map((critText, cIdx) => {
                       const isPassed = (evaluationData.passedCriteria || []).includes(cIdx)
                       const detail = (evaluationData.criteriaDetails || {})[cIdx]
+                      const hasSub = hasCriterionSubmission(cIdx, evaluationData.criteriaDetails)
                       return (
                         <div
                           key={cIdx}
@@ -4868,7 +5049,7 @@ export default function GroupManagementPage({
                                 e.stopPropagation()
                                 handleToggleCriteria(cIdx)
                               }}
-                              title="คลิกเพื่อสลับสถานะผ่าน/ไม่ผ่านทันที"
+                              title={isPassed ? "คลิกเพื่อยกเลิกสถานะผ่านเกณฑ์" : hasSub ? "คลิกเพื่อสลับเป็นผ่านเกณฑ์" : "ต้องมีข้อมูลอย่างน้อย 1 รายการจึงจะผ่านได้ (คลิกเพื่อประเมิน)"}
                               style={{
                                 width: '18px',
                                 height: '18px',
@@ -4924,15 +5105,33 @@ export default function GroupManagementPage({
                               </span>
                             )}
 
+                            {detail?.note && detail.note.trim() && (
+                              <span 
+                                style={{ fontSize: '11px', color: '#475569', background: '#f1f5f9', padding: '2px 6px', borderRadius: '5px', fontWeight: 600, border: '1px solid #cbd5e1' }}
+                                title={detail.note}
+                              >
+                                📝 มีบันทึก
+                              </span>
+                            )}
+
+                            {detail?.images && detail.images.length > 0 && (
+                              <span style={{ fontSize: '11px', color: '#7c3aed', background: '#f5f3ff', padding: '2px 6px', borderRadius: '5px', fontWeight: 700, border: '1px solid #ddd6fe' }}>
+                                📷 {detail.images.length} รูป
+                              </span>
+                            )}
+
                             <span style={{
                               fontSize: '11px',
                               fontWeight: 700,
                               padding: '2px 8px',
                               borderRadius: '9999px',
-                              background: isPassed ? '#d1fae5' : '#f1f5f9',
-                              color: isPassed ? '#047857' : '#64748b',
-                            }}>
-                              {isPassed ? 'ผ่านเกณฑ์แล้ว' : 'ยังไม่ผ่าน'}
+                              background: isPassed ? '#d1fae5' : hasSub ? '#fffbeb' : '#f1f5f9',
+                              color: isPassed ? '#047857' : hasSub ? '#b45309' : '#64748b',
+                              border: isPassed ? '1px solid #a7f3d0' : hasSub ? '1px solid #fde68a' : '1px solid #e2e8f0',
+                            }}
+                            title={isPassed ? "ผ่านเกณฑ์แล้ว" : hasSub ? "กำลังพัฒนา (ระดับยังไม่ถึงเกณฑ์ผ่าน)" : "ยังไม่มีข้อมูลส่ง (ไม่จำเป็นต้องมีรูป แต่ต้องมีอย่างใดอย่างหนึ่ง)"}
+                            >
+                              {isPassed ? 'ผ่านเกณฑ์แล้ว' : hasSub ? 'กำลังพัฒนา' : 'รอข้อมูล/ประเมิน'}
                             </span>
 
                             <button

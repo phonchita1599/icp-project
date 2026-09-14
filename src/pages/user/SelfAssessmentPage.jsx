@@ -344,16 +344,35 @@ export default function SelfAssessmentPage({ onNavigateHome }) {
     alert(`📋 คำแนะนำหลักฐานประกอบสำหรับ "${skill.name}":\n\n1. แนบรูปถ่ายหน้าจอผลงานโปรเจกต์ / โค้ดดิ้ง / Dashboard\n2. แนบรูปถ่ายใบประกาศนียบัตรหลักสูตรออนไลน์\n3. เขียนบันทึกการเรียนรู้และชั่วโมงปฏิบัติงานประจำเดือน`)
   }
 
+  // Helper to verify if skill has at least 1 piece of evidence/submission
+  const hasSkillData = (skillId) => {
+    const d = getSkillData(skillId)
+    return Boolean(
+      (d.level && String(d.level).trim() !== '') ||
+      (d.durationHours && (parseInt(d.durationHours, 10) > 0 || String(d.durationHours).trim() !== '')) ||
+      (d.note && String(d.note).trim().length > 0) ||
+      (d.images && Array.isArray(d.images) && d.images.length > 0)
+    )
+  }
+
   // Save assessment for active month
   const handleSaveAssessment = (skill) => {
     const data = getSkillData(skill.id)
-    if (!data.level) {
-      alert('กรุณาเลือกผลการประเมินก่อนบันทึก')
+    const hasData = Boolean(
+      (data.level && String(data.level).trim() !== '') ||
+      (data.durationHours && (parseInt(data.durationHours, 10) > 0 || String(data.durationHours).trim() !== '')) ||
+      (data.note && String(data.note).trim().length > 0) ||
+      (data.images && Array.isArray(data.images) && data.images.length > 0)
+    )
+
+    if (!hasData) {
+      alert('⚠️ ยังไม่สามารถบันทึกได้:\n\nต้องระบุข้อมูลอย่างน้อย 1 รายการ (เช่น ผลการประเมินทักษะ, จำนวนชั่วโมง, บันทึกการเรียนรู้ หรือรูปภาพหลักฐาน — ไม่จำเป็นต้องมีรูป แต่ต้องมีอย่างใดอย่างหนึ่ง) ก่อนบันทึก')
       return
     }
+
     const currentMonthObj = monthList.find((m) => m.id === selectedMonthId)
     const durationInfo = data.durationHours ? `\n• เวลาที่ใช้: ${data.durationHours} ชั่วโมง` : ''
-    alert(`✓ บันทึกผลการประเมิน "${skill.name}"\nประจำรอบ: ${currentMonthObj?.fullName || selectedMonthId}${durationInfo}\n(คะแนน, บันทึกข้อความ และรูปภาพหลักฐาน ${data.images.length} รูป) สำเร็จเรียบร้อยแล้ว!`)
+    alert(`✓ บันทึกผลการประเมิน "${skill.name}"\nประจำรอบ: ${currentMonthObj?.fullName || selectedMonthId}${durationInfo}\n(คะแนน, บันทึกข้อความ และรูปภาพหลักฐาน ${data.images?.length || 0} รูป) สำเร็จเรียบร้อยแล้ว!`)
     handleCloseModal()
   }
 
@@ -417,7 +436,7 @@ export default function SelfAssessmentPage({ onNavigateHome }) {
       {/* 3. Multiple Target Careers Accordion Group (พับเก็บ/กางออกได้) */}
       <section className="career-accordion-group">
         {careerGoals.map((career) => {
-          const evaluatedCount = career.skills.filter((sk) => Boolean(getSkillData(sk.id).level)).length
+          const evaluatedCount = career.skills.filter((sk) => hasSkillData(sk.id)).length
           const totalCount = career.skills.length
           const isAllEvaluated = evaluatedCount === totalCount && totalCount > 0
 
@@ -464,7 +483,7 @@ export default function SelfAssessmentPage({ onNavigateHome }) {
                 <div className="skills-list-container">
                   {career.skills.map((skill) => {
                     const currentSkillData = getSkillData(skill.id)
-                    const isEvaluated = Boolean(currentSkillData.level)
+                    const isEvaluated = hasSkillData(skill.id)
 
                     return (
                       <div
@@ -608,6 +627,27 @@ export default function SelfAssessmentPage({ onNavigateHome }) {
 
             {/* Modal Body */}
             <div className="assessment-modal-body">
+              {/* Evidence Requirement Notice */}
+              <div style={{
+                background: '#f0fdf4',
+                border: '1.5px solid #86efac',
+                borderRadius: '10px',
+                padding: '10px 14px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                fontSize: '12.5px',
+                color: '#166534',
+                lineHeight: '1.4',
+                marginBottom: '12px'
+              }}>
+                <span style={{ fontSize: '18px', flexShrink: 0 }}>💡</span>
+                <div>
+                  <strong>เงื่อนไขการประเมิน:</strong> ต้องระบุข้อมูลอย่างน้อย 1 รายการ 
+                  (ผลการประเมิน 7 ระดับ, จำนวนชั่วโมง, บันทึกการเรียนรู้ หรือรูปภาพหลักฐาน — <em>ไม่จำเป็นต้องมีรูปภาพ แต่ต้องมีอย่างใดอย่างหนึ่ง</em>)
+                </div>
+              </div>
+
               {/* 1. Evaluation Dropdown Section */}
               <div className="modal-form-card-section">
                 <div className="modal-section-label">
