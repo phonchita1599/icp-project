@@ -663,6 +663,17 @@ export default function GroupManagementPage({
     }))
   }
 
+  // Helper to display clean short category names on cards
+  const getShortCategoryName = (cat = '') => {
+    if (!cat) return 'ทักษะทั่วไป'
+    if (cat.includes('Technical')) return 'ทักษะทางเทคนิค'
+    if (cat.includes('Soft')) return 'Soft Skills'
+    if (cat.includes('Language') || cat.includes('สื่อสาร')) return 'การสื่อสาร & ภาษา'
+    if (cat.includes('Assistive') || cat.includes('ช่วยเหลือ') || cat.includes('อำนวย')) return 'เครื่องมือ DSS'
+    if (cat.includes('Cert') || cat.includes('ประกาศ') || cat.includes('มาตรฐาน')) return 'ใบรับรอง'
+    return cat.replace(/\s*\(.*?\)/g, '').trim() || cat
+  }
+
   // Automatic Score Calculation based on Passed Criteria
   const calcAutoScore = (passedList = [], criteriaList = []) => {
     if (!criteriaList || criteriaList.length === 0) return 0
@@ -3202,11 +3213,11 @@ export default function GroupManagementPage({
                       return (
                         <div key={skill.id} className="skill-card-item">
                           <div className="skill-card-top">
-                            <span className={`skill-cat-badge ${catBadgeClass}`}>
+                            <span className={`skill-cat-badge ${catBadgeClass}`} title={skill.category}>
                               {catIcon}
-                              <span>{skill.category}</span>
+                              <span>{getShortCategoryName(skill.category)}</span>
                             </span>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
                               <div className="skill-direct-hours-wrap" title="ชั่วโมงฝึกฝน (คลิกเพื่อพิมพ์แก้ไขจำนวนชั่วโมงได้)">
                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.2">
                                   <circle cx="12" cy="12" r="10" />

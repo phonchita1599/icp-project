@@ -623,10 +623,10 @@
   gap: 12px;
 }
 
-/* Modal Large */
+/* Modal Large (Full evaluation & skills matrix layout) */
 .modal-large {
-  max-width: 960px !important;
-  width: 95% !important;
+  max-width: 1140px !important;
+  width: 96% !important;
   max-height: 92vh !important;
   display: flex !important;
   flex-direction: column !important;
@@ -2297,8 +2297,9 @@
 
 .skills-cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
   gap: 16px;
+  align-items: stretch;
 }
 
 .skill-card-item {
@@ -2309,6 +2310,10 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  justify-content: space-between;
+  min-height: 220px;
+  box-sizing: border-box;
+  min-width: 0;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.04), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
   position: relative;
@@ -2325,17 +2330,22 @@
   justify-content: space-between;
   align-items: center;
   gap: 8px;
+  min-width: 0;
 }
 
 .skill-cat-badge {
-  font-size: 11px;
+  font-size: 11.5px;
   font-weight: 700;
   padding: 3px 10px;
   border-radius: 9999px;
-  width: fit-content;
   display: inline-flex;
   align-items: center;
   gap: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 170px;
+  flex-shrink: 1;
 }
 
 .cat-tech {
@@ -2455,8 +2465,10 @@
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  padding-top: 6px;
+  padding-top: 8px;
   border-top: 1px solid #f1f5f9;
+  margin-top: auto;
+  min-width: 0;
 }
 
 .skill-status-select-wrap {
@@ -2464,9 +2476,12 @@
   display: inline-flex;
   align-items: center;
   border-radius: 9999px;
-  padding: 2px 6px;
+  padding: 3px 8px;
   transition: all 0.2s ease;
   border: 1.5px solid transparent;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .skill-status-select-wrap.status-pill-passed {
@@ -2488,8 +2503,9 @@
 }
 
 .skill-status-select {
-  padding: 3px 6px;
-  font-size: 11.5px;
+  width: 100%;
+  padding: 2px 2px;
+  font-size: 12px;
   font-weight: 800;
   border: none;
   background: transparent;
@@ -2497,6 +2513,8 @@
   font-family: inherit;
   outline: none;
   cursor: pointer;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .skill-status-select option {
@@ -2509,9 +2527,9 @@
   background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
   color: #ffffff;
   border: none;
-  padding: 5.5px 12px;
+  padding: 6px 12px;
   border-radius: 8px;
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 700;
   cursor: pointer;
   display: inline-flex;
@@ -2521,6 +2539,7 @@
   transition: all 0.18s ease;
   white-space: nowrap;
   font-family: inherit;
+  flex-shrink: 0;
 }
 
 .btn-open-popup-eval:hover {
