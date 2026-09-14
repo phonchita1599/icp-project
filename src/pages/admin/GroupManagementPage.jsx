@@ -3845,14 +3845,14 @@ export default function GroupManagementPage({
             {/* Modal Body */}
             <div className="assessment-modal-body">
               {/* Skill Name Input (Always Editable / กรอกเองได้เสมอ) */}
-              <div className="modal-form-card-section" style={{ backgroundColor: '#f0f9ff', borderColor: '#bae6fd' }}>
+              <div className="modal-form-card-section" style={{ backgroundColor: '#ffffff', borderColor: '#e2e8f0', borderRadius: '10px' }}>
                 <label className="modal-section-label" style={{ marginBottom: '6px' }}>
                   <div className="modal-section-label-left">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0284c7" strokeWidth="2.2">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.2">
                       <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
                       <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
                     </svg>
-                    <span style={{ fontWeight: 700, color: '#0369a1' }}>ชื่อทักษะ (สามารถพิมพ์แก้ไขหรือกรอกชื่อทักษะเองได้):</span>
+                    <span style={{ fontWeight: 700, color: '#0f172a' }}>ชื่อทักษะ (สามารถพิมพ์แก้ไขหรือกรอกชื่อทักษะเองได้):</span>
                   </div>
                 </label>
                 <input
@@ -3862,7 +3862,7 @@ export default function GroupManagementPage({
                   onChange={(e) => setEvalModalData({ ...evalModalData, name: e.target.value })}
                   placeholder="เช่น คอมพิวเตอร์, การเขียนโปรแกรม Full-Stack, การสื่อสาร..."
                   required
-                  style={{ fontWeight: 600, fontSize: '14.5px', color: '#0f172a' }}
+                  style={{ fontWeight: 600, fontSize: '14px', color: '#0f172a', background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '8px', padding: '9px 12px' }}
                 />
               </div>
 
@@ -3962,7 +3962,7 @@ export default function GroupManagementPage({
                     </svg>
                     <span>เวลาในการทำ / ระยะเวลาและชั่วโมงที่ปฏิบัติ:</span>
                   </div>
-                  <span style={{ fontSize: '12px', color: '#2563eb', fontWeight: '700', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  <span style={{ fontSize: '12px', color: '#1d4ed8', background: '#eff6ff', border: '1px solid #bfdbfe', borderRadius: '9999px', padding: '2px 10px', fontWeight: '800', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                     {evalModalData.hours ? (
                       <>
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">

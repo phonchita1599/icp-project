@@ -3047,7 +3047,7 @@
 
 .add-skill-popup-modal .assessment-modal-header,
 .assessment-modal-dialog .assessment-modal-header {
-  padding: 12px 18px !important;
+  padding: 14px 20px !important;
   background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%) !important;
   display: flex !important;
   align-items: center !important;
@@ -3057,12 +3057,78 @@
   border-bottom: 1.5px solid rgba(255, 255, 255, 0.15) !important;
 }
 
+.assessment-modal-dialog .assessment-modal-header .modal-skill-title {
+  color: #ffffff !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  margin: 0 !important;
+  line-height: 1.35 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) !important;
+}
+
+.assessment-modal-dialog .assessment-modal-header .modal-skill-meta {
+  color: #bfdbfe !important;
+  font-size: 12.5px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin-top: 3px !important;
+}
+
+.assessment-modal-dialog .assessment-modal-header .modal-skill-meta span {
+  color: #dbeafe !important;
+}
+
+.assessment-modal-dialog .assessment-modal-header .modal-month-badge {
+  background: rgba(255, 255, 255, 0.22) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  font-weight: 700 !important;
+  border-radius: 9999px !important;
+  padding: 2px 10px !important;
+  font-size: 11.5px !important;
+}
+
+.assessment-modal-dialog .assessment-modal-header .modal-skill-icon-badge {
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.28) !important;
+  border-radius: 10px !important;
+  width: 38px !important;
+  height: 38px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+}
+
+.assessment-modal-dialog .assessment-modal-header .modal-close-btn {
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 8px !important;
+  width: 32px !important;
+  height: 32px !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.15s ease !important;
+}
+
+.assessment-modal-dialog .assessment-modal-header .modal-close-btn:hover {
+  background: rgba(239, 68, 68, 0.9) !important;
+  color: #ffffff !important;
+}
+
 .add-skill-popup-modal .assessment-modal-body,
 .assessment-modal-dialog .assessment-modal-body {
-  padding: 14px 18px !important;
+  padding: 16px 20px !important;
   display: flex !important;
   flex-direction: column !important;
-  gap: 10px !important;
+  gap: 12px !important;
   overflow-y: auto !important; /* ALWAYS scroll within body */
   flex: 1 1 auto !important;
   min-height: 0 !important; /* CRITICAL for flex child vertical scrolling */
@@ -3084,7 +3150,7 @@
 
 .add-skill-popup-modal .assessment-modal-footer,
 .assessment-modal-dialog .assessment-modal-footer {
-  padding: 10px 18px !important;
+  padding: 12px 20px !important;
   background: #f8fafc !important;
   border-top: 1.5px solid #e2e8f0 !important;
   display: flex !important;
@@ -3096,15 +3162,134 @@
   box-sizing: border-box !important;
 }
 
-.add-skill-popup-modal .modal-form-card-section {
+.assessment-modal-dialog .btn-modal-cancel {
+  background-color: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #475569 !important;
+  border-radius: 8px !important;
+  padding: 9px 20px !important;
+  font-family: inherit !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: all 0.15s ease !important;
+}
+
+.assessment-modal-dialog .btn-modal-cancel:hover {
+  background-color: #f1f5f9 !important;
+  color: #1e293b !important;
+  border-color: #94a3b8 !important;
+}
+
+.assessment-modal-dialog .btn-modal-save-eval {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 9px 24px !important;
+  font-family: inherit !important;
+  font-size: 13.5px !important;
+  font-weight: 800 !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  box-shadow: 0 3px 10px rgba(37, 99, 235, 0.28) !important;
+  transition: all 0.2s ease !important;
+}
+
+.assessment-modal-dialog .btn-modal-save-eval:hover {
+  background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%) !important;
+  box-shadow: 0 5px 14px rgba(37, 99, 235, 0.4) !important;
+  transform: translateY(-1px);
+}
+
+.add-skill-popup-modal .modal-form-card-section,
+.assessment-modal-dialog .modal-form-card-section {
   background: #ffffff !important;
-  padding: 8px 12px !important;
+  padding: 12px 16px !important;
   border: 1.5px solid #e2e8f0 !important;
-  border-radius: 10px !important;
+  border-radius: 11px !important;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02) !important;
   display: flex !important;
   flex-direction: column !important;
-  gap: 5px !important;
+  gap: 8px !important;
+}
+
+.assessment-modal-dialog .btn-ai-assist-modern {
+  background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 8px 14px !important;
+  font-family: inherit !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.25) !important;
+  transition: all 0.15s ease !important;
+  white-space: nowrap !important;
+}
+
+.assessment-modal-dialog .btn-ai-assist-modern:hover {
+  background: linear-gradient(135deg, #4338ca 0%, #4f46e5 100%) !important;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35) !important;
+  transform: translateY(-1px);
+}
+
+.assessment-modal-dialog .modal-dropdown-trigger {
+  width: 100% !important;
+  background-color: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  border-radius: 8px !important;
+  padding: 9px 12px !important;
+  font-family: inherit !important;
+  font-size: 13.5px !important;
+  font-weight: 600 !important;
+  color: #1e293b !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  cursor: pointer !important;
+  text-align: left !important;
+  gap: 8px !important;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+.assessment-modal-dialog .modal-dropdown-trigger.has-value {
+  border-color: #3b82f6 !important;
+  background-color: #f0f7ff !important;
+  color: #1d4ed8 !important;
+  font-weight: 700 !important;
+  box-shadow: 0 1px 4px rgba(37, 99, 235, 0.1) !important;
+}
+
+.assessment-modal-dialog .btn-quick-hour-chip {
+  background: #f8fafc !important;
+  color: #475569 !important;
+  border: 1.5px solid #e2e8f0 !important;
+  border-radius: 7px !important;
+  padding: 5px 9px !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: all 0.15s ease !important;
+}
+
+.assessment-modal-dialog .btn-quick-hour-chip:hover {
+  background: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+.assessment-modal-dialog .btn-quick-hour-chip.active {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+  color: #ffffff !important;
+  border-color: #1d4ed8 !important;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25) !important;
 }
 
 /* Save Member Skills Footer */
