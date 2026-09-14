@@ -716,12 +716,14 @@ export default function GroupManagementPage({
           hours: '30',
           images: [],
           note: 'ผ่านการซ้อมสัมภาษณ์ Mock Interview กับพี่เลี้ยง DSS มทส. มีความมั่นใจและตอบคำถามได้ยอดเยี่ยม',
+          superDecision: 'passed',
         },
         1: {
           level: '2.ได้เรียนทักษะนี้บ้างและพอทำได้ ถึงแม้จะน้อยกว่าคนทั่วไป',
           hours: '12',
           images: [],
           note: 'กำลังศึกษาและฝึกทักษะ Soft Skills และการปรับตัวเข้ากับวัฒนธรรมองค์กร',
+          superDecision: 'failed',
         },
       },
       note: 'ผ่านการซ้อมสัมภาษณ์ Mock Interview ได้ดีมาก รอส่งผลงาน Soft Skills และการจับคู่สถานประกอบการ',
@@ -891,12 +893,14 @@ export default function GroupManagementPage({
         hours: '30',
         images: [],
         note: 'ผ่านการซ้อมสัมภาษณ์ Mock Interview กับพี่เลี้ยง DSS มทส. มีความมั่นใจและตอบคำถามได้ยอดเยี่ยม',
+        superDecision: 'passed',
       },
       1: {
         level: '2.ได้เรียนทักษะนี้บ้างและพอทำได้ ถึงแม้จะน้อยกว่าคนทั่วไป',
         hours: '12',
         images: [],
         note: 'กำลังศึกษาและฝึกทักษะ Soft Skills และการปรับตัวเข้ากับวัฒนธรรมองค์กร',
+        superDecision: 'failed',
       },
     },
     mentorNote: 'ผ่านการซ้อมสัมภาษณ์ Mock Interview ได้ดีมาก รอส่งผลงาน Soft Skills และการจับคู่สถานประกอบการ',
@@ -933,12 +937,14 @@ export default function GroupManagementPage({
         hours: curMonthData.hours ? String(parseInt(curMonthData.hours)) : '30',
         images: [],
         note: curMonthData.note || 'ผ่านการซ้อมสัมภาษณ์ Mock Interview กับพี่เลี้ยง DSS มทส. มีความมั่นใจและตอบคำถามได้ยอดเยี่ยม',
+        superDecision: 'passed',
       },
       1: {
         level: '2.ได้เรียนทักษะนี้บ้างและพอทำได้ ถึงแม้จะน้อยกว่าคนทั่วไป',
         hours: '12',
         images: [],
         note: 'กำลังศึกษาและฝึกทักษะ Soft Skills และการปรับตัวเข้ากับวัฒนธรรมองค์กร',
+        superDecision: 'failed',
       },
     }
 
@@ -1232,16 +1238,17 @@ export default function GroupManagementPage({
   const handleOpenSkillEvalModal = (skill) => {
     setSelectedSkillEvalModal(skill)
     setIsEvalDropdownOpen(false)
+    const isPassed = Boolean(skill.status?.includes('ผ่าน') && !skill.status?.includes('ไม่ผ่าน'))
     setEvalModalData({
       name: skill.name || '',
       level: skill.evalLevel || (skill.level === 5 ? evaluationOptions[4] : skill.level === 4 ? evaluationOptions[3] : skill.level === 3 ? evaluationOptions[2] : evaluationOptions[1]),
       hours: skill.hours ? skill.hours.replace(/[^0-9.]/g, '') || '25' : '25',
       images: skill.images || [],
       note: skill.note || '',
+      decision: isPassed ? 'passed' : 'failed',
     })
   }
 
-  // Open Assessment Modal from Monthly Evaluation (+ เพิ่มทักษะ หรือคลิกที่เกณฑ์)
   // Open Assessment Modal from Monthly Evaluation (+ เพิ่มทักษะ หรือคลิกที่เกณฑ์)
   const handleOpenMonthlySkillModal = (skillNameOrIdx) => {
     const activeMonthsList = getMonthsList(selectedMember)
@@ -1256,6 +1263,8 @@ export default function GroupManagementPage({
       const name = evaluationData.criteria[skillNameOrIdx]
       const isPassed = (evaluationData.passedCriteria || []).includes(skillNameOrIdx)
       const detail = (evaluationData.criteriaDetails || {})[skillNameOrIdx] || {}
+      const hasSub = hasCriterionSubmission(skillNameOrIdx, evaluationData.criteriaDetails)
+      const initialDecision = isPassed ? 'passed' : (detail.superDecision === 'failed' ? 'failed' : (hasSub ? 'failed' : 'passed'))
       skillObj = {
         id: `criteria-${skillNameOrIdx}`,
         name: name,
@@ -1267,6 +1276,7 @@ export default function GroupManagementPage({
         hours: detail.hours || (evaluationData.hours ? evaluationData.hours.replace(/[^0-9.]/g, '') || '' : ''),
         images: detail.images || [],
         note: detail.note || '',
+        decision: initialDecision,
       }
     } else {
       const initialName = (typeof skillNameOrIdx === 'string' && skillNameOrIdx.trim()) 
@@ -1282,6 +1292,7 @@ export default function GroupManagementPage({
         hours: '20',
         images: [],
         note: '',
+        decision: 'passed',
       }
     }
 
@@ -1293,6 +1304,7 @@ export default function GroupManagementPage({
       hours: skillObj.hours || '',
       images: skillObj.images || [],
       note: skillObj.note || '',
+      decision: skillObj.decision || 'passed',
     })
   }
 
@@ -1366,12 +1378,18 @@ export default function GroupManagementPage({
     }
 
     // Determine whether criterion is mastered/passed
+    // Super User decision has top priority: can explicitly award Pass or Fail
     let isMastered = false
-    if (evalModalData.level) {
-      isMastered = evalModalData.level.includes('5.') || evalModalData.level.includes('4.') || evalModalData.level.includes('3.') || evalModalData.level.includes('(Yes)')
-    } else {
-      // If no level selected, but hours/note/images were provided -> counts as passed
+    if (evalModalData.decision === 'failed') {
+      isMastered = false
+    } else if (evalModalData.decision === 'passed') {
       isMastered = true
+    } else {
+      if (evalModalData.level) {
+        isMastered = evalModalData.level.includes('5.') || evalModalData.level.includes('4.') || evalModalData.level.includes('3.') || evalModalData.level.includes('(Yes)')
+      } else {
+        isMastered = true
+      }
     }
 
     const newStarLevel = evalModalData.level?.includes('5.') ? 5 : evalModalData.level?.includes('4.') ? 4 : evalModalData.level?.includes('3.') ? 3 : evalModalData.level?.includes('2.') ? 2 : (evalModalData.level ? 1 : 3)
@@ -1391,6 +1409,7 @@ export default function GroupManagementPage({
           hours: evalModalData.hours || '',
           images: evalModalData.images || [],
           note: evalModalData.note || '',
+          superDecision: isMastered ? 'passed' : 'failed',
         },
       }
 
@@ -1412,7 +1431,7 @@ export default function GroupManagementPage({
         name: skillName,
         category: selectedSkillEvalModal.category || 'Technical Skills',
         level: newStarLevel,
-        status: isMastered ? 'ผ่านเกณฑ์แล้ว' : 'กำลังพัฒนา',
+        status: isMastered ? 'ผ่านเกณฑ์แล้ว' : 'ไม่ผ่านเกณฑ์ (กำลังพัฒนา)',
         hours: evalModalData.hours ? `${evalModalData.hours} ชม.` : '20 ชม.',
         images: evalModalData.images || [],
         note: evalModalData.note || '',
@@ -1440,6 +1459,7 @@ export default function GroupManagementPage({
           hours: evalModalData.hours || '',
           images: evalModalData.images || [],
           note: evalModalData.note || '',
+          superDecision: isMastered ? 'passed' : 'failed',
         },
       }
 
@@ -1465,7 +1485,7 @@ export default function GroupManagementPage({
             hours: evalModalData.hours ? `${evalModalData.hours} ชม.` : s.hours,
             images: evalModalData.images,
             note: evalModalData.note,
-            status: isMastered ? 'ผ่านเกณฑ์แล้ว' : 'กำลังพัฒนา',
+            status: isMastered ? 'ผ่านเกณฑ์แล้ว' : 'ไม่ผ่านเกณฑ์ (กำลังพัฒนา)',
           }
         }
         return s
@@ -1481,7 +1501,7 @@ export default function GroupManagementPage({
     }
 
     const durationInfo = evalModalData.hours ? `, เวลาที่ใช้: ${evalModalData.hours} ชม.` : ''
-    alert(`บันทึกผลการประเมินทักษะ "${skillName}" เรียบร้อยแล้ว! (${isMastered ? 'ผ่านเกณฑ์แล้ว' : 'บันทึกข้อมูลแล้ว'}${durationInfo}, รูปภาพ ${evalModalData.images?.length || 0} รูป)`)
+    alert(`บันทึกผลการประเมินทักษะ "${skillName}" เรียบร้อยแล้ว!\nผลการตัดสินโดย Super User: ${isMastered ? '✓ ผ่านเกณฑ์แล้ว' : '✕ ไม่ผ่านเกณฑ์ (กำลังพัฒนา)'}${durationInfo}`)
     handleCloseSkillEvalModal()
   }
 
@@ -1514,12 +1534,14 @@ export default function GroupManagementPage({
         hours: targetMonth.hours ? String(parseInt(targetMonth.hours)) : '30',
         images: [],
         note: targetMonth.note || 'ผ่านการซ้อมสัมภาษณ์ Mock Interview กับพี่เลี้ยง DSS มทส.',
+        superDecision: 'passed',
       },
       1: {
         level: '2.ได้เรียนทักษะนี้บ้างและพอทำได้ ถึงแม้จะน้อยกว่าคนทั่วไป',
         hours: '12',
         images: [],
         note: 'กำลังศึกษาและฝึกทักษะ Soft Skills และการปรับตัวเข้ากับวัฒนธรรมองค์กร',
+        superDecision: 'failed',
       },
     } : {})
 
@@ -1552,8 +1574,15 @@ export default function GroupManagementPage({
   const handleToggleCriteria = (cIdx) => {
     const currentPassed = evaluationData.passedCriteria || []
     let newPassed = []
+    const updatedDetails = { ...(evaluationData.criteriaDetails || {}) }
+
     if (currentPassed.includes(cIdx)) {
+      // Super user toggles off -> mark as not passed / failed
       newPassed = currentPassed.filter((item) => item !== cIdx)
+      updatedDetails[cIdx] = {
+        ...(updatedDetails[cIdx] || {}),
+        superDecision: 'failed',
+      }
     } else {
       // Must have at least 1 piece of evidence/data to pass!
       const hasSubmission = hasCriterionSubmission(cIdx, evaluationData.criteriaDetails)
@@ -1569,6 +1598,10 @@ export default function GroupManagementPage({
         return
       }
       newPassed = [...currentPassed, cIdx]
+      updatedDetails[cIdx] = {
+        ...(updatedDetails[cIdx] || {}),
+        superDecision: 'passed',
+      }
     }
 
     const calculatedScore = calcAutoScore(newPassed, evaluationData.criteria)
@@ -1577,6 +1610,7 @@ export default function GroupManagementPage({
     setEvaluationData({
       ...evaluationData,
       passedCriteria: newPassed,
+      criteriaDetails: updatedDetails,
       score: autoSyncScore ? calculatedScore : evaluationData.score,
       status: autoSyncScore ? calculatedStatus : evaluationData.status,
       passedSkills: `${newPassed.length} ทักษะ`,
@@ -1686,6 +1720,7 @@ export default function GroupManagementPage({
           hours: String(hrs),
           images: withImg ? [mockImages[Math.floor(Math.random() * mockImages.length)]] : [],
           note: mockPassedNotes[Math.floor(Math.random() * mockPassedNotes.length)],
+          superDecision: 'passed',
         }
       } else {
         // Either developing (70%) or empty/waiting (30%)
@@ -1698,6 +1733,7 @@ export default function GroupManagementPage({
             hours: String(hrs),
             images: [],
             note: mockDevNotes[Math.floor(Math.random() * mockDevNotes.length)],
+            superDecision: 'failed',
           }
         } else {
           // Empty / Waiting
@@ -1706,6 +1742,7 @@ export default function GroupManagementPage({
             hours: '',
             images: [],
             note: '',
+            superDecision: undefined,
           }
         }
       }
@@ -3145,7 +3182,7 @@ export default function GroupManagementPage({
                             return (
                               <div
                                 key={cIdx}
-                                className={`criteria-item-pill ${isPassed ? 'passed' : 'pending'}`}
+                                className={`criteria-item-pill ${isPassed ? 'passed' : detail?.superDecision === 'failed' ? 'failed' : 'pending'}`}
                                 onClick={() => handleOpenMonthlySkillModal(cIdx)}
                                 title="คลิกเพื่อเปิดป๊อปอัปประเมินทักษะนี้ (7 ระดับมาตรฐาน แบบ User)"
                                 style={{ cursor: 'pointer' }}
@@ -3156,12 +3193,24 @@ export default function GroupManagementPage({
                                     e.stopPropagation()
                                     handleToggleCriteria(cIdx)
                                   }}
-                                  title={isPassed ? "คลิกเพื่อยกเลิกสถานะผ่านเกณฑ์" : hasSub ? "คลิกเพื่อสลับเป็นผ่านเกณฑ์" : "ต้องมีข้อมูลอย่างน้อย 1 รายการจึงจะผ่านได้ (คลิกเพื่อประเมิน)"}
-                                  style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+                                  title={isPassed ? "คลิกเพื่อสลับเป็นไม่ผ่านเกณฑ์" : hasSub ? "คลิกเพื่อสลับเป็นผ่านเกณฑ์" : "ต้องมีข้อมูลอย่างน้อย 1 รายการจึงจะผ่านได้ (คลิกเพื่อประเมิน)"}
+                                  style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    cursor: 'pointer',
+                                    background: isPassed ? '#10b981' : detail?.superDecision === 'failed' ? '#fee2e2' : '#ffffff',
+                                    borderColor: isPassed ? '#10b981' : detail?.superDecision === 'failed' ? '#f87171' : '#cbd5e1',
+                                  }}
                                 >
                                   {isPassed ? (
                                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
                                       <polyline points="20 6 9 17 4 12" />
+                                    </svg>
+                                  ) : detail?.superDecision === 'failed' ? (
+                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="3">
+                                      <line x1="18" y1="6" x2="6" y2="18" />
+                                      <line x1="6" y1="6" x2="18" y2="18" />
                                     </svg>
                                   ) : (
                                     <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', border: '1.5px solid #94a3b8' }} />
@@ -3221,6 +3270,10 @@ export default function GroupManagementPage({
                                 {isPassed ? (
                                   <span className="criteria-status-badge passed">
                                     ✓ ผ่านเกณฑ์
+                                  </span>
+                                ) : detail?.superDecision === 'failed' ? (
+                                  <span className="criteria-status-badge" style={{ background: '#fef2f2', color: '#dc2626', borderColor: '#fca5a5', fontWeight: 700 }}>
+                                    ✕ ไม่ผ่านเกณฑ์
                                   </span>
                                 ) : hasSub ? (
                                   <span className="criteria-status-badge pending" style={{ background: '#fffbeb', color: '#b45309', borderColor: '#fde68a' }}>
@@ -4615,6 +4668,104 @@ export default function GroupManagementPage({
                 </div>
               </div>
 
+              {/* Super User Decision Section: ให้ผ่านเกณฑ์ vs ไม่ผ่านเกณฑ์ */}
+              <div
+                className="modal-form-card-section"
+                style={{
+                  background: evalModalData.decision === 'passed' ? '#f0fdf4' : '#fef2f2',
+                  border: evalModalData.decision === 'passed' ? '1.5px solid #86efac' : '1.5px solid #fca5a5',
+                  borderRadius: '12px',
+                  padding: '14px 16px',
+                  transition: 'all 0.2s ease',
+                }}
+              >
+                <div className="modal-section-label" style={{ marginBottom: '10px' }}>
+                  <div className="modal-section-label-left">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={evalModalData.decision === 'passed' ? '#16a34a' : '#dc2626'} strokeWidth="2.2">
+                      <path d="M9 11l3 3L22 4" />
+                      <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                    </svg>
+                    <span style={{ fontWeight: 800, color: '#0f172a', fontSize: '13.5px' }}>
+                      ผลการตัดสินโดย Super User / Mentor:
+                    </span>
+                  </div>
+                  <span style={{
+                    fontSize: '11.5px',
+                    fontWeight: 800,
+                    padding: '3px 10px',
+                    borderRadius: '9999px',
+                    background: evalModalData.decision === 'passed' ? '#dcfce7' : '#fee2e2',
+                    color: evalModalData.decision === 'passed' ? '#15803d' : '#b91c1c',
+                    border: evalModalData.decision === 'passed' ? '1px solid #bbf7d0' : '1px solid #fecaca',
+                  }}>
+                    {evalModalData.decision === 'passed' ? '✓ ผ่านเกณฑ์การประเมิน' : '✕ ไม่ผ่านเกณฑ์ (ต้องพัฒนาต่อ)'}
+                  </span>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                  <button
+                    type="button"
+                    onClick={() => setEvalModalData({ ...evalModalData, decision: 'passed' })}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px',
+                      padding: '11px 14px',
+                      borderRadius: '8px',
+                      cursor: 'pointer',
+                      fontSize: '13.5px',
+                      fontWeight: 800,
+                      transition: 'all 0.15s ease',
+                      background: evalModalData.decision === 'passed' ? '#10b981' : '#ffffff',
+                      color: evalModalData.decision === 'passed' ? '#ffffff' : '#334155',
+                      border: evalModalData.decision === 'passed' ? '2px solid #059669' : '1.5px solid #cbd5e1',
+                      boxShadow: evalModalData.decision === 'passed' ? '0 3px 10px rgba(16, 185, 129, 0.35)' : 'none',
+                    }}
+                  >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8">
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                    <span>✓ ให้ผ่านเกณฑ์ (Pass)</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setEvalModalData({ ...evalModalData, decision: 'failed' })}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px',
+                      padding: '11px 14px',
+                      borderRadius: '8px',
+                      cursor: 'pointer',
+                      fontSize: '13.5px',
+                      fontWeight: 800,
+                      transition: 'all 0.15s ease',
+                      background: evalModalData.decision === 'failed' ? '#ef4444' : '#ffffff',
+                      color: evalModalData.decision === 'failed' ? '#ffffff' : '#334155',
+                      border: evalModalData.decision === 'failed' ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                      boxShadow: evalModalData.decision === 'failed' ? '0 3px 10px rgba(239, 68, 68, 0.35)' : 'none',
+                    }}
+                  >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8">
+                      <line x1="18" y1="6" x2="6" y2="18" />
+                      <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                    <span>✕ ให้ไม่ผ่านเกณฑ์ (Fail / พัฒนาต่อ)</span>
+                  </button>
+                </div>
+
+                <div style={{ marginTop: '8px', fontSize: '11.5px', color: evalModalData.decision === 'passed' ? '#166534' : '#991b1b', lineHeight: 1.4 }}>
+                  {evalModalData.decision === 'passed' ? (
+                    <span>💡 <strong>สถานะผ่านเกณฑ์:</strong> ทักษะนี้จะถูกนับเป็นทักษะที่ผ่านเกณฑ์สะสม และคำนวณคะแนนตามสัดส่วนอัตโนมัติ</span>
+                  ) : (
+                    <span>⚠️ <strong>สถานะไม่ผ่านเกณฑ์:</strong> Super User ประเมินว่ายังไม่ผ่านเกณฑ์ ทักษะนี้จะไม่ถูกนับรวมในคะแนนสะสม และจะแสดงสถานะให้ปรับปรุง</span>
+                  )}
+                </div>
+              </div>
+
               {/* 2. Time Spent Section (เวลาในการทำ) */}
               <div className="modal-form-card-section modal-time-spent-section">
                 <div className="modal-section-label">
@@ -5355,8 +5506,8 @@ export default function GroupManagementPage({
                             justifyContent: 'space-between',
                             padding: '7px 12px',
                             borderRadius: '8px',
-                            background: isPassed ? '#ecfdf5' : '#f8fafc',
-                            border: isPassed ? '1.5px solid #a7f3d0' : '1px solid #e2e8f0',
+                            background: isPassed ? '#ecfdf5' : detail?.superDecision === 'failed' ? '#fff5f5' : '#f8fafc',
+                            border: isPassed ? '1.5px solid #a7f3d0' : detail?.superDecision === 'failed' ? '1.5px solid #fecaca' : '1px solid #e2e8f0',
                             cursor: 'pointer',
                             transition: 'all 0.15s ease',
                           }}
@@ -5369,14 +5520,14 @@ export default function GroupManagementPage({
                                 e.stopPropagation()
                                 handleToggleCriteria(cIdx)
                               }}
-                              title={isPassed ? "คลิกเพื่อยกเลิกสถานะผ่านเกณฑ์" : hasSub ? "คลิกเพื่อสลับเป็นผ่านเกณฑ์" : "ต้องมีข้อมูลอย่างน้อย 1 รายการจึงจะผ่านได้ (คลิกเพื่อประเมิน)"}
+                              title={isPassed ? "คลิกเพื่อสลับเป็นไม่ผ่านเกณฑ์" : hasSub ? "คลิกเพื่อสลับเป็นผ่านเกณฑ์" : "ต้องมีข้อมูลอย่างน้อย 1 รายการจึงจะผ่านได้ (คลิกเพื่อประเมิน)"}
                               style={{
                                 width: '18px',
                                 height: '18px',
                                 borderRadius: '5px',
-                                background: isPassed ? '#10b981' : '#ffffff',
-                                border: isPassed ? 'none' : '1.5px solid #cbd5e1',
-                                color: '#ffffff',
+                                background: isPassed ? '#10b981' : detail?.superDecision === 'failed' ? '#fee2e2' : '#ffffff',
+                                border: isPassed ? 'none' : detail?.superDecision === 'failed' ? '1.5px solid #f87171' : '1.5px solid #cbd5e1',
+                                color: isPassed ? '#ffffff' : detail?.superDecision === 'failed' ? '#dc2626' : '#ffffff',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
@@ -5386,9 +5537,9 @@ export default function GroupManagementPage({
                                 cursor: 'pointer',
                               }}
                             >
-                              {isPassed ? '✓' : ''}
+                              {isPassed ? '✓' : detail?.superDecision === 'failed' ? '✕' : ''}
                             </span>
-                            <span style={{ fontSize: '13px', color: isPassed ? '#065f46' : '#334155', fontWeight: isPassed ? 700 : 500 }}>
+                            <span style={{ fontSize: '13px', color: isPassed ? '#065f46' : detail?.superDecision === 'failed' ? '#991b1b' : '#334155', fontWeight: isPassed ? 700 : 500 }}>
                               {critText}
                             </span>
                           </div>
@@ -5445,13 +5596,13 @@ export default function GroupManagementPage({
                               fontWeight: 700,
                               padding: '2px 8px',
                               borderRadius: '9999px',
-                              background: isPassed ? '#d1fae5' : hasSub ? '#fffbeb' : '#f1f5f9',
-                              color: isPassed ? '#047857' : hasSub ? '#b45309' : '#64748b',
-                              border: isPassed ? '1px solid #a7f3d0' : hasSub ? '1px solid #fde68a' : '1px solid #e2e8f0',
+                              background: isPassed ? '#d1fae5' : detail?.superDecision === 'failed' ? '#fee2e2' : hasSub ? '#fffbeb' : '#f1f5f9',
+                              color: isPassed ? '#047857' : detail?.superDecision === 'failed' ? '#b91c1c' : hasSub ? '#b45309' : '#64748b',
+                              border: isPassed ? '1px solid #a7f3d0' : detail?.superDecision === 'failed' ? '1px solid #fca5a5' : hasSub ? '1px solid #fde68a' : '1px solid #e2e8f0',
                             }}
-                            title={isPassed ? "ผ่านเกณฑ์แล้ว" : hasSub ? "กำลังพัฒนา (ระดับยังไม่ถึงเกณฑ์ผ่าน)" : "ยังไม่มีข้อมูลส่ง (ไม่จำเป็นต้องมีรูป แต่ต้องมีอย่างใดอย่างหนึ่ง)"}
+                            title={isPassed ? "ผ่านเกณฑ์แล้ว" : detail?.superDecision === 'failed' ? "Super User ประเมินไม่ผ่านเกณฑ์" : hasSub ? "กำลังพัฒนา (ระดับยังไม่ถึงเกณฑ์ผ่าน)" : "ยังไม่มีข้อมูลส่ง (ไม่จำเป็นต้องมีรูป แต่ต้องมีอย่างใดอย่างหนึ่ง)"}
                             >
-                              {isPassed ? 'ผ่านเกณฑ์แล้ว' : hasSub ? 'กำลังพัฒนา' : 'รอข้อมูล/ประเมิน'}
+                              {isPassed ? 'ผ่านเกณฑ์แล้ว' : detail?.superDecision === 'failed' ? '✕ ไม่ผ่านเกณฑ์' : hasSub ? 'กำลังพัฒนา' : 'รอข้อมูล/ประเมิน'}
                             </span>
 
                             <button
