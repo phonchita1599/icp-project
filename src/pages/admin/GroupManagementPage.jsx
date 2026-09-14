@@ -368,6 +368,18 @@ export default function GroupManagementPage({
     }
   }, [isCareerDropdownOpen])
 
+  // Month Evaluation Edit Pop-up Modal State
+  const [showEditMonthModal, setShowEditMonthModal] = useState(false)
+
+  const handleOpenEditMonthModal = (idx) => {
+    handleSelectMonth(idx)
+    setShowEditMonthModal(true)
+  }
+
+  const handleCloseEditMonthModal = () => {
+    setShowEditMonthModal(false)
+  }
+
   // Add Individual Skill Popup Modal State
   const [showAddSkillModal, setShowAddSkillModal] = useState(false)
   const [addSkillModalData, setAddSkillModalData] = useState({
@@ -1406,6 +1418,7 @@ export default function GroupManagementPage({
     setSelectedMember(updatedMember)
     onUpdateMemberProgress(activeGroup.id, updatedMember)
 
+    setShowEditMonthModal(false)
     setSaveSuccessMsg(`บันทึกผลการประเมินรอบเดือน ${currentMonthDef.monthName} เรียบร้อยแล้ว!`)
     setTimeout(() => {
       setSaveSuccessMsg('')
@@ -2515,6 +2528,31 @@ export default function GroupManagementPage({
                   </div>
 
                   <div className="monthly-nav-controls">
+                    <button
+                      type="button"
+                      onClick={() => handleOpenEditMonthModal(activeMonthIdx)}
+                      title="เปิดหน้าต่างป๊อปอัปเพื่อแก้ไขผลการประเมินเดือนนี้"
+                      style={{
+                        background: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)',
+                        color: '#1d4ed8',
+                        border: '1.5px solid #93c5fd',
+                        borderRadius: '8px',
+                        padding: '6px 12px',
+                        fontSize: '12.5px',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '5px',
+                      }}
+                    >
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                        <path d="M12 20h9" />
+                        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                      </svg>
+                      <span>เปิดป๊อปอัปแก้ไข</span>
+                    </button>
+
                     {activeMonthIdx > 0 && (
                       <button
                         type="button"
@@ -2940,7 +2978,13 @@ export default function GroupManagementPage({
                       {getMonthsList(selectedMember).map((mObj, idx) => {
                         const isCurActive = activeMonthIdx === idx
                         return (
-                          <tr key={mObj.monthKey || idx} className={isCurActive ? 'row-active' : ''}>
+                          <tr
+                            key={mObj.monthKey || idx}
+                            className={isCurActive ? 'row-active' : ''}
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => handleOpenEditMonthModal(idx)}
+                            title={`คลิกเพื่อเปิดป๊อปอัปแก้ไขรอบเดือน ${mObj.monthName}`}
+                          >
                             <td>
                               <span className="table-month-name">{mObj.shortMonth}</span>
                             </td>
@@ -2979,9 +3023,13 @@ export default function GroupManagementPage({
                               <button
                                 type="button"
                                 className={`btn-edit-month-action ${isCurActive ? 'active' : ''}`}
-                                onClick={() => handleSelectMonth(idx)}
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  handleOpenEditMonthModal(idx)
+                                }}
+                                title={`คลิกเพื่อเปิดป๊อปอัปแก้ไขผลการประเมินรอบเดือน ${mObj.monthName}`}
                               >
-                                {isCurActive ? 'กำลังดู' : 'แก้ไข'}
+                                {isCurActive ? '✏️ แก้ไข (ดูอยู่)' : '✏️ แก้ไข'}
                               </button>
                             </td>
                           </tr>
@@ -4415,6 +4463,515 @@ export default function GroupManagementPage({
                 <span>✓ บันทึกเพิ่มทักษะ</span>
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Month Evaluation Edit Pop-up Modal */}
+      {showEditMonthModal && (
+        <div
+          className="assessment-modal-overlay"
+          onClick={handleCloseEditMonthModal}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 2200,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '16px',
+            backgroundColor: 'rgba(15, 23, 42, 0.65)',
+            backdropFilter: 'blur(4px)',
+            WebkitBackdropFilter: 'blur(4px)',
+            overflow: 'hidden',
+          }}
+        >
+          <div
+            className="assessment-modal-dialog edit-month-popup-modal"
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              maxWidth: '780px',
+              width: '95%',
+              maxHeight: '86vh',
+              display: 'flex',
+              flexDirection: 'column',
+              overflow: 'hidden',
+              borderRadius: '16px',
+              margin: 'auto',
+              boxShadow: '0 25px 60px -15px rgba(15, 23, 42, 0.35)',
+              background: '#ffffff',
+            }}
+          >
+            {/* Modal Header */}
+            <div
+              className="assessment-modal-header"
+              style={{
+                background: 'linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%)',
+                padding: '12px 20px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexShrink: 0,
+                borderBottom: '1.5px solid rgba(255, 255, 255, 0.15)',
+              }}
+            >
+              <div className="assessment-modal-title-group" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div className="assessment-modal-icon-badge" style={{ background: 'rgba(255, 255, 255, 0.2)', width: '38px', height: '38px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2.2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                    <line x1="16" y1="2" x2="16" y2="6" />
+                    <line x1="8" y1="2" x2="8" y2="6" />
+                    <line x1="3" y1="10" x2="21" y2="10" />
+                  </svg>
+                </div>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <h3 className="assessment-modal-title" style={{ color: '#ffffff', margin: 0, fontSize: '16px', fontWeight: 800 }}>
+                      แก้ไขผลการประเมิน: {getMonthsList(selectedMember)[activeMonthIdx]?.monthName}
+                    </h3>
+                    <span style={{ fontSize: '11px', background: 'rgba(255,255,255,0.2)', color: '#ffffff', padding: '1px 8px', borderRadius: '9999px', fontWeight: 700 }}>
+                      รอบที่ {activeMonthIdx + 1}/12
+                    </span>
+                  </div>
+                  <p className="assessment-modal-sub" style={{ color: '#bfdbfe', margin: '2px 0 0 0', fontSize: '12.5px' }}>
+                    สำหรับนักศึกษา: <strong>{selectedMember?.name}</strong> ({selectedMember?.institution || 'มทส.'})
+                  </p>
+                </div>
+              </div>
+
+              {/* Month Navigation inside modal & Close button */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <button
+                  type="button"
+                  onClick={() => handleSelectMonth(Math.max(0, activeMonthIdx - 1))}
+                  disabled={activeMonthIdx === 0}
+                  style={{
+                    background: activeMonthIdx === 0 ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.2)',
+                    color: activeMonthIdx === 0 ? 'rgba(255,255,255,0.4)' : '#ffffff',
+                    border: 'none',
+                    borderRadius: '6px',
+                    padding: '5px 9px',
+                    fontSize: '11.5px',
+                    fontWeight: 700,
+                    cursor: activeMonthIdx === 0 ? 'not-allowed' : 'pointer',
+                  }}
+                  title="เดือนก่อนหน้า"
+                >
+                  ◀
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleSelectMonth(Math.min(11, activeMonthIdx + 1))}
+                  disabled={activeMonthIdx === 11}
+                  style={{
+                    background: activeMonthIdx === 11 ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.2)',
+                    color: activeMonthIdx === 11 ? 'rgba(255,255,255,0.4)' : '#ffffff',
+                    border: 'none',
+                    borderRadius: '6px',
+                    padding: '5px 9px',
+                    fontSize: '11.5px',
+                    fontWeight: 700,
+                    cursor: activeMonthIdx === 11 ? 'not-allowed' : 'pointer',
+                  }}
+                  title="เดือนถัดไป"
+                >
+                  ▶
+                </button>
+                <button
+                  type="button"
+                  className="btn-close-modal"
+                  onClick={handleCloseEditMonthModal}
+                  title="ปิดหน้าต่าง"
+                  style={{ color: '#ffffff', marginLeft: '6px', background: 'rgba(255,255,255,0.15)', border: 'none', borderRadius: '50%', width: '28px', height: '28px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px' }}
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Body Form */}
+            <form onSubmit={handleSaveMonthlyEvaluation} style={{ display: 'flex', flexDirection: 'column', flex: '1 1 auto', overflow: 'hidden' }}>
+              <div
+                className="assessment-modal-body"
+                style={{
+                  padding: '16px 22px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '12px',
+                  overflowY: 'auto',
+                  flex: '1 1 auto',
+                  minHeight: 0,
+                  maxHeight: 'calc(86vh - 125px)',
+                }}
+              >
+                {/* Field 1: Topic / Milestone */}
+                <div className="modal-form-card-section" style={{ background: '#ffffff', padding: '12px 14px', border: '1.5px solid #e2e8f0', borderRadius: '10px' }}>
+                  <label className="modal-field-label" style={{ fontWeight: 800, color: '#0f172a', fontSize: '12.5px', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '5px' }}>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.2">
+                      <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                    </svg>
+                    <span>หัวข้อหรือสมรรถนะหลักที่ประเมินประจำเดือน ({getMonthsList(selectedMember)[activeMonthIdx]?.shortMonth}): *</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="modal-text-input"
+                    value={evaluationData.topic}
+                    onChange={(e) => setEvaluationData({ ...evaluationData, topic: e.target.value })}
+                    placeholder="ระบุหัวข้อสมรรถนะที่มุ่งเน้นในเดือนนี้..."
+                    required
+                    style={{ width: '100%', boxSizing: 'border-box', padding: '8px 12px', fontSize: '13.5px', fontWeight: 600, borderRadius: '8px', border: '1.5px solid #cbd5e1' }}
+                  />
+                </div>
+
+                {/* Field 2: Criteria Checklist */}
+                <div className="modal-form-card-section" style={{ background: '#ffffff', padding: '12px 14px', border: '1.5px solid #e2e8f0', borderRadius: '10px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                    <label className="modal-field-label" style={{ fontWeight: 800, color: '#0f172a', fontSize: '12.5px', display: 'flex', alignItems: 'center', gap: '6px', margin: 0 }}>
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2.5">
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                      <span>เกณฑ์และทักษะที่ประเมินประจำเดือน:</span>
+                      <span style={{ color: '#059669', fontSize: '11.5px', fontWeight: 800 }}>
+                        ({evaluationData.passedCriteria?.length || 0}/{(evaluationData.criteria || []).length} ผ่านแล้ว)
+                      </span>
+                    </label>
+                    <span style={{ fontSize: '11px', color: '#64748b' }}>คลิกเพื่อสลับสถานะผ่าน/ไม่ผ่าน</span>
+                  </div>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '8px' }}>
+                    {(evaluationData.criteria || []).map((critText, cIdx) => {
+                      const isPassed = (evaluationData.passedCriteria || []).includes(cIdx)
+                      return (
+                        <div
+                          key={cIdx}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            padding: '7px 12px',
+                            borderRadius: '8px',
+                            background: isPassed ? '#ecfdf5' : '#f8fafc',
+                            border: isPassed ? '1.5px solid #a7f3d0' : '1px solid #e2e8f0',
+                            cursor: 'pointer',
+                            transition: 'all 0.15s ease',
+                          }}
+                          onClick={() => handleToggleCriteria(cIdx)}
+                        >
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1 }}>
+                            <span style={{
+                              width: '18px',
+                              height: '18px',
+                              borderRadius: '5px',
+                              background: isPassed ? '#10b981' : '#ffffff',
+                              border: isPassed ? 'none' : '1.5px solid #cbd5e1',
+                              color: '#ffffff',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              fontSize: '11px',
+                              fontWeight: 900,
+                              flexShrink: 0,
+                            }}>
+                              {isPassed ? '✓' : ''}
+                            </span>
+                            <span style={{ fontSize: '13px', color: isPassed ? '#065f46' : '#334155', fontWeight: isPassed ? 700 : 500 }}>
+                              {critText}
+                            </span>
+                          </div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <span style={{
+                              fontSize: '11px',
+                              fontWeight: 700,
+                              padding: '2px 8px',
+                              borderRadius: '9999px',
+                              background: isPassed ? '#d1fae5' : '#f1f5f9',
+                              color: isPassed ? '#047857' : '#64748b',
+                            }}>
+                              {isPassed ? 'ผ่านเกณฑ์แล้ว' : 'ยังไม่ผ่าน'}
+                            </span>
+                            {(evaluationData.criteria || []).length > 1 && (
+                              <button
+                                type="button"
+                                onClick={(e) => handleRemoveCriteria(cIdx, e)}
+                                style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '2px 4px', fontSize: '12px' }}
+                                title="ลบเกณฑ์นี้"
+                              >
+                                ✕
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+
+                  {/* Add Criteria Input */}
+                  <div style={{ display: 'flex', gap: '6px' }}>
+                    <input
+                      type="text"
+                      className="modal-text-input"
+                      placeholder="+ พิมพ์เกณฑ์หรือทักษะใหม่ประจำเดือนนี้ แล้วกดเพิ่ม..."
+                      value={customSkillText}
+                      onChange={(e) => setCustomSkillText(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault()
+                          handleAddCustomSkill(e)
+                        }
+                      }}
+                      style={{ flex: 1, padding: '7px 10px', fontSize: '12.5px', borderRadius: '6px', border: '1.5px solid #cbd5e1' }}
+                    />
+                    <button
+                      type="button"
+                      onClick={handleAddCustomSkill}
+                      style={{
+                        background: '#eff6ff',
+                        color: '#1d4ed8',
+                        border: '1.5px solid #bfdbfe',
+                        borderRadius: '6px',
+                        padding: '6px 12px',
+                        fontSize: '12px',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      + เพิ่มเกณฑ์
+                    </button>
+                  </div>
+                </div>
+
+                {/* Field 3: Score & Status (2 Columns) */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '10px' }}>
+                  {/* Left: Score Slider */}
+                  <div className="modal-form-card-section" style={{ background: '#ffffff', padding: '12px 14px', border: '1.5px solid #e2e8f0', borderRadius: '10px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                      <label className="modal-field-label" style={{ fontWeight: 800, color: '#0f172a', fontSize: '12px', margin: 0 }}>
+                        ความพร้อมสู่อาชีพ (%):
+                      </label>
+                      <span style={{ fontSize: '14px', fontWeight: 900, color: evaluationData.score >= 80 ? '#059669' : evaluationData.score >= 60 ? '#2563eb' : '#f59e0b' }}>
+                        {evaluationData.score}%
+                      </span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <input
+                        type="range"
+                        min="0"
+                        max="100"
+                        step="1"
+                        style={{ flex: 1, cursor: 'pointer' }}
+                        value={evaluationData.score}
+                        onChange={(e) => setEvaluationData({ ...evaluationData, score: Number(e.target.value) })}
+                      />
+                      <input
+                        type="number"
+                        min="0"
+                        max="100"
+                        style={{ width: '65px', padding: '6px', fontSize: '13px', fontWeight: 800, textAlign: 'center', borderRadius: '6px', border: '1.5px solid #cbd5e1' }}
+                        value={evaluationData.score}
+                        onChange={(e) => setEvaluationData({ ...evaluationData, score: Number(e.target.value) })}
+                      />
+                    </div>
+                    {/* Quick Sync hint */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '6px' }}>
+                      <span style={{ fontSize: '11px', color: '#64748b' }}>
+                        คำนวณตามเกณฑ์: <strong>{calcAutoScore(evaluationData.passedCriteria, evaluationData.criteria)}%</strong>
+                      </span>
+                      <button
+                        type="button"
+                        onClick={handleForceSyncScore}
+                        style={{ background: 'none', border: 'none', color: '#2563eb', fontSize: '11px', fontWeight: 700, cursor: 'pointer', textDecoration: 'underline' }}
+                      >
+                        ซิงค์คะแนนตามเกณฑ์
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Right: Status Select */}
+                  <div className="modal-form-card-section" style={{ background: '#ffffff', padding: '12px 14px', border: '1.5px solid #e2e8f0', borderRadius: '10px' }}>
+                    <label className="modal-field-label" style={{ fontWeight: 800, color: '#0f172a', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
+                      สถานะการพัฒนาในเดือนนี้:
+                    </label>
+                    <select
+                      className="modal-select-input"
+                      value={evaluationData.status === 'พร้อมยื่นสมัครงานแล้ว' ? 'พัฒนาได้ดีมาก' : evaluationData.status}
+                      onChange={(e) => setEvaluationData({ ...evaluationData, status: e.target.value })}
+                      style={{ width: '100%', padding: '7px 10px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '12.5px', fontWeight: 700, background: '#ffffff' }}
+                    >
+                      <option value="พัฒนาได้ดีมาก">พัฒนาได้ดีมาก (Very Good / &gt;80%)</option>
+                      <option value="กำลังพัฒนาได้ดี">กำลังพัฒนาได้ดี (On Track / 60-79%)</option>
+                      <option value="ต้องการคำแนะนำเพิ่มเติม">ต้องการคำแนะนำเพิ่มเติม (40-59%)</option>
+                      <option value="ต้องเร่งปรับปรุงทักษะ">ต้องเร่งปรับปรุงทักษะ (&lt;40%)</option>
+                      <option value="ยังไม่ถึงรอบประเมิน">ยังไม่ถึงรอบประเมิน (Pending)</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Field 4: Passed Skills & Hours (2 Columns) */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                  <div className="modal-form-card-section" style={{ background: '#ffffff', padding: '10px 12px', border: '1.5px solid #e2e8f0', borderRadius: '10px' }}>
+                    <label className="modal-field-label" style={{ fontWeight: 800, color: '#0f172a', fontSize: '12px', display: 'block', marginBottom: '4px' }}>
+                      จำนวนทักษะที่ผ่านเกณฑ์สะสม:
+                    </label>
+                    <input
+                      type="text"
+                      className="modal-text-input"
+                      placeholder="เช่น 8 ทักษะ หรือ 4 ทักษะ"
+                      value={evaluationData.passedSkills}
+                      onChange={(e) => setEvaluationData({ ...evaluationData, passedSkills: e.target.value })}
+                      style={{ width: '100%', boxSizing: 'border-box', padding: '7px 10px', fontSize: '13px', borderRadius: '6px', border: '1.5px solid #cbd5e1' }}
+                    />
+                  </div>
+
+                  <div className="modal-form-card-section" style={{ background: '#ffffff', padding: '10px 12px', border: '1.5px solid #e2e8f0', borderRadius: '10px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                      <label className="modal-field-label" style={{ fontWeight: 800, color: '#0f172a', fontSize: '12px', margin: 0 }}>
+                        ชั่วโมงการเรียนรู้ / ฝึกอบรม:
+                      </label>
+                      <span style={{ fontSize: '11.5px', color: '#2563eb', fontWeight: 800 }}>{evaluationData.hours}</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <input
+                        type="text"
+                        className="modal-text-input"
+                        placeholder="เช่น 30 ชม."
+                        value={evaluationData.hours}
+                        onChange={(e) => setEvaluationData({ ...evaluationData, hours: e.target.value })}
+                        style={{ flex: 1, padding: '7px 10px', fontSize: '13px', borderRadius: '6px', border: '1.5px solid #cbd5e1' }}
+                      />
+                      {['15 ชม.', '20 ชม.', '25 ชม.', '30 ชม.'].map((h) => (
+                        <button
+                          key={h}
+                          type="button"
+                          onClick={() => setEvaluationData({ ...evaluationData, hours: h })}
+                          style={{
+                            background: evaluationData.hours === h ? '#eff6ff' : '#f8fafc',
+                            color: evaluationData.hours === h ? '#1d4ed8' : '#64748b',
+                            border: '1px solid #cbd5e1',
+                            borderRadius: '6px',
+                            padding: '5px 7px',
+                            fontSize: '11px',
+                            fontWeight: 700,
+                            cursor: 'pointer',
+                          }}
+                        >
+                          {h}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Field 5: Super User Mentor Notes */}
+                <div className="modal-form-card-section" style={{ background: '#ffffff', padding: '12px 14px', border: '1.5px solid #e2e8f0', borderRadius: '10px' }}>
+                  <label className="modal-field-label" style={{ fontWeight: 800, color: '#0f172a', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '5px' }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.2">
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                    </svg>
+                    <span>บันทึกข้อเสนอแนะและผลการประเมินจาก Super User / Mentor: *</span>
+                  </label>
+                  <textarea
+                    className="modal-textarea"
+                    placeholder={`พิมพ์คำแนะนำและผลการประเมินสำหรับหัวข้อ "${evaluationData.topic}" ประจำเดือน ${getMonthsList(selectedMember)[activeMonthIdx]?.shortMonth}...`}
+                    value={evaluationData.mentorNote}
+                    onChange={(e) => setEvaluationData({ ...evaluationData, mentorNote: e.target.value })}
+                    rows={3}
+                    required
+                    style={{ width: '100%', boxSizing: 'border-box', minHeight: '65px', padding: '8px 12px', fontSize: '12.5px', borderRadius: '8px', border: '1.5px solid #cbd5e1' }}
+                  />
+                </div>
+
+                {/* Field 6: Action Item Plan */}
+                <div className="modal-form-card-section" style={{ background: '#ffffff', padding: '10px 12px', border: '1.5px solid #e2e8f0', borderRadius: '10px' }}>
+                  <label className="modal-field-label" style={{ fontWeight: 800, color: '#0f172a', fontSize: '12px', display: 'block', marginBottom: '4px' }}>
+                    แผนการพัฒนาต่อเนื่อง / มอบหมายงานในเดือนถัดไป (Action Item):
+                  </label>
+                  <input
+                    type="text"
+                    className="modal-text-input"
+                    placeholder="เช่น ทำ Mini Project เชื่อมต่อ API หรือ ฝึกซ้อม Mock Interview สหกิจศึกษา..."
+                    value={evaluationData.advicePlan}
+                    onChange={(e) => setEvaluationData({ ...evaluationData, advicePlan: e.target.value })}
+                    style={{ width: '100%', boxSizing: 'border-box', padding: '7px 10px', fontSize: '12.5px', borderRadius: '6px', border: '1.5px solid #cbd5e1' }}
+                  />
+                </div>
+
+                {/* Section 7: User Self-Assessment Information Card */}
+                <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '10px 14px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                    <span style={{ fontSize: '12px', fontWeight: 800, color: '#475569', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                      </svg>
+                      <span>ข้อมูลการประเมินตนเองของนักศึกษา (User Self-Assessment)</span>
+                    </span>
+                    <span style={{ fontSize: '11.5px', fontWeight: 800, color: '#047857', background: '#ecfdf5', padding: '2px 8px', borderRadius: '9999px', border: '1px solid #a7f3d0' }}>
+                      ประเมินตนเอง: {evaluationData.userSelfScore || 0}%
+                    </span>
+                  </div>
+                  <div style={{ fontSize: '12px', color: '#475569', lineHeight: 1.4 }}>
+                    {evaluationData.userSelfNote || 'นักศึกษาได้บันทึกการเรียนรู้และส่งหลักฐานในระบบเรียบร้อย'}
+                  </div>
+                  {evaluationData.userSelfEvidence && (
+                    <div style={{ marginTop: '5px', fontSize: '11.5px' }}>
+                      <span style={{ color: '#64748b' }}>หลักฐานแนบ: </span>
+                      <a href={evaluationData.userSelfEvidence} target="_blank" rel="noreferrer" style={{ color: '#2563eb', textDecoration: 'underline' }}>
+                        {evaluationData.userSelfEvidence}
+                      </a>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Modal Footer */}
+              <div
+                className="assessment-modal-footer"
+                style={{
+                  padding: '12px 22px',
+                  background: '#f8fafc',
+                  borderTop: '1.5px solid #e2e8f0',
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                  alignItems: 'center',
+                  gap: '10px',
+                  flexShrink: 0,
+                }}
+              >
+                <button
+                  type="button"
+                  className="btn-modal-cancel"
+                  onClick={handleCloseEditMonthModal}
+                  style={{ padding: '8px 18px', borderRadius: '8px', border: '1px solid #cbd5e1', background: '#ffffff', color: '#475569', fontWeight: 700, fontSize: '13px', cursor: 'pointer' }}
+                >
+                  ยกเลิก
+                </button>
+
+                <button
+                  type="submit"
+                  className="btn-modal-save-eval"
+                  style={{
+                    padding: '9px 24px',
+                    borderRadius: '8px',
+                    border: 'none',
+                    background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
+                    color: '#ffffff',
+                    fontWeight: 800,
+                    fontSize: '13.5px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    boxShadow: '0 2px 8px rgba(37, 99, 235, 0.3)',
+                  }}
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                  <span>✓ บันทึกผลการประเมินรอบเดือน ({getMonthsList(selectedMember)[activeMonthIdx]?.shortMonth})</span>
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
