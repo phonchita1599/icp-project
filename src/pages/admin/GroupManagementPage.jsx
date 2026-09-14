@@ -442,15 +442,29 @@ export default function GroupManagementPage({
       shortMonth: 'ม.ค.',
       topic: 'ปูพื้นฐานการเขียนโปรแกรม & ตรรกะอัลกอริทึม',
       shortTopic: 'ปูพื้นฐาน',
-      score: 35,
-      passedSkills: '1 ทักษะ',
+      score: 67,
+      passedSkills: '2 ทักษะ',
       hours: '12 ชม.',
       status: 'กำลังพัฒนาได้ดี',
       criteria: ['ทดสอบตรรกะและอัลกอริทึมพื้นฐาน (Condition, Loop)', 'การติดตั้งและตั้งค่าเครื่องมือพัฒนาซอฟต์แวร์', 'การประเมินความต้องการอุปกรณ์ช่วยเหลือ DSS มทส.'],
-      passedCriteria: [0, 1, 2],
+      passedCriteria: [0, 1],
+      criteriaDetails: {
+        0: {
+          level: '4.ได้ใช้ทักษะนี้ประจำหรือในงานและทำได้ดีกว่าคนทั่วไป',
+          hours: '12',
+          images: [],
+          note: 'ทดสอบตรรกะ Condition และ Loop ผ่านเกณฑ์ 85% เขียน Flowchart ได้ถูกต้อง',
+        },
+        1: {
+          level: '3.ได้มีประสบการณ์ในการใช้ทักษะนี้เป็นครั้งคราว และทำได้เทียบเท่ากับคนทั่วไป',
+          hours: '8',
+          images: [],
+          note: 'ติดตั้ง VS Code, Python Environment และ Git บนเครื่องเรียบร้อย',
+        },
+      },
       note: 'เริ่มปรับพื้นฐานการเขียนโปรแกรม Python และอัลกอริทึม เข้าใจ Flowchart และ Logic การทำงานได้ดี',
       plan: 'ฝึกทำโจทย์ Condition & Loop เพิ่มเติม',
-      userSelfScore: 40,
+      userSelfScore: 65,
       userSelfStatus: 'เข้าใจพื้นฐานดี',
       userSelfNote: 'เรียนรู้ Logic และเขียน Python ฟังก์ชันพื้นฐานได้แล้ว มีความเข้าใจคำสั่ง Loop ดีขึ้น',
       userSelfEvidence: 'https://github.com/sut-student/python-basics-lab1',
@@ -462,19 +476,39 @@ export default function GroupManagementPage({
       shortMonth: 'ก.พ.',
       topic: 'โครงสร้างข้อมูล & ระบบ Git Version Control',
       shortTopic: 'Git & Data',
-      score: 48,
+      score: 67,
       passedSkills: '2 ทักษะ',
       hours: '16 ชม.',
       status: 'กำลังพัฒนาได้ดี',
       criteria: ['การใช้งาน Git & GitHub (Commit, Branch, Pull Request)', 'การจัดการ Data Structures (Array, List, Map, Set)', 'การทำงานร่วมกันเป็นทีมผ่าน Version Control'],
-      passedCriteria: [0, 1, 2],
+      passedCriteria: [0, 1],
+      criteriaDetails: {
+        0: {
+          level: '5.ได้ถ่ายทอดทักษะนี้แก่ผู้อื่น หรือเป็นต้นแบบของทักษะนี้แก่ผู้อื่น',
+          hours: '18',
+          images: ['https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=300&auto=format&fit=crop&q=60'],
+          note: 'ใช้งาน Git & GitHub คล่องแคล่ว สร้าง Branch และ Pull Request ได้อย่างชำนาญ',
+        },
+        1: {
+          level: '4.ได้ใช้ทักษะนี้ประจำหรือในงานและทำได้ดีกว่าคนทั่วไป',
+          hours: '14',
+          images: [],
+          note: 'ทำแบบฝึกหัด Array, List, Set และ Map ผ่านเกณฑ์การทดสอบครบถ้วน',
+        },
+        2: {
+          level: '2.ได้เรียนทักษะนี้บ้างและพอทำได้ ถึงแม้จะน้อยกว่าคนทั่วไป',
+          hours: '6',
+          images: [],
+          note: 'อยู่ระหว่างฝึกการแก้ปัญหา Merge Conflict ในการทำงานร่วมกันเป็นทีม',
+        },
+      },
       note: 'ศึกษา Data Structures และ Git Version Control ได้คล่องแคล่ว ส่งงานผ่าน GitHub สม่ำเสมอ',
       plan: 'เริ่มเรียนรู้โครงสร้างหน้าเว็บ HTML5/CSS3',
-      userSelfScore: 50,
+      userSelfScore: 70,
       userSelfStatus: 'ใช้งาน Git ได้คล่อง',
       userSelfNote: 'สามารถสร้าง Branch และส่ง Pull Request บน GitHub ได้ถูกต้อง ทำการทดลองโครงสร้าง Array และ Map ผ่านเกณฑ์',
       userSelfEvidence: 'https://github.com/sut-student/data-structure-assignment',
-      userSelfPassedCriteria: [0, 1, 2],
+      userSelfPassedCriteria: [0, 1],
     },
     {
       monthKey: '03',
@@ -482,15 +516,35 @@ export default function GroupManagementPage({
       shortMonth: 'มี.ค.',
       topic: 'พื้นฐานการพัฒนาเว็บ & JavaScript ES6+',
       shortTopic: 'Web & JS',
-      score: 56,
+      score: 100,
       passedSkills: '3 ทักษะ',
       hours: '20 ชม.',
-      status: 'กำลังพัฒนาได้ดี',
+      status: 'พัฒนาได้ดีมาก',
       criteria: ['การเขียน Modern JavaScript (ES6+, Async/Await, Fetch)', 'การจัด Layout Responsive ด้วย CSS Flexbox และ Grid', 'การจัดการ DOM Manipulation และ Event Handling'],
       passedCriteria: [0, 1, 2],
+      criteriaDetails: {
+        0: {
+          level: '4.ได้ใช้ทักษะนี้ประจำหรือในงานและทำได้ดีกว่าคนทั่วไป',
+          hours: '20',
+          images: [],
+          note: 'เขียน Modern JavaScript ES6+ ได้ดีมาก ใช้ Async/Await เชื่อมต่อ REST API สำเร็จ',
+        },
+        1: {
+          level: '4.ได้ใช้ทักษะนี้ประจำหรือในงานและทำได้ดีกว่าคนทั่วไป',
+          hours: '16',
+          images: [],
+          note: 'ออกแบบหน้าเว็บแบบ Responsive ด้วย CSS Flexbox และ Grid รองรับทุกขนาดหน้าจอ',
+        },
+        2: {
+          level: '3.ได้มีประสบการณ์ในการใช้ทักษะนี้เป็นครั้งคราว และทำได้เทียบเท่ากับคนทั่วไป',
+          hours: '12',
+          images: [],
+          note: 'จัดการ DOM Manipulation และ Event Handling สร้าง Interactive UI ได้ถูกต้อง',
+        },
+      },
       note: 'เรียนรู้ HTML5, CSS3, JavaScript ES6 และ DOM Manipulation สร้าง Interactive Form ได้ถูกต้อง',
       plan: 'เริ่มศึกษา React และ Component-based Architecture',
-      userSelfScore: 60,
+      userSelfScore: 90,
       userSelfStatus: 'เขียน JavaScript ได้ดี',
       userSelfNote: 'เข้าใจการใช้ Fetch API และการจัดหน้าจอ Responsive ด้วย Flexbox/Grid ได้อย่างถูกต้อง',
       userSelfEvidence: 'https://codepen.io/sut-dss-student/pen/responsive-form',
@@ -502,19 +556,33 @@ export default function GroupManagementPage({
       shortMonth: 'เม.ย.',
       topic: 'Frontend Web Framework (React Components & Hooks)',
       shortTopic: 'React Web',
-      score: 65,
-      passedSkills: '4 ทักษะ',
+      score: 67,
+      passedSkills: '2 ทักษะ',
       hours: '18 ชม.',
       status: 'กำลังพัฒนาได้ดี',
       criteria: ['การสร้าง Reusable React Components & Props', 'การจัดการ State ด้วย React Hooks (useState, useEffect, useMemo)', 'การเชื่อมต่อ REST API และจัดการสถานะข้อมูลแบบ Asynchronous'],
-      passedCriteria: [0, 1, 2],
+      passedCriteria: [0, 1],
+      criteriaDetails: {
+        0: {
+          level: '4.ได้ใช้ทักษะนี้ประจำหรือในงานและทำได้ดีกว่าคนทั่วไป',
+          hours: '18',
+          images: [],
+          note: 'สร้าง Reusable React Components แบ่งสัดส่วนของ UI ได้เป็นระเบียบ',
+        },
+        1: {
+          level: '3.ได้มีประสบการณ์ในการใช้ทักษะนี้เป็นครั้งคราว และทำได้เทียบเท่ากับคนทั่วไป',
+          hours: '15',
+          images: [],
+          note: 'ใช้งาน useState, useEffect ได้อย่างถูกต้อง และเข้าใจวงจรการ Render',
+        },
+      },
       note: 'สร้าง Component และใช้งาน Hooks บน React ได้ถูกต้อง สามารถเชื่อมต่อ Mock API ได้อย่างราบรื่น',
       plan: 'ศึกษาการออกแบบฐานข้อมูล PostgreSQL และระบบความปลอดภัย',
-      userSelfScore: 68,
+      userSelfScore: 70,
       userSelfStatus: 'สร้าง React App ได้แล้ว',
       userSelfNote: 'พัฒนา Single Page Application โดยใช้ React และเชื่อมต่อ API แสดงผลข้อมูลได้ตามโจทย์',
       userSelfEvidence: 'https://github.com/sut-student/react-icp-miniapp',
-      userSelfPassedCriteria: [0, 1, 2],
+      userSelfPassedCriteria: [0, 1],
     },
     {
       monthKey: '05',
@@ -522,15 +590,35 @@ export default function GroupManagementPage({
       shortMonth: 'พ.ค.',
       topic: 'ฐานข้อมูล & มาตรฐานการเข้าถึงสำหรับคนพิการ (WCAG)',
       shortTopic: 'DB & WCAG',
-      score: 72,
-      passedSkills: '5 ทักษะ',
+      score: 100,
+      passedSkills: '3 ทักษะ',
       hours: '24 ชม.',
-      status: 'กำลังพัฒนาได้ดี',
+      status: 'พัฒนาได้ดีมาก',
       criteria: ['การออกแบบและ Query ฐานข้อมูล PostgreSQL (DDL/DML)', 'การพัฒนาเว็บตามมาตรฐาน WCAG 2.1 (Web Accessibility)', 'การสร้างระบบ CRUD Backend API เชื่อมต่อฐานข้อมูล'],
       passedCriteria: [0, 1, 2],
+      criteriaDetails: {
+        0: {
+          level: '4.ได้ใช้ทักษะนี้ประจำหรือในงานและทำได้ดีกว่าคนทั่วไป',
+          hours: '24',
+          images: [],
+          note: 'ออกแบบ Relational Schema บน PostgreSQL และเขียนคำสั่ง SQL Query ได้ถูกต้องแม่นยำ',
+        },
+        1: {
+          level: '4.ได้ใช้ทักษะนี้ประจำหรือในงานและทำได้ดีกว่าคนทั่วไป',
+          hours: '18',
+          images: [],
+          note: 'ปรับแต่งเว็บให้ได้มาตรฐาน WCAG 2.1 รองรับ Screen Reader และคีย์บอร์ดนำทางสมบูรณ์',
+        },
+        2: {
+          level: '4.ได้ใช้ทักษะนี้ประจำหรือในงานและทำได้ดีกว่าคนทั่วไป',
+          hours: '20',
+          images: [],
+          note: 'สร้าง Node.js REST API จัดการระบบ CRUD เชื่อมโยงกับฐานข้อมูลได้อย่างมีประสิทธิภาพ',
+        },
+      },
       note: 'ทำระบบ CRUD และต่อเชื่อมฐานข้อมูล PostgreSQL ได้อย่างราบรื่น ออกแบบ UI รองรับ Screen Reader ได้ตามเกณฑ์',
       plan: 'รวมชิ้นงานทำ Mini Project Full-Stack สำหรับสหกิจศึกษา',
-      userSelfScore: 75,
+      userSelfScore: 92,
       userSelfStatus: 'รองรับ Accessibility',
       userSelfNote: 'ออกแบบระบบฐานข้อมูล PostgreSQL และปรับปรุงหน้า UI ให้รองรับ Screen Reader สำหรับผู้พิการทางสายตา',
       userSelfEvidence: 'https://github.com/sut-student/accessible-postgres-crud',
@@ -542,19 +630,39 @@ export default function GroupManagementPage({
       shortMonth: 'มิ.ย.',
       topic: 'Full-Stack Mini Project & การทดสอบระบบ (Testing)',
       shortTopic: 'Mini Project',
-      score: 78,
-      passedSkills: '6 ทักษะ',
+      score: 67,
+      passedSkills: '2 ทักษะ',
       hours: '25 ชม.',
       status: 'กำลังพัฒนาได้ดี',
       criteria: ['การพัฒนา Full-Stack Web Application ฉบับสมบูรณ์', 'การเขียน Unit Test & Integration Test', 'การ Deploy Application ขึ้น Cloud Platform (Vercel/Render)'],
-      passedCriteria: [0, 1, 2],
+      passedCriteria: [0, 2],
+      criteriaDetails: {
+        0: {
+          level: '4.ได้ใช้ทักษะนี้ประจำหรือในงานและทำได้ดีกว่าคนทั่วไป',
+          hours: '28',
+          images: [],
+          note: 'พัฒนา Mini Project Full-Stack สำเร็จตามกำหนดการ ชิ้นงานพร้อมนำเสนอ',
+        },
+        1: {
+          level: '2.ได้เรียนทักษะนี้บ้างและพอทำได้ ถึงแม้จะน้อยกว่าคนทั่วไป',
+          hours: '10',
+          images: [],
+          note: 'อยู่ระหว่างฝึกเขียน Unit Test ด้วย Jest เพิ่มเติมเพื่อให้ครอบคลุมฟังก์ชันหลัก',
+        },
+        2: {
+          level: '4.ได้ใช้ทักษะนี้ประจำหรือในงานและทำได้ดีกว่าคนทั่วไป',
+          hours: '14',
+          images: [],
+          note: 'Deploy เว็บไซต์และฐานข้อมูลขึ้น Cloud (Vercel & Render) ทำงานได้ปกติ',
+        },
+      },
       note: 'ทำ Mini Project Full-Stack Web App สำเร็จตามกำหนด เขียน Unit Test ผ่านเกณฑ์ 80%',
       plan: 'จัดทำ Portfolio และเตรียมตัวสอบวัดระดับทักษะวิชาชีพ',
       userSelfScore: 80,
       userSelfStatus: 'Mini Project สำเร็จสมบูรณ์',
       userSelfNote: 'ส่งมอบ Full-Stack Web Application พร้อม Deploy ขึ้น Vercel และผ่าน Unit Test 82%',
       userSelfEvidence: 'https://sut-icp-mini-project.vercel.app',
-      userSelfPassedCriteria: [0, 1, 2],
+      userSelfPassedCriteria: [0, 2],
     },
     {
       monthKey: '07',
@@ -562,19 +670,33 @@ export default function GroupManagementPage({
       shortMonth: 'ก.ค.',
       topic: 'ทดสอบทักษะวิชาชีพ & จัดทำแฟ้มผลงาน Portfolio',
       shortTopic: 'Portfolio',
-      score: 82,
-      passedSkills: '7 ทักษะ',
+      score: 67,
+      passedSkills: '2 ทักษะ',
       hours: '28 ชม.',
-      status: 'พัฒนาได้ดีมาก',
+      status: 'กำลังพัฒนาได้ดี',
       criteria: ['สอบผ่านเกณฑ์มาตรฐานสมรรถนะวิชาชีพด้านซอฟต์แวร์', 'จัดทำ Live Portfolio & GitHub Showcases', 'จัดทำเรซูเม่ฉบับสองภาษา (ไทย-อังกฤษ) สำหรับสหกิจศึกษา'],
-      passedCriteria: [0, 1, 2],
+      passedCriteria: [0, 1],
+      criteriaDetails: {
+        0: {
+          level: '4.ได้ใช้ทักษะนี้ประจำหรือในงานและทำได้ดีกว่าคนทั่วไป',
+          hours: '25',
+          images: [],
+          note: 'สอบผ่านเกณฑ์มาตรฐานสมรรถนะวิชาชีพด้านซอฟต์แวร์ระดับดีเยี่ยม',
+        },
+        1: {
+          level: '5.ได้ถ่ายทอดทักษะนี้แก่ผู้อื่น หรือเป็นต้นแบบของทักษะนี้แก่ผู้อื่น',
+          hours: '20',
+          images: ['https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=300&auto=format&fit=crop&q=60'],
+          note: 'จัดทำ Live Portfolio เว็บไซต์พร้อม Showcase โค้ดผลงานบน GitHub อย่างมืออาชีพ',
+        },
+      },
       note: 'ผ่านการทดสอบทักษะ Frontend & Backend ได้คะแนนสูงมาก Portfolio มีชิ้นงานจริงครบถ้วน',
       plan: 'เตรียมตัวซ้อมสัมภาษณ์งาน Mock Interview',
       userSelfScore: 85,
       userSelfStatus: 'Portfolio ครบถ้วนพร้อมยื่น',
       userSelfNote: 'จัดทำเว็บไซต์ Portfolio และเรซูเม่ภาษาไทย-อังกฤษ พร้อม Link ผลงาน GitHub ครบถ้วน',
       userSelfEvidence: 'https://thanakorn-dev.portfolio.sut.ac.th',
-      userSelfPassedCriteria: [0, 1, 2],
+      userSelfPassedCriteria: [0, 1],
     },
     {
       monthKey: '08',
@@ -582,7 +704,7 @@ export default function GroupManagementPage({
       shortMonth: 'ส.ค.',
       topic: 'เตรียมความพร้อมสหกิจศึกษา & ซ้อมสัมภาษณ์งาน',
       shortTopic: 'สหกิจ/สัมภาษณ์',
-      score: 35,
+      score: 33,
       passedSkills: '1 ทักษะ',
       hours: '30 ชม.',
       status: 'ต้องการคำแนะนำเพิ่มเติม',
@@ -594,6 +716,12 @@ export default function GroupManagementPage({
           hours: '30',
           images: [],
           note: 'ผ่านการซ้อมสัมภาษณ์ Mock Interview กับพี่เลี้ยง DSS มทส. มีความมั่นใจและตอบคำถามได้ยอดเยี่ยม',
+        },
+        1: {
+          level: '2.ได้เรียนทักษะนี้บ้างและพอทำได้ ถึงแม้จะน้อยกว่าคนทั่วไป',
+          hours: '12',
+          images: [],
+          note: 'กำลังศึกษาและฝึกทักษะ Soft Skills และการปรับตัวเข้ากับวัฒนธรรมองค์กร',
         },
       },
       note: 'ผ่านการซ้อมสัมภาษณ์ Mock Interview ได้ดีมาก รอส่งผลงาน Soft Skills และการจับคู่สถานประกอบการ',
@@ -764,13 +892,19 @@ export default function GroupManagementPage({
         images: [],
         note: 'ผ่านการซ้อมสัมภาษณ์ Mock Interview กับพี่เลี้ยง DSS มทส. มีความมั่นใจและตอบคำถามได้ยอดเยี่ยม',
       },
+      1: {
+        level: '2.ได้เรียนทักษะนี้บ้างและพอทำได้ ถึงแม้จะน้อยกว่าคนทั่วไป',
+        hours: '12',
+        images: [],
+        note: 'กำลังศึกษาและฝึกทักษะ Soft Skills และการปรับตัวเข้ากับวัฒนธรรมองค์กร',
+      },
     },
     mentorNote: 'ผ่านการซ้อมสัมภาษณ์ Mock Interview ได้ดีมาก รอส่งผลงาน Soft Skills และการจับคู่สถานประกอบการ',
     advicePlan: 'จัดทำเอกสารและหลักฐานเพิ่มเติมสำหรับทักษะที่เหลือ',
     userSelfScore: 88,
     userSelfStatus: 'พร้อมเริ่มสหกิจศึกษา',
     userSelfNote: 'นักศึกษาได้บันทึกการเรียนรู้และส่งผลงานในเดือนนี้เรียบร้อยแล้ว',
-    userSelfEvidence: 'https://github.com/sut-student/project-portfolio',
+    userSelfEvidence: 'https://drive.google.com/mock-interview-sut-dss-cert',
     userSelfPassedCriteria: [0],
   })
 
@@ -799,6 +933,12 @@ export default function GroupManagementPage({
         hours: curMonthData.hours ? String(parseInt(curMonthData.hours)) : '30',
         images: [],
         note: curMonthData.note || 'ผ่านการซ้อมสัมภาษณ์ Mock Interview กับพี่เลี้ยง DSS มทส. มีความมั่นใจและตอบคำถามได้ยอดเยี่ยม',
+      },
+      1: {
+        level: '2.ได้เรียนทักษะนี้บ้างและพอทำได้ ถึงแม้จะน้อยกว่าคนทั่วไป',
+        hours: '12',
+        images: [],
+        note: 'กำลังศึกษาและฝึกทักษะ Soft Skills และการปรับตัวเข้ากับวัฒนธรรมองค์กร',
       },
     }
 
@@ -1375,6 +1515,12 @@ export default function GroupManagementPage({
         images: [],
         note: targetMonth.note || 'ผ่านการซ้อมสัมภาษณ์ Mock Interview กับพี่เลี้ยง DSS มทส.',
       },
+      1: {
+        level: '2.ได้เรียนทักษะนี้บ้างและพอทำได้ ถึงแม้จะน้อยกว่าคนทั่วไป',
+        hours: '12',
+        images: [],
+        note: 'กำลังศึกษาและฝึกทักษะ Soft Skills และการปรับตัวเข้ากับวัฒนธรรมองค์กร',
+      },
     } : {})
 
     const rawPassed = Array.isArray(targetMonth.passedCriteria) ? targetMonth.passedCriteria : (targetMonth.score > 0 ? [0] : [])
@@ -1486,6 +1632,133 @@ export default function GroupManagementPage({
       status: getStatusFromScore(calculatedScore),
       passedSkills: `${evaluationData.passedCriteria?.length || 0} ทักษะ`,
     })
+  }
+
+  // Randomize Mock Evaluation for demonstration
+  const handleRandomizeMockEvaluation = () => {
+    const criteria = evaluationData.criteria || []
+    if (criteria.length === 0) return
+
+    const mockLevelsPassed = [
+      '4.ได้ใช้ทักษะนี้ประจำหรือในงานและทำได้ดีกว่าคนทั่วไป',
+      '5.ได้ถ่ายทอดทักษะนี้แก่ผู้อื่น หรือเป็นต้นแบบของทักษะนี้แก่ผู้อื่น',
+      '3.ได้มีประสบการณ์ในการใช้ทักษะนี้เป็นครั้งคราว และทำได้เทียบเท่ากับคนทั่วไป',
+    ]
+    const mockLevelsDev = [
+      '2.ได้เรียนทักษะนี้บ้างและพอทำได้ ถึงแม้จะน้อยกว่าคนทั่วไป',
+      '1.มีความรู้หรือเคยได้ยิน แต่ยังไม่เคยลงมือปฏิบัติ',
+    ]
+
+    const mockPassedNotes = [
+      'ปฏิบัติการฝึกฝนและทำแบบประเมินผลงานผ่านเกณฑ์มาตรฐาน DSS มทส. เรียบร้อยแล้ว ผลงานยอดเยี่ยม',
+      'ผ่านการทดสอบทักษะภาคปฏิบัติ ส่งชิ้นงานการพัฒนาครบถ้วนและตอบคำถามเชิงลึกได้เป็นอย่างดี',
+      'นำความรู้ไปประยุกต์ใช้จริงและผ่านเกณฑ์การประเมินจากพี่เลี้ยงที่ปรึกษาอย่างน่าพึงพอใจ',
+      'มีผลงานเป็นรูปธรรม ชิ้นงานตรงตามข้อกำหนดและสามารถเป็นแบบอย่างในการทำงานได้',
+    ]
+    const mockDevNotes = [
+      'กำลังศึกษาค้นคว้าและฝึกฝนเพิ่มเติมตามคำแนะนำของพี่เลี้ยง ยังต้องปรับปรุงรายละเอียดบางส่วน',
+      'อยู่ระหว่างขั้นตอนการลงมือปฏิบัติและทดลองใช้งาน ยังต้องการคำแนะนำและเวลาในการฝึกทักษะเพิ่ม',
+      'เริ่มทำความเข้าใจแนวคิดหลักแล้ว รอส่งชิ้นงานและหลักฐานการประเมินฉบับสมบูรณ์',
+    ]
+
+    const mockImages = [
+      'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=300&auto=format&fit=crop&q=60',
+      'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=300&auto=format&fit=crop&q=60',
+      'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=300&auto=format&fit=crop&q=60',
+    ]
+
+    // Determine target passed count (random between 1 and criteria.length)
+    const targetPassedCount = Math.floor(Math.random() * criteria.length) + 1
+    const shuffledIndices = criteria.map((_, idx) => idx).sort(() => Math.random() - 0.5)
+    const passedSet = new Set(shuffledIndices.slice(0, targetPassedCount))
+
+    const newDetails = {}
+    let totalHours = 0
+
+    criteria.forEach((crit, idx) => {
+      const willPass = passedSet.has(idx)
+      if (willPass) {
+        const hrs = Math.floor(Math.random() * 16) + 15 // 15 - 30 hrs
+        totalHours += hrs
+        const withImg = Math.random() > 0.6
+        newDetails[idx] = {
+          level: mockLevelsPassed[Math.floor(Math.random() * mockLevelsPassed.length)],
+          hours: String(hrs),
+          images: withImg ? [mockImages[Math.floor(Math.random() * mockImages.length)]] : [],
+          note: mockPassedNotes[Math.floor(Math.random() * mockPassedNotes.length)],
+        }
+      } else {
+        // Either developing (70%) or empty/waiting (30%)
+        const isDeveloping = Math.random() > 0.3
+        if (isDeveloping) {
+          const hrs = Math.floor(Math.random() * 10) + 4 // 4 - 13 hrs
+          totalHours += hrs
+          newDetails[idx] = {
+            level: mockLevelsDev[Math.floor(Math.random() * mockLevelsDev.length)],
+            hours: String(hrs),
+            images: [],
+            note: mockDevNotes[Math.floor(Math.random() * mockDevNotes.length)],
+          }
+        } else {
+          // Empty / Waiting
+          newDetails[idx] = {
+            level: '',
+            hours: '',
+            images: [],
+            note: '',
+          }
+        }
+      }
+    })
+
+    const newPassedCriteria = criteria
+      .map((_, idx) => idx)
+      .filter((idx) => passedSet.has(idx) && hasCriterionSubmission(idx, newDetails))
+
+    const calculatedScore = calcAutoScore(newPassedCriteria, criteria)
+    const calculatedStatus = getStatusFromScore(calculatedScore)
+
+    const updatedEval = {
+      ...evaluationData,
+      passedCriteria: newPassedCriteria,
+      criteriaDetails: newDetails,
+      score: calculatedScore,
+      status: calculatedStatus,
+      passedSkills: `${newPassedCriteria.length} ทักษะ`,
+      hours: `${totalHours > 0 ? totalHours : 20} ชม.`,
+      mentorNote: `ประเมินสมรรถนะจำลอง (Mock) ประจำเดือน: นักศึกษาผ่านเกณฑ์ ${newPassedCriteria.length} จาก ${criteria.length} ทักษะ (${calculatedScore}%) ${newPassedCriteria.length === criteria.length ? 'ผลงานครบถ้วนยอดเยี่ยมตามเป้าหมาย' : 'มีบางทักษะที่กำลังพัฒนาและรอส่งหลักฐานเพิ่มเติม'}`,
+      advicePlan: 'ติดตามผลการพัฒนาในเกณฑ์ที่เหลือ และดำเนินการตามแผนการเรียนรู้ต่อเนื่อง',
+    }
+
+    setEvaluationData(updatedEval)
+
+    // Also sync to selectedMember's monthlyProgress if currently in member modal
+    if (selectedMember && activeGroup) {
+      const months = [...getMonthsList(selectedMember)]
+      const curMonthDef = months[activeMonthIdx] || DEFAULT_12_MONTHS_SYLLABUS[activeMonthIdx]
+      months[activeMonthIdx] = {
+        ...curMonthDef,
+        topic: updatedEval.topic,
+        score: calculatedScore,
+        status: calculatedStatus,
+        passedSkills: `${newPassedCriteria.length} ทักษะ`,
+        hours: `${totalHours > 0 ? totalHours : 20} ชม.`,
+        criteria: criteria,
+        passedCriteria: newPassedCriteria,
+        criteriaDetails: newDetails,
+        note: updatedEval.mentorNote,
+        plan: updatedEval.advicePlan,
+      }
+      const updatedMember = {
+        ...selectedMember,
+        monthlyProgress: months,
+      }
+      setSelectedMember(updatedMember)
+      onUpdateMemberProgress(activeGroup.id, updatedMember)
+    }
+
+    setSaveSuccessMsg(`🎲 สุ่มผลประเมินจำลอง (Mock) สำเร็จ! ผ่าน ${newPassedCriteria.length}/${criteria.length} ทักษะ (${calculatedScore}%)`)
+    setTimeout(() => setSaveSuccessMsg(''), 4000)
   }
 
   // Save monthly evaluation & feedback
@@ -2811,14 +3084,39 @@ export default function GroupManagementPage({
 
                       {/* Criteria Checklist for this month */}
                       <div className="milestone-criteria-wrap">
-                        <div className="criteria-header-row">
+                        <div className="criteria-header-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
                           <span className="criteria-section-title" style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2.5">
                               <polyline points="20 6 9 17 4 12" />
                             </svg>
                             <span>เกณฑ์และทักษะที่ประเมินประจำเดือน ({evaluationData.passedCriteria?.length || 0}/{(evaluationData.criteria || []).length} ผ่านแล้ว)</span>
                           </span>
-                          <span className="criteria-hint">คลิกที่ทักษะเพื่อเปิดป๊อปอัปประเมิน 7 ระดับมาตรฐาน (แบบ User) หรือติ๊กเช็กผ่าน/ไม่ผ่าน</span>
+                          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                            <button
+                              type="button"
+                              onClick={handleRandomizeMockEvaluation}
+                              className="btn-random-mock-eval"
+                              title="สุ่มผลการประเมินจำลอง (Mock) เพื่อทดสอบข้อมูลเกณฑ์ทั้ง 3 รูปแบบ (ผ่านเกณฑ์, กำลังพัฒนา, รอข้อมูล)"
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '5px',
+                                padding: '4px 10px',
+                                borderRadius: '6px',
+                                border: '1.5px solid #d8b4fe',
+                                background: 'linear-gradient(135deg, #fdf4ff 0%, #fae8ff 100%)',
+                                color: '#9333ea',
+                                fontWeight: 700,
+                                fontSize: '11.5px',
+                                cursor: 'pointer',
+                                boxShadow: '0 1px 3px rgba(147, 51, 234, 0.12)',
+                                transition: 'all 0.15s ease',
+                              }}
+                            >
+                              <span>🎲 สุ่มประเมินจำลอง (Mock)</span>
+                            </button>
+                            <span className="criteria-hint">คลิกที่ทักษะเพื่อเปิดป๊อปอัปประเมิน 7 ระดับมาตรฐาน (แบบ User) หรือติ๊กเช็กผ่าน/ไม่ผ่าน</span>
+                          </div>
                         </div>
 
                         {/* Evidence & Passing Condition Banner */}
@@ -4990,7 +5288,7 @@ export default function GroupManagementPage({
 
                 {/* Field 2: Criteria Checklist */}
                 <div className="modal-form-card-section" style={{ background: '#ffffff', padding: '12px 14px', border: '1.5px solid #e2e8f0', borderRadius: '10px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', flexWrap: 'wrap', gap: '6px' }}>
                     <label className="modal-field-label" style={{ fontWeight: 800, color: '#0f172a', fontSize: '12.5px', display: 'flex', alignItems: 'center', gap: '6px', margin: 0 }}>
                       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2.5">
                         <polyline points="20 6 9 17 4 12" />
@@ -5000,7 +5298,29 @@ export default function GroupManagementPage({
                         ({evaluationData.passedCriteria?.length || 0}/{(evaluationData.criteria || []).length} ผ่านแล้ว)
                       </span>
                     </label>
-                    <span style={{ fontSize: '11px', color: '#64748b' }}>คลิกเพื่อสลับสถานะผ่าน/ไม่ผ่าน</span>
+                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+                      <button
+                        type="button"
+                        onClick={handleRandomizeMockEvaluation}
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '4px',
+                          padding: '3px 8px',
+                          borderRadius: '6px',
+                          border: '1px solid #d8b4fe',
+                          background: '#faf5ff',
+                          color: '#9333ea',
+                          fontWeight: 700,
+                          fontSize: '11px',
+                          cursor: 'pointer',
+                        }}
+                        title="สุ่มผลประเมินจำลอง (Mock) ให้มีทั้งผ่านเกณฑ์, กำลังพัฒนา และรอข้อมูล"
+                      >
+                        <span>🎲 สุ่มประเมินจำลอง</span>
+                      </button>
+                      <span style={{ fontSize: '11px', color: '#64748b' }}>คลิกเพื่อสลับสถานะผ่าน/ไม่ผ่าน</span>
+                    </div>
                   </div>
 
                   {/* Evidence & Passing Condition Banner */}
