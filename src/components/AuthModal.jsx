@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './AuthModal.css'
 
 export default function AuthModal({
@@ -9,11 +9,30 @@ export default function AuthModal({
   onRegisterSuccess,
 }) {
   const [loginRole, setLoginRole] = useState('user') // 'user' | 'super_user' | 'super_admin'
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('b6501234@g.sut.ac.th')
+  const [password, setPassword] = useState('12345678')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [fullName, setFullName] = useState('')
   const [showPassword, setShowPassword] = useState(false)
+
+  // Auto-fill when switching authMode or when role changes
+  useEffect(() => {
+    if (authMode === 'login') {
+      if (loginRole === 'super_admin') {
+        setEmail('admin@icp.ac.th')
+        setPassword('12345678')
+      } else if (loginRole === 'super_user') {
+        setEmail('dss.mentor@sut.ac.th')
+        setPassword('12345678')
+      } else {
+        setEmail('b6501234@g.sut.ac.th')
+        setPassword('12345678')
+      }
+    } else {
+      setEmail('')
+      setPassword('')
+    }
+  }, [authMode, loginRole])
 
   // Quick fill demo for roles
   const handleSelectRole = (role) => {
